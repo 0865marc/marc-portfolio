@@ -74,7 +74,8 @@ The requested dependency ranges were installed. Resolved top-level versions from
 - `npm install -D @types/react@^18.3.12 @types/react-dom@^18.3.1` — passed; added 5 packages and audited 141 packages.
 - `npm run build` — passed. `tsc -b` completed and Vite 5.4.21 produced `dist/` successfully.
 - `git diff --cached --check` on implementation files — passed with no whitespace errors.
-- A first full check before baselining the supplied workflow artifacts reported existing trailing whitespace in `.workflow/source_template.md`; that source file was not modified. The final clean working-tree check is run after the report commit.
+- `git diff --check` on the final clean working tree — passed with no output.
+- A first full check before baselining the supplied workflow artifacts reported existing trailing whitespace in `.workflow/source_template.md`; that source file was not modified.
 - Local dev server — started successfully at `http://localhost:5173/`.
 - `curl http://127.0.0.1:5173/` — passed and returned the Vite HTML shell.
 
