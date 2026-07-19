@@ -98,6 +98,7 @@ The app did pass the production build and local HTTP smoke check. Source-level s
 - Push was not attempted, per policy.
 - Workflow baseline commit: `4b99bce18362b119f6f50dd66af7a241ea972ebc`.
 - Implementation commit: `3ba02700058886f0d46261d83fc1a93297450567`.
+- Final status check: clean working tree on `main` after the report commit.
 
 ## Known limitations / follow-up content
 
