@@ -98,26 +98,31 @@ Therefore these browser-only checks remain unverified in this environment:
 
 The app did pass the production build and local HTTP smoke check. Source-level safeguards for the requested mobile overflow, anchors, reduced motion, lazy images, and fallback behavior are implemented.
 
-## Follow-up verification
+## Commands run and verification
 
 - `npm run build` — passed after the contact/footer layout fix; TypeScript and Vite production output completed successfully.
-- `git diff --check` — passed for the follow-up changes.
+- `git diff --cached --check` and `git diff --check` — passed for the follow-up changes.
 - Local dev server — started successfully on `http://localhost:5174/` because port 5173 was already occupied; `curl http://127.0.0.1:5174/` returned the Vite HTML shell.
 - Browser visual verification — unavailable in the coder profile because Chrome/Chromium is not installed; the orchestrator should repeat the `#contact` smoke check.
+- Final `git status --short --branch` — confirmed `main` with no tracked modifications.
+
+## Result
+
+The verified contact/footer overlap fix is implemented and committed. Desktop project cards remain sticky, the contact block keeps `id="contact"` and its existing copy, and mobile behavior is unchanged by the breakpoint-scoped wrapper spacing.
+
+## Risks/TODOs
+
+- Browser visual smoke for `#contact` remains pending in the orchestrator environment because this coder profile has no browser runtime.
+- Portrait, GIFs, and project images are remote template assets and may be slow or unavailable.
+- Project links, article links, and `hello@marc.dev` remain safe placeholders.
+- `npm install` previously reported 2 audit vulnerabilities; dependency maintenance is outside this approved fix.
 
 ## Git
 
 - Repository initialized on branch `main`.
 - Push was not attempted, per policy.
+- Auto-deploy note: not applicable; no push/deploy was performed, and project policy says `auto_deploy_on_push=false`.
 - Workflow baseline commit: `4b99bce18362b119f6f50dd66af7a241ea972ebc`.
 - Implementation commit: `3ba02700058886f0d46261d83fc1a93297450567`.
 - Follow-up fix commit: `5ca1257` (`fix: separate sticky project cards from contact footer`).
 - Final status check: clean tracked working tree on `main`; the supplied `.workflow/coder_followup_contact_fix.md` task artifact remains untracked and was not modified.
-
-## Known limitations / follow-up content
-
-- Portrait, GIFs, and project images are remote template assets and may be slow or unavailable.
-- Project links and article links are safe in-page placeholders; replace them with real URLs when available.
-- `hello@marc.dev` is a placeholder email and should be replaced with Marc's real contact destination.
-- Blog content is static; no CMS, API, or form submission backend was requested.
-- `npm install` reported 2 audit vulnerabilities; review with a future dependency-maintenance task rather than applying an unapproved forced upgrade.
