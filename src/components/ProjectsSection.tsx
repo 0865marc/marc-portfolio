@@ -35,7 +35,7 @@ function ProjectCard({
   const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale])
 
   return (
-    <div className="relative md:h-[85vh]">
+    <div className="relative md:min-h-[85vh] md:pb-24">
       <motion.article
         ref={cardRef}
         style={{

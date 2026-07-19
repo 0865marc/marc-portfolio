@@ -49,6 +49,12 @@ The supplied workflow artifacts were preserved unchanged.
 - Compact `id="contact"` footer block with placeholder email destination.
 - Mobile-safe non-sticky project cards below the medium breakpoint and reduced-motion CSS/Framer Motion fallbacks.
 
+## Follow-up fix — contact/footer overlap
+
+- Root cause: desktop project wrappers used a fixed `md:h-[85vh]`, while the card content can be taller than that at some desktop viewport sizes. The sticky card could therefore overflow its wrapper and paint over the following contact footer.
+- Updated `src/components/ProjectsSection.tsx` so each desktop wrapper uses `md:min-h-[85vh] md:pb-24`. The wrapper now contains the card content and adds a separation buffer before the footer, while desktop sticky cards remain enabled.
+- Mobile behavior remains unchanged because the added sizing and padding are scoped to `md` and above; the `id="contact"`, visible copy, section order, and nav anchors are unchanged.
+
 ## Dependencies installed
 
 The requested dependency ranges were installed. Resolved top-level versions from `npm list --depth=0`:
@@ -84,7 +90,6 @@ The requested dependency ranges were installed. Resolved top-level versions from
 Browser smoke testing could not be completed because the browser runtime has no Chrome/Chromium installation. `browser_navigate` reported that Chrome was not found in the agent-browser cache, system installations, or Puppeteer cache. The documented `agent-browser install` command was also unavailable (`agent-browser: command not found`), and no system browser or Playwright/Puppeteer package was present.
 
 Therefore these browser-only checks remain unverified in this environment:
-
 - visual desktop and 390x844/375x667 viewport inspection
 - browser console error inspection
 - measured runtime horizontal overflow
@@ -92,6 +97,13 @@ Therefore these browser-only checks remain unverified in this environment:
 - keyboard focus traversal
 
 The app did pass the production build and local HTTP smoke check. Source-level safeguards for the requested mobile overflow, anchors, reduced motion, lazy images, and fallback behavior are implemented.
+
+## Follow-up verification
+
+- `npm run build` — passed after the contact/footer layout fix; TypeScript and Vite production output completed successfully.
+- `git diff --check` — passed for the follow-up changes.
+- Local dev server — started successfully on `http://localhost:5174/` because port 5173 was already occupied; `curl http://127.0.0.1:5174/` returned the Vite HTML shell.
+- Browser visual verification — unavailable in the coder profile because Chrome/Chromium is not installed; the orchestrator should repeat the `#contact` smoke check.
 
 ## Git
 
