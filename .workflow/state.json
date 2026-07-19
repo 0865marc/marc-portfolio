@@ -1,5 +1,5 @@
 {
-  "stage": "implementing",
+  "stage": "done",
   "active_project": "marc-portfolio",
   "path": "/home/agent/projects/marc-portfolio",
   "updated_at": "2026-07-19",
@@ -8,7 +8,12 @@
     "frontend_task": ".workflow/frontend_task.md",
     "frontend_report": ".workflow/frontend_report.md",
     "plan": ".workflow/plan.md",
-    "implementation_task": ".workflow/implementation_task.md"
+    "implementation_task": ".workflow/implementation_task.md",
+    "implementation_report": ".workflow/implementation_report.md"
   },
-  "approval": "User replied Adelante to approved plan message."
+  "verification": {
+    "npm_run_build": "passed",
+    "browser_smoke": "passed on default browser for desktop/#contact/no horizontal overflow/no console errors",
+    "push": "not attempted"
+  }
 }

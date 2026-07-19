@@ -103,8 +103,10 @@ The app did pass the production build and local HTTP smoke check. Source-level s
 - `npm run build` — passed after the contact/footer layout fix; TypeScript and Vite production output completed successfully.
 - `git diff --cached --check` and `git diff --check` — passed for the follow-up changes.
 - Local dev server — started successfully on `http://localhost:5174/` because port 5173 was already occupied; `curl http://127.0.0.1:5174/` returned the Vite HTML shell.
-- Browser visual verification — unavailable in the coder profile because Chrome/Chromium is not installed; the orchestrator should repeat the `#contact` smoke check.
-- Final `git status --short --branch` — confirmed `main` with no tracked modifications.
+- Browser visual verification in the coder profile — unavailable because Chrome/Chromium is not installed there.
+- Orchestrator browser smoke after the follow-up fix — passed on `http://127.0.0.1:5173/?v=contact-fix#contact`: page title `Marc -- Fullstack Developer`, no browser console errors, no horizontal overflow, `#contact` anchor reachable, no `3D Creator`/`Price` text in the rendered body, and bounding-box check confirmed project cards no longer overlap the contact/footer block.
+- Orchestrator visual inspection — passed: the contact/footer block is visible below the project cards and no longer hidden by the sticky stack.
+- Final `git status --short --branch` — confirmed `main` with no tracked modifications before this final workflow report update.
 
 ## Result
 
