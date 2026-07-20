@@ -5,6 +5,8 @@ dist
 .env.*
 !.env.example
 *.DS_Store
+__pycache__/
+*.pyc
 
 # Local Hermes workflow artifacts and generated browser audit outputs
 .workflow/deploy_implementation_task.md
