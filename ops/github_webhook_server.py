@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Any, NamedTuple
 
 HOST = "127.0.0.1"
-PORT = int(os.environ.get("MARC_PORTFOLIO_WEBHOOK_PORT", "9003"))
+PORT = int(os.environ.get("MARC_PORTFOLIO_WEBHOOK_PORT", "9004"))
 WEBHOOK_PATH = os.environ.get(
     "MARC_PORTFOLIO_WEBHOOK_PATH", "/github-webhook-marc-portfolio"
 )

@@ -21,7 +21,7 @@ set +a
 
 PRODUCTION_DIR="${PRODUCTION_DIR:-/home/agent/deployments/marc-portfolio-production}"
 SERVER_SCRIPT="${MARC_PORTFOLIO_WEBHOOK_SERVER_SCRIPT:-$PRODUCTION_DIR/ops/github_webhook_server.py}"
-PORT="${MARC_PORTFOLIO_WEBHOOK_PORT:-9003}"
+PORT="${MARC_PORTFOLIO_WEBHOOK_PORT:-9004}"
 LOG_FILE="${MARC_PORTFOLIO_WEBHOOK_LOG:-/home/agent/.hermes/logs/marc-portfolio-github-webhook.log}"
 PID_FILE="${MARC_PORTFOLIO_WEBHOOK_PID_FILE:-/home/agent/.hermes/run/marc-portfolio-github-webhook.pid}"
 START_LOCK="${MARC_PORTFOLIO_WEBHOOK_START_LOCK:-/tmp/marc-portfolio-github-webhook-start.lock}"

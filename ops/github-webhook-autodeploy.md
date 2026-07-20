@@ -40,10 +40,10 @@ The start script refuses symlinks, non-owner files, modes other than `0600`, and
 
 ```bash
 /home/agent/deployments/marc-portfolio-production/ops/start-github-webhook.sh
-curl -fsS http://127.0.0.1:9003/health
+curl -fsS http://127.0.0.1:9004/health
 ```
 
-The receiver binds to `127.0.0.1:9003`; its default webhook path is `/github-webhook-marc-portfolio`. It logs decisions to `/home/agent/.hermes/logs/marc-portfolio-github-webhook.log` without logging signatures, bodies, or secret values.
+The receiver binds to `127.0.0.1:9004`; its default webhook path is `/github-webhook-marc-portfolio`. It logs decisions to `/home/agent/.hermes/logs/marc-portfolio-github-webhook.log` without logging signatures, bodies, or secret values.
 
 A simple no-sudo watchdog option is:
 
