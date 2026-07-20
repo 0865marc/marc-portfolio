@@ -3,7 +3,7 @@ import { ContactButton } from './ContactButton'
 
 const navigation = [
   { label: 'Sobre mí', href: '#about' },
-  { label: 'Notas', href: '#blog' },
+  { label: 'Blog', href: '#blog' },
   { label: 'Proyectos', href: '#projects' },
   { label: 'Contacto', href: '#contact' },
 ]

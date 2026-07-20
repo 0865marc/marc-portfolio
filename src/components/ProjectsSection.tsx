@@ -120,20 +120,37 @@ export function ProjectsSection() {
 
       <footer
         id="contact"
+        aria-labelledby="contact-title"
         className="mx-auto mt-16 flex max-w-6xl flex-col gap-8 border-t border-[#D7E2EA]/20 py-12 text-[#D7E2EA] sm:mt-24 sm:flex-row sm:items-end sm:justify-between sm:py-16"
       >
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.2em] opacity-[0.55]">Have a product in mind?</p>
-          <h2 className="mt-4 max-w-2xl text-[clamp(2rem,5vw,5rem)] font-medium uppercase leading-none">
-            Let&apos;s build something useful.
+        <div className="min-w-0">
+          <p className="text-xs font-medium uppercase tracking-[0.2em] opacity-[0.55]">¿Hablamos?</p>
+          <h2 id="contact-title" className="mt-4 max-w-2xl text-[clamp(2rem,5vw,5rem)] font-medium uppercase leading-none">
+            Construyamos algo útil.
           </h2>
         </div>
-        <a
-          href="mailto:hello@marc.dev"
-          className="w-fit text-sm font-medium uppercase tracking-[0.16em] underline decoration-[#D7E2EA]/40 underline-offset-8 transition-opacity duration-200 hover:opacity-70 sm:text-base"
-        >
-          hello@marc.dev
-        </a>
+        <address className="flex min-w-0 max-w-full flex-col gap-6 not-italic sm:items-end">
+          <div className="flex min-w-0 max-w-full flex-col gap-2">
+            <span className="text-xs font-medium tracking-[0.2em] opacity-[0.55]">Correo</span>
+            <a
+              href="mailto:0865marc@gmail.com"
+              aria-label="Enviar un correo a Marc a 0865marc@gmail.com"
+              className="w-fit max-w-full break-words text-sm font-medium tracking-[0.16em] underline decoration-[#D7E2EA]/40 underline-offset-8 transition-opacity duration-200 hover:opacity-70 sm:text-base"
+            >
+              0865marc@gmail.com
+            </a>
+          </div>
+          <div className="flex min-w-0 max-w-full flex-col gap-2">
+            <span className="text-xs font-medium tracking-[0.2em] opacity-[0.55]">LinkedIn</span>
+            <a
+              href="https://linkedin.com/in/marc-teixid%C3%B3-rosauro"
+              aria-label="Ver el perfil de Marc en LinkedIn"
+              className="w-fit max-w-full break-words text-sm font-medium tracking-[0.16em] underline decoration-[#D7E2EA]/40 underline-offset-8 transition-opacity duration-200 hover:opacity-70 sm:text-base"
+            >
+              Perfil de Marc en LinkedIn
+            </a>
+          </div>
+        </address>
       </footer>
     </section>
   )

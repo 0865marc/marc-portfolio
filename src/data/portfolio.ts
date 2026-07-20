@@ -11,12 +11,6 @@ export type Experience = {
   stack: string
 }
 
-export type BlogPost = {
-  category: string
-  title: string
-  excerpt: string
-}
-
 export type Project = {
   number: string
   category: string
@@ -100,27 +94,6 @@ export const services: Service[] = [
     name: 'Dirección técnica y producto',
     description:
       'Coordinación técnica de APIs, web, Android, iOS, sistemas embebidos, desarrolladores externos y distribuidores internacionales.',
-  },
-]
-
-export const blogPosts: BlogPost[] = [
-  {
-    category: 'Arquitectura IoT',
-    title: 'Arquitecturas para plataformas IoT',
-    excerpt:
-      'Principios para recibir, validar y exponer datos de dispositivos sin perder trazabilidad ni capacidad de crecimiento.',
-  },
-  {
-    category: 'Procesos asíncronos',
-    title: 'RabbitMQ y Celery para procesos pesados',
-    excerpt:
-      'Cómo separar el trabajo intensivo de la petición principal y diseñar flujos operativos más resistentes.',
-  },
-  {
-    category: 'Infraestructura distribuida',
-    title: 'Infraestructura distribuida y latencia',
-    excerpt:
-      'Criterios para operar servidores en distintas ubicaciones y cuidar la fiabilidad y la experiencia de usuario.',
   },
 ]
 

@@ -1,7 +1,7 @@
-import { ArrowUpRight } from 'lucide-react'
-import { blogPosts } from '../data/portfolio'
+import { blogPosts } from '../data/blog'
+import { BLOG_INDEX_HREF } from '../lib/blogRoutes'
+import { BlogCard } from './BlogCard'
 import { FadeIn } from './FadeIn'
-import { LiveProjectButton } from './LiveProjectButton'
 
 export function BlogSection() {
   return (
@@ -13,9 +13,10 @@ export function BlogSection() {
       <FadeIn y={40}>
         <h2
           id="blog-title"
-          className="text-center text-[clamp(3rem,12vw,160px)] font-black uppercase leading-none tracking-tight"
+          tabIndex={-1}
+          className="text-center text-[clamp(3rem,12vw,160px)] font-black uppercase leading-none tracking-tight focus:outline-none"
         >
-          Notas
+          Blog
         </h2>
       </FadeIn>
 
@@ -25,35 +26,30 @@ export function BlogSection() {
         </p>
       </FadeIn>
 
-      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-3 sm:gap-4 md:grid-cols-3">
-        {blogPosts.map((post, index) => (
-          <FadeIn key={post.title} delay={index * 0.1 + 0.25} y={30}>
-            <article className="group flex min-h-[320px] flex-col justify-between rounded-[28px] border border-[rgba(12,12,12,0.15)] bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-[rgba(12,12,12,0.45)] hover:shadow-[0_16px_35px_rgba(12,12,12,0.08)] sm:rounded-[34px] sm:p-7 md:rounded-[40px] md:p-8">
-              <div>
-                <div className="flex items-center justify-between gap-3 text-[0.68rem] font-medium uppercase tracking-[0.2em] opacity-[0.55]">
-                  <span>{post.category}</span>
-                </div>
-                <h3 className="mt-10 text-[clamp(1.35rem,2.4vw,2rem)] font-medium uppercase leading-tight">
-                  {post.title}
-                </h3>
-                <p className="mt-5 text-sm font-light leading-relaxed opacity-60 sm:text-base">
-                  {post.excerpt}
-                </p>
-              </div>
-              <a
-                href="#blog"
-                className="group/link mt-8 inline-flex w-fit items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] transition-opacity duration-300 hover:opacity-60"
-              >
-                Explorar tema
-                <ArrowUpRight size={17} strokeWidth={1.8} aria-hidden="true" className="transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
-              </a>
-            </article>
-          </FadeIn>
-        ))}
-      </div>
+      {blogPosts.slice(0, 3).length > 0 ? (
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {blogPosts.slice(0, 3).map((post, index) => (
+            <FadeIn key={post.id} delay={index * 0.1 + 0.25} y={30}>
+              <BlogCard post={post} headingLevel={3} source="landing" />
+            </FadeIn>
+          ))}
+        </div>
+      ) : (
+        <div className="mx-auto max-w-2xl rounded-[28px] border border-[rgba(12,12,12,0.15)] px-6 py-10 text-center sm:rounded-[34px] sm:px-8">
+          <h3 className="text-2xl font-medium">Aún no hay artículos</h3>
+          <p className="mt-4 text-base font-light leading-relaxed opacity-60">
+            Cuando haya contenido disponible, aparecerá aquí.
+          </p>
+        </div>
+      )}
 
-      <FadeIn delay={0.55} y={20} className="mt-12 flex justify-center sm:mt-16">
-        <LiveProjectButton href="#blog" label="Ver temas" light />
+      <FadeIn delay={0.55} y={20} className="mt-10 flex justify-center sm:mt-12">
+        <a
+          href={BLOG_INDEX_HREF}
+          className="inline-flex min-h-11 items-center rounded-full bg-[#0C0C0C] px-6 text-sm uppercase tracking-[0.14em] text-[#D7E2EA] transition hover:bg-[#0C0C0C]/75 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0C0C0C]"
+        >
+          Ver todos los artículos
+        </a>
       </FadeIn>
     </section>
   )
