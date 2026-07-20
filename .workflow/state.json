@@ -2,18 +2,44 @@
   "stage": "done",
   "active_project": "marc-portfolio",
   "path": "/home/agent/projects/marc-portfolio",
-  "updated_at": "2026-07-19",
+  "updated_at": "2026-07-20T12:32:13Z",
+  "deployment_target": "portfolio.mybrawl.io",
+  "deployment_status": "deployed_and_verified",
+  "deployed_release": "/var/www/portfolio.mybrawl.io/releases/20260720T123154Z-33154157c8be",
+  "deployment_verified_at": "2026-07-20T12:32:13Z",
+  "support_commit": "a6e1420b1e09dd7d1541df4f910b641a3a4e5a76",
+  "report_commit": "33154157c8be7071df40ef8fdc8270abc3d308bb",
+  "dns_status": "A resolves to 178.104.235.140 via 1.1.1.1 and 8.8.8.8; AAAA empty",
+  "http_status": "verified: HTTP 301 redirects to HTTPS",
+  "https_status": "verified: HTTPS 200 with the new hero copy and matching local dist hashes",
+  "sudo_status": "sudo requires interactive password; user/operator must run ops/portfolio-host.sh enable-tls",
   "artifacts": {
+    "plan": ".workflow/plan.md",
+    "implementation_task": ".workflow/hero_redesign_implementation_task.md",
+    "implementation_report": ".workflow/implementation_report.md",
+    "deploy_script": "ops/deploy-static.sh",
+    "host_script": "ops/portfolio-host.sh",
+    "nginx_config": "ops/nginx/portfolio.mybrawl.io.conf"
+  },
+  "previous_stage": "implementing",
+  "previous_workflow_task": "mobile_safe_profile_adaptation",
+  "deployment_approval": "Apruebo el deploy",
+  "workflow_task": "professional_hero_redesign",
+  "implementation_approval": true,
+  "implementation_result": "Approved hero redesign implemented, built, deployed locally to the production web root, and publicly verified; no commit or push.",
+  "browser_verification": "partial_real_browser: managed browser loaded local build; DOM/overflow/console/anchor/first-focus checks passed at available 1280x577 viewport; exact six viewport matrix remains unverified because exact resize control is unavailable",
+  "workflow_artifacts": {
     "planner_task": ".workflow/planner_task.md",
+    "plan": ".workflow/plan.md",
     "frontend_task": ".workflow/frontend_task.md",
     "frontend_report": ".workflow/frontend_report.md",
-    "plan": ".workflow/plan.md",
-    "implementation_task": ".workflow/implementation_task.md",
-    "implementation_report": ".workflow/implementation_report.md"
-  },
-  "verification": {
-    "npm_run_build": "passed",
-    "browser_smoke": "passed on default browser for desktop/#contact/no horizontal overflow/no console errors",
-    "push": "not attempted"
+    "implementation_task": ".workflow/hero_redesign_implementation_task.md",
+    "implementation_report": ".workflow/implementation_report.md",
+    "preserved_previous_implementation_report": ".workflow/previous_implementation_report_before_hero_redesign.md",
+    "preserved_deployment_plan": ".workflow/deployment_plan.md",
+    "preserved_previous_plan": ".workflow/previous_mobile_profile_adaptation_plan.md",
+    "preserved_previous_planner_task": ".workflow/previous_mobile_profile_adaptation_planner_task.md",
+    "preserved_previous_frontend_report": ".workflow/previous_mobile_profile_adaptation_frontend_report.md",
+    "frontend_report_mode": "fallback_after_profile_timeout"
   }
 }

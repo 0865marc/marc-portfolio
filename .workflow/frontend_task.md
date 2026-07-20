@@ -1,86 +1,116 @@
-# Frontend planning/design consultation — Marc Fullstack Developer portfolio
+# Frontend consultation task — professional hero redesign
 
-## Active project
+## Mode and deliverable
 
-- Name: `marc-portfolio`
-- Path: `/home/agent/projects/marc-portfolio`
-- Environment: local
-- Default branch: `main`
-- Current state: new directory, not yet a Git repository, with only workflow/specification artifacts
-- `AGENTS.md`: not currently present; check again and read it if present when you start
-- Local/dev URL: none yet because the React/Vite app has not been scaffolded
-- Deployed URL: none
-
-## Original user request (English)
-
-The user supplied a detailed React/TypeScript/Tailwind/Framer Motion portfolio template originally describing a 3D creator, asked to replace its Price section with a Blog section for Marc, and then clarified: change the identity from `3D Creator` to `Fullstack Developer` and implement it as a new React/Vite project.
-
-The complete adapted source specification is:
-
-`/home/agent/projects/marc-portfolio/.workflow/source_template.md`
-
-Treat that project-local specification as the source of truth. Read it in full before reporting.
-
-## Required product/technical direction
-
-- Plan a new React + TypeScript + Vite + Tailwind CSS landing page.
-- Use Framer Motion and Lucide React; use Kanit from Google Fonts.
-- Preserve the premium, high-motion, dark visual language.
-- Page order: Hero, Marquee, About, Services, Blog, Projects.
-- Navbar: About / Blog / Projects / Contact.
-- Replace Price completely with an editorial Blog section; no pricing table.
-- Identity/copy references must say Fullstack Developer, not 3D Creator.
-- Decorative 3D imagery may remain when it is purely visual, unless a more developer-aligned treatment is clearly better without expanding scope.
-- External image/GIF URLs may remain remote, but reliability and graceful fallback should be considered.
-- Missing real portfolio URLs, contact details, social links, blog URLs, and portrait may use honest placeholders and must be called out as follow-up content.
-
-## Git/deployment policy
-
-Policy from `/home/agent/projects/projects.yaml`:
-
-- `auto_deploy_on_push: false`
-- `allow_commit: true`
-- `allow_push: false`
-- `require_approval_before_push: true`
-- No deployment target is configured.
-- Do not commit, push, or deploy during this consultation.
-- Do not touch projects outside `/home/agent/projects/marc-portfolio` (reading the central policy is already complete).
-
-## Consultation scope
-
-Run in planning/design consultation mode only. Inspect and evaluate the specification and the empty project context. Use relevant frontend, browser, accessibility, responsive-design, or design skills when useful. You may inspect/test and may create workflow-only audit artifacts or prototypes under `/home/agent/projects/marc-portfolio/.workflow/` if they improve the report, but do not scaffold the app and do not make unapproved final implementation changes.
-
-Audit these flows/screens and concerns:
-
-1. Hero/navbar hierarchy, portrait overlap, contact CTA, and first-viewport behavior.
-2. Anchor navigation and the absence of a separately specified Contact section.
-3. Scroll-driven marquee behavior and remote GIF performance.
-4. About layout with decorative images and character-by-character animated text.
-5. Services-to-Blog light-section continuity and editorial Blog card usability.
-6. Sticky project-card behavior, card content density, and mobile alternatives.
-7. Responsive behavior from small mobile through ultrawide.
-8. Keyboard operation, semantic HTML, focus treatment, contrast, link semantics, alt text, and reduced-motion support.
-9. Animation performance and safe degradation on touch/coarse-pointer devices.
-10. A simple component/file architecture and practical browser-verification matrix.
-
-Because no app exists yet, a real browser audit may be impossible. If so, provide code/spec-only findings and clearly state that limitation rather than implying a live audit occurred.
-
-## Required report
-
-Write the final consultation report in English to exactly:
+Work in English internally. Operate only in planning/design consultation mode: inspect the repository, current UI, and current git state; test and use browser/design/frontend skills where useful; create supporting artifacts or non-production prototypes only under `.workflow/` when useful; do not make final implementation changes and do not edit source files. Write the final consultation report to:
 
 `/home/agent/projects/marc-portfolio/.workflow/frontend_report.md`
 
-Include:
+The report must state exactly what was inspected and tested, distinguish source-only reasoning from real browser evidence, and recommend one implementation direction. A brief alternative is optional only if it clarifies a real tradeoff.
 
-- Consultation method and limitations
-- Recommended information architecture and interaction behavior
-- Responsive/mobile recommendations
-- Accessibility and reduced-motion requirements
-- Motion/performance recommendations
-- Suggested component/data organization
-- Priority-ranked findings (must-have vs optional)
-- Concrete acceptance checks for the implementation
-- Any conflicts or ambiguities in the source specification that the planner must resolve
+## Project context
 
-Keep recommendations surgical and traceable to the requested landing page. Avoid speculative features, CMS/backend work, additional routes, or unrelated redesigns.
+- Active project: `marc-portfolio`
+- Active project path: `/home/agent/projects/marc-portfolio`
+- Environment: local
+- Current branch: `main`
+- Default branch: `main`
+- Local development URL when Vite is running: normally `http://127.0.0.1:5173/` or the URL printed by `npm run dev`
+- Stack: React 18, TypeScript, Vite 5, Tailwind CSS 3, Framer Motion, Lucide React
+- Build command: `npm run build`
+- Development command: `npm run dev -- --host 127.0.0.1`
+
+Read `AGENTS.md` if present before inspecting anything. None was found by the planner, but verify rather than assuming.
+
+## Git and deployment policy
+
+The working tree is already dirty with user work from prior iterations. `src/components/HeroSection.tsx` and other source/workflow files are modified. Treat every existing change as user work. Do not reset, restore, stash, stage, commit, push, deploy, or edit implementation files. Do not touch deployment, DNS, Nginx, TLS, hosts, secrets, servers, or `ops/`.
+
+Policy metadata:
+
+- `allow_commit: true`
+- `allow_push: false`
+- `require_approval_before_push: true`
+- `auto_deploy_on_push: false`
+- This consultation and the planned iteration are local-only.
+
+The following previous-work artifacts are preserved and must not be deleted or rewritten:
+
+- `.workflow/previous_mobile_profile_adaptation_plan.md`
+- `.workflow/previous_mobile_profile_adaptation_planner_task.md`
+- `.workflow/previous_mobile_profile_adaptation_frontend_report.md`
+
+You may replace only `.workflow/frontend_report.md` with this iteration's report and may place new supporting audit artifacts under a clearly named `.workflow/` subdirectory if necessary.
+
+## Original user request (English translation)
+
+The first section with the text “Hola soy Marc”, the emoji, and the supporting text does not convince the user. It does not look good on mobile or desktop and probably does not add much value. The supporting sentence — “Diseño y mantengo productos IoT, plataformas web e infraestructuras distribuidas orientadas a la fiabilidad, la escalabilidad y una buena experiencia de usuario.” — looks badly cut on desktop. The main “Hola…” text is not displayed in full, and the emoji is very small and occupies an awkward area. Re-think this first section so it looks more professional and clean.
+
+## Clarified scope and constraints
+
+- Redesign only the first viewport/hero and directly related styling/content.
+- Make the hero genuinely mobile-first and polished at narrow phone, tablet, and desktop widths.
+- Reconsider the clipped oversized heading, long narrow uppercase support paragraph, and small decorative portrait/emoji as one composition rather than merely shrinking them.
+- Prefer a simple hierarchy: clear professional identity, concise value proposition, and one obvious contact/next-step action.
+- The identity must not depend on an ornamental image. If the existing portrait/emoji remains, it needs a deliberate role, readable scale, explicit bounds, and zero overlap with copy or CTA; otherwise recommend removing it.
+- Preserve the dark visual identity and useful motion language, but prevent decoration from colliding or competing with copy.
+- Preserve anchors and navigation behavior: `#hero-title`, `#about`, `#blog`, `#projects`, and `#contact`, unless proposing a compatibility-preserving alternative.
+- Visible hero copy must remain Spanish and factual. Do not invent employer/customer names, countries, dates, metrics, or a real contact address.
+- Do not broaden scope to About, Services, Blog, Projects, deployment, or infrastructure. A shared CSS adjustment is allowed only if strictly required for the hero.
+- Preserve unrelated current modifications, especially previous Spanish/profile adaptation outside the hero.
+
+## Source evidence and areas to inspect
+
+Inspect the real current files and relevant diffs rather than relying only on this summary:
+
+- `src/components/HeroSection.tsx`: nav; `h1` with `whitespace-nowrap` and viewport-based sizing; absolute remote portrait inside `Magnet`; long uppercase narrow support paragraph; contact CTA.
+- `src/index.css`: `.hero-heading`, global overflow guards, focus styles, reduced-motion rules.
+- `src/components/Magnet.tsx`: pointer/reduced-motion behavior for the portrait.
+- `src/components/FadeIn.tsx`: reveal behavior and reduced-motion fallback.
+- `src/components/AnimatedText.tsx`: inspect for relevance, but do not assume it is used by the hero.
+- `src/components/ContactButton.tsx`: CTA size, labels, hover/focus/motion behavior.
+- `src/App.tsx` and section IDs only as needed to confirm anchor compatibility.
+- `package.json`, Tailwind config, and existing tests/tooling as needed.
+- Use `git status`, `git diff`, and narrowly scoped diffs to identify prior modifications. Do not undo them.
+
+The previous implementation report said browser smoke was blocked by missing Chrome/Chromium. Try a real browser/visual audit in this environment if a supported browser is now available. If Chrome/Chromium or browser tooling is unavailable, do not claim visual verification: report the limitation and provide source-based findings only.
+
+## Questions the report must resolve
+
+1. Recommend the exact new information hierarchy and exact Spanish hero copy. The lead must remain fully readable at 320–430px. A factual role line may use “Director de proyectos y desarrollador fullstack”. Keep the value proposition concise and avoid a dense all-uppercase paragraph.
+2. Decide whether to remove the portrait/emoji, retain it as a bounded secondary visual, or replace it with a more useful lightweight visual. Justify the recommendation using source and, where available, visual evidence. Prefer the simplest solution.
+3. Define layout behavior at approximately 320×568, 360×800, 390×844, 430×932, 768×1024, and 1440×900 for nav, heading/identity, value proposition, CTA, and any retained visual.
+4. Cover accessibility: semantic heading; full readable text without depending on animation; alt/empty-alt semantics; visible keyboard focus; touch-sized controls; reduced-motion behavior; no horizontal overflow concealed by global clipping.
+5. Name exact files/classes/components likely to change and explicitly identify what should remain untouched.
+
+## Audit priorities
+
+Evaluate the first viewport specifically for:
+
+- clipping and horizontal overflow;
+- awkward portrait/emoji scale and placement;
+- copy hierarchy, text measure, line breaks, and readable casing;
+- responsive wrapping and vertical fit, especially at 320×568;
+- nav density, keyboard focus, and touch targets;
+- CTA prominence and collision safety;
+- remote-image failure behavior if the image is retained;
+- reduced-motion behavior and content visibility;
+- browser console/network errors when browser testing is possible.
+
+For browser evidence, include the tested viewport dimensions, describe screenshots or measured bounding-box/overflow results, and state the browser/tool used. Do not alter implementation source to make the audit pass.
+
+## Required report structure
+
+Write `.workflow/frontend_report.md` with:
+
+- Consultation scope and evidence
+- Browser/visual verification status and limitations
+- Current-state findings, prioritized by severity
+- One recommended design direction
+- Exact proposed Spanish copy and hierarchy
+- Portrait/emoji decision and rationale
+- Responsive behavior for the full viewport matrix
+- Accessibility, focus, touch, and reduced-motion requirements
+- Exact likely file/component scope and explicit non-scope
+- Risks, assumptions, and any genuinely blocking question
+- Acceptance-oriented handoff notes for the planner

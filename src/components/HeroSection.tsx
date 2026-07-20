@@ -1,40 +1,34 @@
-import type { SyntheticEvent } from 'react'
 import { FadeIn } from './FadeIn'
-import { Magnet } from './Magnet'
 import { ContactButton } from './ContactButton'
 
-const portraitUrl =
-  'https://shrug-person-78902957.figma.site/_components/v2/d24c01ad3a56fc65e942a1f501eb73db42d7cf9a/Rectangle_40443.81459862.png'
-
 const navigation = [
-  { label: 'About', href: '#about' },
-  { label: 'Blog', href: '#blog' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Sobre mí', href: '#about' },
+  { label: 'Notas', href: '#blog' },
+  { label: 'Proyectos', href: '#projects' },
+  { label: 'Contacto', href: '#contact' },
 ]
-
-function hideBrokenImage(event: SyntheticEvent<HTMLImageElement>) {
-  event.currentTarget.style.opacity = '0'
-}
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen overflow-hidden bg-[#0C0C0C]" aria-labelledby="hero-title">
-      <div className="relative z-20 flex min-h-screen flex-col px-6 md:px-10">
+    <section className="relative min-h-[100svh] bg-[#0C0C0C]" aria-labelledby="hero-title">
+      <div className="mx-auto flex min-h-[100svh] w-full max-w-[1440px] flex-col px-5 sm:px-8 lg:px-12">
         <FadeIn delay={0} y={-20} className="w-full">
-          <nav className="flex items-center justify-between gap-4 pt-6 md:pt-8" aria-label="Primary navigation">
+          <nav
+            className="flex flex-col gap-1 pt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:pt-6 md:pt-8"
+            aria-label="Navegación principal"
+          >
             <a
               href="#hero-title"
-              className="text-sm font-semibold uppercase tracking-[0.24em] text-[#D7E2EA] transition-opacity duration-200 hover:opacity-70 md:text-lg lg:text-[1.4rem]"
+              className="inline-flex min-h-11 shrink-0 items-center text-sm font-semibold uppercase tracking-[0.24em] text-[#D7E2EA] transition-opacity duration-200 hover:opacity-70 md:text-[0.9375rem]"
             >
               Marc
             </a>
-            <ul className="flex items-center gap-4 text-right sm:gap-6 md:gap-10 lg:gap-14">
+            <ul className="grid w-full grid-cols-4 text-center text-[0.6875rem] font-medium uppercase tracking-[0.08em] text-[#D7E2EA] sm:flex sm:w-auto sm:items-center sm:justify-end sm:gap-4 sm:text-left sm:text-xs md:gap-6 md:text-sm lg:gap-8">
               {navigation.map((item) => (
-                <li key={item.href}>
+                <li key={item.href} className="min-w-0">
                   <a
                     href={item.href}
-                    className="text-xs font-medium uppercase tracking-wider text-[#D7E2EA] transition-opacity duration-200 hover:opacity-70 sm:text-sm md:text-lg lg:text-[1.4rem]"
+                    className="inline-flex min-h-11 w-full items-center justify-center transition-opacity duration-200 hover:opacity-70 sm:w-auto"
                   >
                     {item.label}
                   </a>
@@ -44,44 +38,26 @@ export function HeroSection() {
           </nav>
         </FadeIn>
 
-        <div className="flex flex-1 flex-col justify-center pb-24 pt-16 md:justify-start md:pb-28 md:pt-24">
-          <FadeIn delay={0.15} y={40}>
-            <div className="overflow-hidden">
-              <h1
-                id="hero-title"
-                className="hero-heading w-full whitespace-nowrap text-[14vw] font-black uppercase leading-none tracking-tight sm:text-[15vw] md:-mt-5 md:text-[16vw] lg:text-[17.5vw]"
-              >
-                Hi, i&apos;m marc
-              </h1>
-            </div>
-          </FadeIn>
-        </div>
-
-        <Magnet
-          padding={150}
-          strength={3}
-          className="absolute left-1/2 top-1/2 z-10 w-[280px] -translate-x-1/2 -translate-y-1/2 sm:top-auto sm:bottom-0 sm:w-[360px] sm:translate-y-0 md:w-[440px] lg:w-[520px]"
-        >
-          <div className="overflow-hidden rounded-t-[45%] bg-[radial-gradient(circle_at_50%_30%,rgba(215,226,234,0.22),transparent_62%)]">
-            <img
-              src={portraitUrl}
-              alt="Marc, Fullstack Developer"
-              width={520}
-              height={680}
-              decoding="async"
-              onError={hideBrokenImage}
-              className="block h-auto w-full object-contain"
-            />
-          </div>
-        </Magnet>
-
-        <div className="relative z-30 flex items-end justify-between gap-5 pb-7 sm:pb-8 md:pb-10">
-          <FadeIn delay={0.35} y={20} className="max-w-[160px] sm:max-w-[220px] md:max-w-[260px]">
-            <p className="text-[clamp(0.75rem,1.4vw,1.5rem)] font-light uppercase leading-snug tracking-wide text-[#D7E2EA]">
-              a fullstack developer crafting polished apps, robust systems, and memorable digital products
+        <div className="flex flex-1 flex-col justify-center gap-6 pb-10 pt-8 sm:gap-7 sm:pb-16 sm:pt-16 md:gap-8 md:pb-20 md:pt-20 lg:pb-24 lg:pt-24">
+          <FadeIn delay={0.1} y={24}>
+            <p className="max-w-[42ch] text-[0.6875rem] font-medium uppercase leading-snug tracking-[0.14em] text-[#D7E2EA] sm:text-xs md:text-sm">
+              Director de proyectos y desarrollador fullstack
             </p>
           </FadeIn>
-          <FadeIn delay={0.5} y={20}>
+          <FadeIn delay={0.18} y={24}>
+            <h1
+              id="hero-title"
+              className="hero-heading w-full max-w-[28ch] text-[clamp(2.5rem,8vw,5.5rem)] font-black leading-[0.98] tracking-tight"
+            >
+              Sistemas fiables, del producto a la infraestructura.
+            </h1>
+          </FadeIn>
+          <FadeIn delay={0.28} y={24}>
+            <p className="max-w-[42ch] text-base font-light leading-relaxed text-[#D7E2EA] sm:text-lg md:text-xl">
+              Diseño y mantengo plataformas IoT, productos web e infraestructuras distribuidas.
+            </p>
+          </FadeIn>
+          <FadeIn delay={0.38} y={24}>
             <ContactButton />
           </FadeIn>
         </div>

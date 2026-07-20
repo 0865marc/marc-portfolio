@@ -1,4 +1,5 @@
 import type { SyntheticEvent } from 'react'
+import { experience } from '../data/portfolio'
 import { FadeIn } from './FadeIn'
 import { AnimatedText } from './AnimatedText'
 import { ContactButton } from './ContactButton'
@@ -47,7 +48,7 @@ export function AboutSection() {
           delay={image.delay}
           x={image.x}
           y={0}
-          className={`pointer-events-none absolute z-0 opacity-80 ${image.className}`}
+          className={`pointer-events-none absolute z-0 hidden opacity-80 sm:block ${image.className}`}
         >
           <img
             src={image.src}
@@ -63,21 +64,48 @@ export function AboutSection() {
         </FadeIn>
       ))}
 
-      <div className="relative z-10 flex w-full max-w-3xl flex-col items-center gap-16 text-center sm:gap-20 md:gap-24">
+      <div className="relative z-10 flex w-full max-w-4xl flex-col items-center gap-14 text-center sm:gap-20 md:gap-24">
         <FadeIn delay={0} y={40}>
           <h2
             id="about-title"
             className="hero-heading text-[clamp(3rem,12vw,160px)] font-black uppercase leading-none tracking-tight"
           >
-            About me
+            Sobre mí
           </h2>
         </FadeIn>
 
-        <div className="flex flex-col items-center gap-16 sm:gap-20 md:gap-24">
+        <div className="flex w-full flex-col items-center gap-14 sm:gap-20 md:gap-24">
           <AnimatedText
-            text="I'm Marc, a fullstack developer focused on building fast, polished, and reliable digital products. I work across frontend, backend, integrations, automation, and user experience to turn ideas into scalable web applications. Let's build something incredible together!"
-            className="max-w-[560px] text-[clamp(1rem,2vw,1.35rem)] font-medium leading-relaxed text-[#D7E2EA]"
+            text="Soy Marc, desarrollador fullstack y director de proyectos. Trabajo conectando producto, software e infraestructura: desde una plataforma web que recibe datos de miles de dispositivos IoT hasta operaciones distribuidas con servidores en distintos países."
+            className="max-w-2xl text-[clamp(1rem,2vw,1.35rem)] font-medium leading-relaxed text-[#D7E2EA]"
           />
+
+          <div className="w-full max-w-3xl text-left">
+            <h3 className="mb-8 text-center text-xs font-semibold uppercase tracking-[0.24em] text-[#D7E2EA]/60 sm:mb-10">
+              Experiencia
+            </h3>
+            <div className="space-y-8 sm:space-y-10">
+              {experience.map((entry) => (
+                <article
+                  key={entry.id}
+                  className="grid gap-4 border-t border-[#D7E2EA]/20 pt-8 sm:grid-cols-[minmax(0,0.85fr)_minmax(0,1.5fr)] sm:gap-8 sm:pt-10"
+                >
+                  <h4 className="text-[clamp(1.15rem,2.5vw,1.8rem)] font-medium uppercase leading-tight text-[#D7E2EA]">
+                    {entry.title}
+                  </h4>
+                  <div>
+                    <p className="text-[clamp(0.95rem,1.6vw,1.2rem)] font-light leading-relaxed text-[#D7E2EA]/80">
+                      {entry.description}
+                    </p>
+                    <p className="mt-4 text-xs font-medium uppercase tracking-[0.14em] text-[#D7E2EA]/50">
+                      {entry.stack}
+                    </p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+
           <FadeIn delay={0.2} y={20}>
             <ContactButton />
           </FadeIn>

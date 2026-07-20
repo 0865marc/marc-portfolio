@@ -1,135 +1,93 @@
-# Frontend/UI-UX consultation report — Marc Fullstack Developer portfolio
+# Frontend/UI-UX consultation report — fallback after profile timeout
 
-## Scope, method, and limitations
+## Consultation scope and evidence
 
 - Project: `/home/agent/projects/marc-portfolio`
-- Mode: planning/design consultation for a new React/Vite landing page.
-- Source specification: `.workflow/source_template.md`.
-- No runnable app exists yet, so this is a spec/code-architecture review rather than a rendered browser audit.
-- The dedicated frontend profile was invoked but did not complete within the tool timeout; this report is a fallback frontend-specialist review so planning can continue without fabricating a completed profile run.
+- Request: redesign only the first hero viewport so the identity, supporting copy, CTA, and portrait/emoji treatment feel professional and clean on mobile and desktop.
+- The dedicated `frontend` profile was launched by the planner, but the planner session timed out after 600 seconds and no new frontend report was produced. The frontend process was then stopped after verifying the expected report was still absent. This document is an explicit orchestrator fallback, not a completed frontend-profile run.
+- Source inspected directly: `src/components/HeroSection.tsx`, `src/index.css`, `src/components/Magnet.tsx`, `src/components/FadeIn.tsx`, `src/components/AnimatedText.tsx`, `src/components/ContactButton.tsx`, `src/App.tsx`, `package.json`, and the current git status.
+- No implementation source was edited as part of this consultation.
+- Existing saved screenshots under `.workflow/frontend_artifacts/screenshots/` were inspected as visual context, but their timestamps/content predate or do not conclusively represent the current Spanish source state. They must not be treated as a current browser acceptance run. No fresh browser/console/network verification is claimed because the profile timeout prevented a valid run and the prior environment reported no Chrome/Chromium runtime.
 
-## Executive summary
+## Current-state findings
 
-The supplied template can work well as a premium high-motion personal portfolio, but the implementation should treat it as a **Fullstack Developer** portfolio, not a 3D creator page. Keep the dark cinematic visual identity and motion system, replace Price with Blog, and make services/projects/blog content developer-focused. The highest-risk parts are mobile hero overlap, remote GIF performance, sticky project cards on small screens, contact-link behavior without a dedicated Contact section, and reduced-motion/accessibility support.
+### P0 — Hero heading is intentionally clipped by its layout model
 
-## Priority findings
+`HeroSection.tsx` places `Hola, soy Marc` in an `overflow-hidden` wrapper and applies `whitespace-nowrap` with viewport-based font sizes up to `17.5vw`. This makes the heading depend on a single line being wider than the viewport. The user's report that the main text is not fully displayed is consistent with this implementation. The global `overflow-x: hidden/clip` guard must not be considered a fix.
 
-### P0 — No runnable project scaffold exists yet
+**Recommendation:** remove `whitespace-nowrap` and the clipping dependency. Use a normal-flow, responsive heading with a deliberate maximum measure, controlled line breaks or natural wrapping, and a desktop scale that leaves margins. The complete text must remain in the DOM and visible.
 
-- Location: project root.
-- Observed: only `.workflow/` artifacts exist; no Vite, Tailwind, or React files yet.
-- Why it matters: implementation must create a real app, not only adapt the markdown prompt.
-- Proposed change: scaffold a minimal Vite React TypeScript app manually inside the existing non-empty project directory, then install dependencies and build.
+### P1 — Supporting copy has the wrong measure and casing
 
-### P1 — Identity must be consistently Fullstack Developer
+The supporting paragraph is constrained to `max-w-[220px]`/`[260px]` and uses uppercase, tracking, and a very long sentence. This creates excessive line breaks and makes the paragraph feel like a narrow label rather than a professional positioning statement. On desktop it occupies a small column while the heading consumes most of the visual field.
 
-- Location: title, hero, about copy, services, blog, project labels.
-- Observed: adapted spec replaces identity copy, but visual assets/project images still originate from a 3D/creative template.
-- Why it matters: mixed 3D/developer language would weaken positioning.
-- Proposed change: keep decorative 3D imagery as visual style only, but ensure all visible professional positioning says Fullstack Developer / frontend / backend / integrations / automation / product UX.
+**Recommendation:** replace it with a short Spanish role/value block, normal sentence casing, `max-w` around 32–42ch, and a stable line-height. Keep only claims supplied by the user, for example a role line and a concise sentence about IoT platforms, web products, and distributed infrastructure.
 
-### P1 — Contact target is underspecified
+### P1 — Portrait/emoji is an ornamental collision layer without a clear role
 
-- Location: nav `Contact`, `ContactButton`.
-- Observed: no separate Contact section is in the required section order.
-- Why it matters: links/buttons should not be dead controls.
-- Proposed change: use safe placeholders initially (`#contact`), and add a compact contact/footer block at the end of ProjectsSection or as a small footer with `id="contact"`. Mark real email/social/contact URLs as follow-up content.
+The remote portrait is absolutely positioned inside `Magnet`, centered over the hero and visually layered with the heading/content. Its role is decorative rather than informational, and its mobile scale/placement contributes to the reported awkward composition. `onError` only hides the image; it does not provide a layout alternative.
 
-### P1 — Motion and scroll effects need safe degradation
+**Recommendation:** remove the portrait from the primary hero in the preferred direction. A clean typographic hero better communicates the professional identity and removes remote-image, z-index, pointer, and responsive collision risk. If product/design insists on retaining it, use a clearly bounded secondary media panel in normal layout flow, never behind the heading or CTA, with reduced-motion-safe behavior and a meaningful or empty alt decision.
 
-- Location: marquee, sticky project cards, AnimatedText, FadeIn, Magnet.
-- Observed: the template relies heavily on scroll and hover-based motion.
-- Why it matters: mobile/touch devices, reduced-motion users, and lower-power devices can suffer if motion is uncontrolled.
-- Proposed change: implement `prefers-reduced-motion` fallbacks, passive/rAF scroll handling for marquee, disable/soften Magnet on coarse pointers, and provide non-sticky/mobile-friendly project cards below `md` if sticky stacking feels cramped.
+### P2 — Hero contains too many competing visual signals
 
-### P1 — Remote GIF/image performance
+The current first viewport has a large gradient heading, a remote illustrated portrait, a narrow uppercase paragraph, nav links, and a CTA. The heading and portrait compete for the center while the summary and CTA sit at opposing lower corners. The visual language is distinctive but not sufficiently structured for a professional portfolio introduction.
 
-- Location: MarqueeSection and ProjectsSection.
-- Observed: 21 remote GIFs plus remote project images can be heavy.
-- Why it matters: first load and scroll performance may degrade.
-- Proposed change: lazy-load below-the-fold images, set width/height, `decoding="async"`, `loading="lazy"`, `object-cover`, alt text, and graceful placeholder backgrounds. Avoid preloading all marquee GIFs.
+**Recommendation:** use a three-level hierarchy: small eyebrow/availability or discipline label only if truthful; one readable identity heading; one concise value proposition; one primary contact CTA. Keep the nav quiet and preserve anchors.
 
-### P2 — Blog section should be editorial, not pricing-like
+## Recommended design direction
 
-- Location: BlogSection.
-- Observed: adapted spec defines three cards and a `Read More` CTA.
-- Why it matters: it must clearly replace Price and not look like a plan table.
-- Proposed change: use article cards with category/date/title/excerpt/read link, no pricing amounts, no feature comparison, no plan names.
+Implement a typographic, editorial hero with no portrait/emoji in the primary composition:
 
-## Recommended information architecture
+1. Header: retain `Marc` and the existing anchor navigation. On narrow screens, use a compact wrapping-safe layout or a reduced nav treatment that keeps every link readable and touchable; do not let the nav consume the hero title's width.
+2. Identity: use a semantic `h1` with short, fully visible Spanish content. Recommended hierarchy:
+   - eyebrow: `Director de proyectos · Fullstack · IoT` (only if the final copy team accepts this factual summary);
+   - heading: `Construyo sistemas que deben funcionar bien.`;
+   - role/value line: `Director de proyectos y desarrollador fullstack.`
+3. Supporting proposition: `Trabajo entre producto, software e infraestructura para crear plataformas IoT, productos web y operaciones distribuidas fiables.` This is deliberately shorter than the current sentence and stays factual without employer/customer names or unsupported metrics.
+4. CTA: keep one prominent `Contactar`/`Hablemos` action pointing to `#contact`; retain the existing real anchor and accessible focus behavior. If a secondary scroll cue is useful, make it quiet and non-competing rather than adding another button.
+5. Visual treatment: retain the dark background, restrained gradient accent, and subtle entrance motion, but make the content the visual. Remove `Magnet`/remote portrait usage from this section unless the planner chooses the bounded-flow alternative based on stronger evidence.
 
-1. Hero: immediate identity — `Hi, i'm marc`, subtitle as fullstack developer, contact CTA.
-2. Marquee: visual proof/energy; treat GIFs as inspiration/portfolio placeholders.
-3. About: concise developer positioning across frontend, backend, integrations, automation, UX.
-4. Services: five fullstack service rows.
-5. Blog: three editorial cards about frontend/backend/automation.
-6. Projects: sticky project cards with developer-oriented names and placeholder imagery.
-7. Contact: compact anchor/footer block if no real contact URL is available.
+The exact copy is a planning recommendation and should be implemented only after user approval of the plan. It should not be expanded with invented credentials, companies, client names, locations, or metrics.
 
-## Responsive/mobile recommendations
+## Responsive behavior requirements
 
-- Keep hero `h-screen`, but test iPhone/narrow widths for portrait and heading overlap.
-- Use `whitespace-nowrap` for hero heading as specified, but ensure it does not cause horizontal scroll; main wrapper must use `overflow-x: clip`.
-- For sticky project cards, use stacked normal-flow cards on small screens if sticky creates clipping or unusable scroll length.
-- Use `clamp()` typography exactly where specified, but cap small-screen line-height and spacing so the first viewport remains readable.
-- Decorative About images should be `pointer-events-none`, `aria-hidden`, and opacity/size controlled so they do not cover text on mobile.
+- `320x568`: nav remains readable without horizontal overflow; heading wraps intentionally in at most a few lines and is fully visible; value proposition and CTA remain in normal flow; no absolute visual overlaps.
+- `360x800`, `390x844`, `430x932`: maintain comfortable side padding, readable line length, full heading/value copy, and a touch-sized CTA. The hero should not rely on viewport clipping or a portrait positioned over text.
+- `768x1024`: transition to a balanced two-column or editorial composition only if both columns have a clear purpose; avoid recreating a giant clipped heading.
+- `1440x900`: use a max-width content container and a controlled heading size; keep the support copy at a readable 32–42ch measure; retain generous whitespace without pushing the CTA into an unrelated corner.
+- Across all sizes: `document.documentElement.scrollWidth` must not exceed `clientWidth`; no important element may be outside its intended container; content must remain reachable in normal document flow.
 
-## Accessibility and interaction requirements
+## Accessibility, focus, touch, and reduced motion
 
-- Use semantic landmarks: `header`, `nav`, `main`, `section`, `article`, `footer` as appropriate.
-- Use real anchors/buttons with accessible names.
-- Add `id` targets for `about`, `blog`, `projects`, and `contact`.
-- Give meaningful alt text to portfolio/project images; decorative images should use empty alt and `aria-hidden`.
-- Keep visible keyboard focus for nav links, ContactButton, Read Article, Read More, and Live Project buttons.
-- Respect `prefers-reduced-motion` for scroll reveals, sticky scaling, marquee transforms, and magnetic hover.
-- Ensure normal text contrast meets WCAG AA against dark/light backgrounds.
+- Keep one semantic `h1` with complete readable text; do not make essential meaning dependent on animation.
+- If the portrait is removed, remove its `img`, `Magnet`, remote URL, and image-specific error handler from the hero. If retained as decoration, use `alt=""`, `aria-hidden="true"`, and `pointer-events-none`; if informative, provide an accurate concise alt.
+- Preserve visible `:focus-visible` styling and real anchors/buttons. Keep primary controls comfortably touch-sized.
+- Keep `prefers-reduced-motion` behavior: copy must remain visible, and any retained motion/hover effect must soften or disable appropriately.
+- Do not use global overflow clipping to conceal bad wrapping; verify actual element bounds.
 
-## Suggested component/data organization
+## Likely file scope
 
-- `src/main.tsx`
-- `src/App.tsx`
-- `src/index.css`
-- `src/data/portfolio.ts`
-- `src/components/FadeIn.tsx`
-- `src/components/Magnet.tsx`
-- `src/components/AnimatedText.tsx`
-- `src/components/ContactButton.tsx`
-- `src/components/LiveProjectButton.tsx`
-- `src/components/HeroSection.tsx`
-- `src/components/MarqueeSection.tsx`
-- `src/components/AboutSection.tsx`
-- `src/components/ServicesSection.tsx`
-- `src/components/BlogSection.tsx`
-- `src/components/ProjectsSection.tsx`
+Required likely changes:
 
-Keep data arrays for GIFs, services, blog posts, and projects in `src/data/portfolio.ts` so copy can be edited later without hunting through JSX.
+- `src/components/HeroSection.tsx`: new hierarchy, copy, layout, and removal or bounded-flow handling of the portrait.
+- `src/index.css`: only if a small hero-specific class is needed for gradient/type treatment or responsive behavior that is clearer than inline Tailwind classes.
 
-## Motion/performance implementation notes
+Potentially inspect but avoid changing unless required:
 
-- Use Framer Motion for FadeIn, AnimatedText, and project card scale transforms.
-- For marquee scroll, prefer a `requestAnimationFrame`-guarded passive scroll listener to avoid setState on every scroll event.
-- Use `will-change: transform` only on actively moving elements, not globally.
-- Disable or minimize hover-only Magnet behavior on touch/coarse pointers.
-- Avoid layout thrashing by measuring sectionTop with `getBoundingClientRect` only on mount/resize or derive via `offsetTop`.
+- `src/components/ContactButton.tsx` for CTA label/size compatibility.
+- `src/components/Magnet.tsx` only if the portrait is retained elsewhere; do not make unrelated global interaction changes.
+- `src/components/FadeIn.tsx` only if the new composition needs existing reveal wrappers.
 
-## Acceptance checks for implementation
+Explicitly out of scope: About, Services, Blog, Projects, global navigation architecture, deployment, DNS, Nginx, TLS, secrets, `ops/`, dependencies, and unrelated dirty files.
 
-- `npm install` completes and creates lockfile.
-- `npm run build` passes.
-- The page title is `Marc -- Fullstack Developer`.
-- No visible `3D Creator`, `3d creator`, `Price`, or pricing-table copy remains.
-- Navbar links are `About`, `Blog`, `Projects`, `Contact` and point to working anchors.
-- Blog section exists and contains editorial article cards, not pricing cards.
-- Services are fullstack/developer-focused.
-- Marquee uses 21 provided GIF URLs, split 11/10 and tripled.
-- Main wrapper has `overflow-x: clip`; no horizontal overflow at 320px/375px.
-- Reduced-motion mode does not depend on continuous animation to understand content.
-- Browser smoke check shows no console errors on initial load.
+## Risks and assumptions
 
-## Risks and follow-up content needed
+- The exact asset referred to by the user as an “emoji” is the remote portrait currently rendered by `HeroSection.tsx`; if another asset is found during implementation, apply the same decision to that asset.
+- Existing screenshots in workflow artifacts are not reliable proof of the current source state, so implementation must perform a fresh build and browser check if a browser becomes available.
+- Removing the portrait changes the emotional tone of the original template, but it is the lowest-risk way to meet the user's stated desire for a cleaner, more professional hero and eliminates the reported small/awkward decorative area.
+- No blocking product question remains for planning: the user has explicitly requested a rethink, and the planner can present the recommended typographic direction for approval.
 
-- Real contact destination is missing.
-- Real project URLs are missing.
-- Real Marc portrait/image is missing.
-- Remote assets may fail or be slow; placeholders/fallback backgrounds are needed.
-- The source spec requests exact animation behavior, but final implementation should favor stable, accessible behavior over fragile pixel-perfect motion if there is a conflict.
+## Handoff to planner
+
+Use this report as supporting consultation context only. The approved `.workflow/plan.md` must specify the final copy, exact responsive classes/structure, the portrait removal decision, preserved anchors, and verification commands. Do not treat this fallback as evidence that browser acceptance has passed.

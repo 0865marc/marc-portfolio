@@ -12,7 +12,7 @@ export function ServicesSection() {
           id="services-title"
           className="mb-16 text-center text-[clamp(3rem,12vw,160px)] font-black uppercase leading-none tracking-tight sm:mb-20 md:mb-28"
         >
-          Services
+          Servicios
         </h2>
       </FadeIn>
 

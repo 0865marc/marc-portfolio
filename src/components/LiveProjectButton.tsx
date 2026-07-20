@@ -8,7 +8,7 @@ type LiveProjectButtonProps = {
 
 export function LiveProjectButton({
   href = '#contact',
-  label = 'Live Project',
+  label = 'Ver proyecto',
   light = false,
 }: LiveProjectButtonProps) {
   return (

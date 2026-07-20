@@ -4,9 +4,15 @@ export type Service = {
   description: string
 }
 
+export type Experience = {
+  id: string
+  title: string
+  description: string
+  stack: string
+}
+
 export type BlogPost = {
   category: string
-  date: string
   title: string
   excerpt: string
 }
@@ -47,60 +53,74 @@ export const marqueeRows = [
   [...marqueeGifs.slice(11), ...marqueeGifs.slice(11), ...marqueeGifs.slice(11)],
 ] as const
 
+export const experience: Experience[] = [
+  {
+    id: 'first-stage',
+    title: 'Primera etapa profesional — Desarrollo fullstack e IoT',
+    description:
+      'Participé en un refactor integral hacia una plataforma web Django/Python más escalable, que recibía datos de miles de dispositivos IoT agrícolas e industriales e incorporaba herramientas de gestión ERP y CRM. Trabajé con PostgreSQL, MQTT, RabbitMQ y Celery para tareas asíncronas pesadas, además de la gestión cloud y VPS.',
+    stack: 'PostgreSQL · MQTT · RabbitMQ · Celery · cloud · VPS',
+  },
+  {
+    id: 'project-direction',
+    title: 'Director de proyectos e infraestructura',
+    description:
+      'Dirijo proyectos e infraestructura para un dispositivo IoT de cocina, gestiono la relación con clientes y distribuidores internacionales y coordino desarrolladores externos en APIs, web, Android, iOS y sistemas embebidos. Mantengo más de 15 servidores en distintos países y trabajo con Docker, Terraform y VPS para cuidar la latencia y la experiencia de usuario.',
+    stack: 'Dirección técnica · Docker · Terraform · VPS · sistemas distribuidos',
+  },
+]
+
 export const services: Service[] = [
   {
     number: '01',
-    name: 'Frontend Development',
+    name: 'Plataformas IoT y backend',
     description:
-      'Building polished, responsive, and accessible interfaces with strong attention to motion, layout, performance, and mobile-first usability.',
+      'Plataformas web y sistemas backend que reciben, procesan y exponen datos de dispositivos con fiabilidad.',
   },
   {
     number: '02',
-    name: 'Backend Architecture',
+    name: 'Arquitectura Django y Python',
     description:
-      'Designing reliable APIs, data models, authentication flows, and server-side systems that keep products stable and scalable.',
+      'Aplicaciones escalables con Django y Python, modelos de datos en PostgreSQL y herramientas de gestión ERP y CRM.',
   },
   {
     number: '03',
-    name: 'Fullstack Web Apps',
+    name: 'Mensajería y procesos asíncronos',
     description:
-      'Creating complete web applications from concept to launch, connecting product thinking, frontend quality, backend logic, and deployment.',
+      'Flujos de dispositivos y operaciones con MQTT, RabbitMQ y Celery para trabajo asíncrono pesado.',
   },
   {
     number: '04',
-    name: 'Integrations & Automation',
+    name: 'Infraestructura cloud y VPS',
     description:
-      'Connecting services, workflows, APIs, webhooks, and internal tools so businesses can move faster with fewer manual processes.',
+      'Operación de cloud y VPS con Docker y Terraform, cuidando la fiabilidad, la latencia y la experiencia de usuario.',
   },
   {
     number: '05',
-    name: 'Product UX & Iteration',
+    name: 'Dirección técnica y producto',
     description:
-      'Improving flows, dashboards, forms, and user journeys with practical UX decisions grounded in real usage and measurable outcomes.',
+      'Coordinación técnica de APIs, web, Android, iOS, sistemas embebidos, desarrolladores externos y distribuidores internacionales.',
   },
 ]
 
 export const blogPosts: BlogPost[] = [
   {
-    category: 'Frontend',
-    date: '01 / 2026',
-    title: 'How I turn product ideas into polished interfaces',
+    category: 'Arquitectura IoT',
+    title: 'Arquitecturas para plataformas IoT',
     excerpt:
-      'A practical look at translating requirements into responsive layouts, accessible components, and interactions that feel fast and natural.',
+      'Principios para recibir, validar y exponer datos de dispositivos sin perder trazabilidad ni capacidad de crecimiento.',
   },
   {
-    category: 'Backend',
-    date: '02 / 2026',
-    title: 'The quiet systems behind reliable web products',
+    category: 'Procesos asíncronos',
+    title: 'RabbitMQ y Celery para procesos pesados',
     excerpt:
-      'APIs, data models, authentication, queues, and integrations are invisible when they work well. That is exactly the point.',
+      'Cómo separar el trabajo intensivo de la petición principal y diseñar flujos operativos más resistentes.',
   },
   {
-    category: 'Automation',
-    date: '03 / 2026',
-    title: 'Building workflows that save teams real time',
+    category: 'Infraestructura distribuida',
+    title: 'Infraestructura distribuida y latencia',
     excerpt:
-      'How webhooks, dashboards, scripts, and internal tools can remove repetitive work and make operations easier to trust.',
+      'Criterios para operar servidores en distintas ubicaciones y cuidar la fiabilidad y la experiencia de usuario.',
   },
 ]
 
