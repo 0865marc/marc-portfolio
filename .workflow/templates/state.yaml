@@ -1,0 +1,35 @@
+schema_version: 1
+run_id: 20000101T000000Z-example-run
+status: intake
+repository:
+  root: .
+  branch: main
+  baseline_head: '0000000000000000000000000000000000000000'
+  pre_existing_changes: []
+roles:
+  requester: ''
+  planner: ''
+  approver: ''
+  implementer: ''
+  verifier: ''
+  release_approver: ''
+  releaser: ''
+  knowledge_reviewer: ''
+scope_sha256: '0000000000000000000000000000000000000000000000000000000000000000'
+plan_sha256: '0000000000000000000000000000000000000000000000000000000000000000'
+approval_refs: []
+evidence_refs: []
+git:
+  commit_allowed: false
+  push_allowed: false
+  commit: null
+  push_target: null
+deployment:
+  allowed: false
+  environment: production
+  trigger: github_push_webhook
+  commit: null
+  target: null
+  post_deploy_evidence: null
+blocker: null
+transitions: []

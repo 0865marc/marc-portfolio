@@ -1,0 +1,20 @@
+schema_version: 1
+task_id: dev-20260721-2216-workflow-contract
+review_status: pending
+summary: Review bounded source-verifiable workflow and deployment knowledge changes.
+knowledge_delta:
+  added_nodes:
+    - .workflow/README.md and .workflow/policy.yaml define prospective workflow records; task history is not durable knowledge.
+  changed_nodes: []
+  deprecated_nodes: []
+  adr_needed: false
+  adr_reason: ''
+  design_changed: false
+  design_notes: ''
+  stale_knowledge:
+    - .agents/context/project.md wording about preserving workflow history may be stale after the explicitly approved cleanup.
+    - .agents/context/operations.md may be stale relative to the host-managed push webhook documented in ops/github-webhook-autodeploy.md.
+    - .agents/domains/release.md may be stale relative to the host-managed push webhook documented in ops/github-webhook-autodeploy.md.
+reviewed_by: ''
+reviewed_at: null
+reindex_approved: false
