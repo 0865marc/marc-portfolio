@@ -1,0 +1,331 @@
+{"record": "meta", "schema_version": "1"}
+{"hash": "b94f2e0a8f3ac53af575f56a8841cf948230ffe7199c753ed101cfe052dc25d7", "id": "file:03fc26223fa2204fb3eba016", "kind": "file", "path": "src/components/BlogIndexView.tsx", "record": "node", "title": "BlogIndexView"}
+{"hash": "70500f5bbb50ee1da7502b3696298859991b76940d6f14f2ccea5af43702e795", "id": "file:084e48c19cf800d722e88456", "kind": "file", "path": "src/components/AboutSection.tsx", "record": "node", "title": "AboutSection"}
+{"hash": "c644c16ab1d4736edbdeb07584e7c7849b78b4d00ffcf6f94a72993720f39264", "id": "file:09ca90d157e573d1c66d063b", "kind": "file", "path": ".agents/domains/release.md", "record": "node", "title": "Release and deployment domain"}
+{"hash": "a4ee64acb0c388441c38fa209476c2555463b70f0ce6b87d4ddeabebc25a6280", "id": "file:11dc8987cb4d3be7fb3c45a0", "kind": "file", "path": ".agents/scripts/validate_design.py", "record": "node", "title": "validate_design"}
+{"hash": "957b2f0a4a91d2e854bb0dfdca73f33219838d16e7d95f96498f32d8db036cbe", "id": "file:29902c5645394f9ee56daad4", "kind": "file", "path": ".agents/README.md", "record": "node", "title": "Marc Portfolio project knowledge"}
+{"hash": "710a4251386815482ab2162f3f304eb70e3886c809c396ca320b5282c6c22332", "id": "file:2a404272b6a6d18eb0ce7689", "kind": "file", "path": ".agents/manifest.yaml", "record": "node", "title": "manifest"}
+{"hash": "203c0780c1e4d64fff2bd42190b666ba6253cbf5ea15c4511859c8df1f2e3a44", "id": "file:2ac4d0068aa5b67f167321a2", "kind": "file", "path": "src/lib/blogRoutes.ts", "record": "node", "title": "blogRoutes"}
+{"hash": "6b0d2b9bb8e2c8649776d1dc252951ff63c0bfa70a3e63369faaf48111089aa5", "id": "file:34f64a130c872fd5f44cf347", "kind": "file", "path": "src/index.css", "record": "node", "title": "index"}
+{"hash": "bf8b7bc2cf151fb81a93f2248f86a06cd03e5b391eaa6eabcc14eeb05270aca7", "id": "file:389a219263563226584cf4a0", "kind": "file", "path": "tailwind.config.js", "record": "node", "title": "tailwind.config"}
+{"hash": "00105cedff3c025eee1ab717134b09eed1cf69da634d082d619b798ead5e80ef", "id": "file:3921938be33d4b695d48cff6", "kind": "file", "path": "src/components/FadeIn.tsx", "record": "node", "title": "FadeIn"}
+{"hash": "986b901e4309e9a666fed9ac5e4eed2f358da4959dd348814f2ee72cb11ae5e7", "id": "file:398d7e8674fc3b23eff79f4e", "kind": "file", "path": "src/data/blog.ts", "record": "node", "title": "blog"}
+{"hash": "343c040d532d52c966973631a1487e9d943da9485aec1f55a956d6ed60a053a1", "id": "file:3dd2730e859dc75ab5e9695d", "kind": "file", "path": ".agents/scripts/index_project.py", "record": "node", "title": "index_project"}
+{"hash": "15613f1f305e5efe7999279fd696650152dcde9cf5de4d84d3c7d2093cca8cbf", "id": "file:421cb2c2245d9977ecd121bd", "kind": "file", "path": "src/components/BlogSection.tsx", "record": "node", "title": "BlogSection"}
+{"hash": "69e852afbcdad78aaa2f12cee1d9d8474878126fee772e81b853e59015b56965", "id": "file:44a6f521868b8f35e5432401", "kind": "file", "path": ".agents/graph/README.md", "record": "node", "title": "Project graph and search index"}
+{"hash": "0d6b2ee1133cdc8a0be1d0508284c0b214f58ab3b42e0778442d4f629e1b68ce", "id": "file:46c5aaea01c6a732f66c80b9", "kind": "file", "path": ".agents/context/project.md", "record": "node", "title": "Project context"}
+{"hash": "34e9e8f66037d5686bef389c895c1a82ce62739751d29aa5e69a5a53af7e2c36", "id": "file:4928c6d8bac8a7a71bbd8144", "kind": "file", "path": "src/components/ProjectsSection.tsx", "record": "node", "title": "ProjectsSection"}
+{"hash": "1b6d46f3f0271517e4ed63d76c1d54f309c5c7088e760141e713ddc95f131711", "id": "file:4ad82745f002a1706b995d1b", "kind": "file", "path": "ops/deploy-static.sh", "record": "node", "title": "deploy-static"}
+{"hash": "f71c7c085e50dd2127bbacdcfbc201c1446480fe15e32e51c27b205c8864a734", "id": "file:4dde9e0b18c68a0a8c3577ba", "kind": "file", "path": "src/components/ContactButton.tsx", "record": "node", "title": "ContactButton"}
+{"hash": "d1fc4ff9566108e2afc45e27415556eec6a05e281a59c74cd5703fc75750c910", "id": "file:50c17cb98fbfa49a1731be8e", "kind": "file", "path": "ops/nginx/portfolio.mybrawl.io.conf", "record": "node", "title": "portfolio.mybrawl.io"}
+{"hash": "a564557307a161487824dcb25877e384b82667f8485eff5abc0affe14222e438", "id": "file:50cf4ee61dfed1efb5ddc9a0", "kind": "file", "path": ".agents/graph/schema.md", "record": "node", "title": "Generated index schema"}
+{"hash": "6dc0ce25c4170ac9fbadb4dbd19ca5c2ceb57b9c5efc5090b82e2923f53dd679", "id": "file:5d0486254aee8dd1e5f27e6b", "kind": "file", "path": "vite.config.ts", "record": "node", "title": "vite.config"}
+{"hash": "d9ee05f73a1383003409bf7ac4ba577ac74a91e65871a627ff9ff2f0ba484ea8", "id": "file:5df61f3b735e3ecac400c265", "kind": "file", "path": "src/components/LiveProjectButton.tsx", "record": "node", "title": "LiveProjectButton"}
+{"hash": "15f8a207427871da525bc7750b173ca49f4e68197574b256160d1edd1f000557", "id": "file:5f7af62de8d86d82d4bbdc9a", "kind": "file", "path": ".agents/domains/portfolio.md", "record": "node", "title": "Portfolio landing domain"}
+{"hash": "e1936cf60f527244f12d459df72f7f49f869452f7ec0a30d253546a820ffa1b6", "id": "file:61136396a55fb3ddd081bc9e", "kind": "file", "path": "ops/github-webhook-autodeploy.md", "record": "node", "title": "marc-portfolio GitHub webhook autodeploy"}
+{"hash": "9d12bf559b4ed067e7fe081e647b92ddd172a4b2e8b78df545065f94282e5f9e", "id": "file:677316277e7381477c189b7c", "kind": "file", "path": "src/components/AnimatedText.tsx", "record": "node", "title": "AnimatedText"}
+{"hash": "707dad8bac5d64ea6ecd11d06ab069000884ea7c571f1a791d787c9ba9a383c5", "id": "file:77056848a1876efb6d3b710f", "kind": "file", "path": ".agents/context/architecture.md", "record": "node", "title": "Application architecture"}
+{"hash": "e82d87ed1e0613c7926731d8f54c9a3bbf23c074739e8e84ee50684a95455012", "id": "file:7c86134c11c79c995739fa14", "kind": "file", "path": "tsconfig.node.json", "record": "node", "title": "tsconfig.node"}
+{"hash": "7e7ac336d8ecefcfae4f918005fc2fef189cb656ef94b94f0b1f15d8028a4d92", "id": "file:7f9f42b9f8dd935e14a22175", "kind": "file", "path": "src/components/BlogCard.tsx", "record": "node", "title": "BlogCard"}
+{"hash": "f1bf07a2538accbbad8cd8475dd9f1e1a47de23dc63d4b3228be7205255f8b97", "id": "file:818083744bc70a093e6d0ae9", "kind": "file", "path": "src/components/MarqueeSection.tsx", "record": "node", "title": "MarqueeSection"}
+{"hash": "7f3696b607495cd5d2d53ee2f86286de50e3851829523b1be24b1924e5f41662", "id": "file:8a419252fdf58b8140c6c9a2", "kind": "file", "path": "src/components/Magnet.tsx", "record": "node", "title": "Magnet"}
+{"hash": "48728607f31bc4ec562cc98c0a29475efe0facc1ccf6daa532c789b79674b8f1", "id": "file:94aa7e13d274c8a63b26e79a", "kind": "file", "path": "src/components/ServicesSection.tsx", "record": "node", "title": "ServicesSection"}
+{"hash": "4c29666c2493126f473d7e83720b634e660d12b674e2dde9cc9dbe4f9f7c0b79", "id": "file:9a1afcb74b0b9453506c7511", "kind": "file", "path": "src/lib/blogFilters.ts", "record": "node", "title": "blogFilters"}
+{"hash": "aefc0921025eeeb98c064fdc6d31ece46fc53d509ec9470f96c34430a31ab02c", "id": "file:9b366825d86e80fb7958bef7", "kind": "file", "path": "src/App.tsx", "record": "node", "title": "App"}
+{"hash": "af07a0828db768f7287ead80d3c62058af0a7f55e28c0c192ddf6b09eb91f4fe", "id": "file:a4d75497f57a37a70e192e13", "kind": "file", "path": "src/components/HeroSection.tsx", "record": "node", "title": "HeroSection"}
+{"hash": "678bd485a86a7cbc4b4e15f53c8cafaf21812d3b1ee15bd2b87330309d8e96fc", "id": "file:a72dbd18bf9ec3d04eb067d1", "kind": "file", "path": "index.html", "record": "node", "title": "index"}
+{"hash": "ffff90d738da58fdff084d5c0c9ffdfb9e36081e361ed440eade216d20022ca1", "id": "file:a96b20b6089327ae05660eb5", "kind": "file", "path": "ops/auto-deploy-production.sh", "record": "node", "title": "auto-deploy-production"}
+{"hash": "ca79f7e83afc848d5fd980462555ceeadea6dbe21bb48abe1dc700898267a85f", "id": "file:ac0f2cbaf3cda543b04b0dde", "kind": "file", "path": "tsconfig.json", "record": "node", "title": "tsconfig"}
+{"hash": "24a6297e1b0c0e4744a4690c535d2068e3bf9e136833676a3a9aa58af682a9fb", "id": "file:ae48d9a9f631f5e18f3039ca", "kind": "file", "path": ".agents/tests/test_index_project.py", "record": "node", "title": "test_index_project"}
+{"hash": "e5b77bc46aca5da0e4045e6123febf5d2aa91d3d5b3b2f873cb4200c6dd10848", "id": "file:af36c73e86a0e21108cf402d", "kind": "file", "path": "package-lock.json", "record": "node", "title": "package-lock"}
+{"hash": "98eb7dc45b01148a9b7529edae888549912b526f33728df44f85227e8202808a", "id": "file:af9d37f0a9a0ef70a2c9961f", "kind": "file", "path": "src/data/portfolio.ts", "record": "node", "title": "portfolio"}
+{"hash": "52a9f2a847ac39b12de730221af16edb4eabfcc710d58bf7ea5f83687faab50b", "id": "file:bc772b7df244c3f45cd04f63", "kind": "file", "path": ".agents/tasks/knowledge-delta.template.yaml", "record": "node", "title": "knowledge-delta.template"}
+{"hash": "6673d152fc42aea31f259aab763c6e6b2fd36167b144fc8706354036b6c24e0b", "id": "file:bd923804a8d5cac72dac9a1c", "kind": "file", "path": "src/data/README.md", "record": "node", "title": "Gestión del blog"}
+{"hash": "b1cff517de431d50f85adfba438c4f06992880d3cabed18a19b0452219902d26", "id": "file:c1946fcbbed00282279f560a", "kind": "file", "path": "ops/portfolio-host.sh", "record": "node", "title": "portfolio-host"}
+{"hash": "7e4159a571f0808e864b9298d793f81f0371a864d1ab4e093dcad55dda459f19", "id": "file:c83f6dc2c4b83b1f7e5ea523", "kind": "file", "path": ".agents/context/operations.md", "record": "node", "title": "Operational context"}
+{"hash": "7cb5dd0d8c91dba824c15b9237c1a7eceb17c9f0989962918904ea9aa76ab7c7", "id": "file:c8a8ba00580b26640604b60d", "kind": "file", "path": ".agents/DESIGN.md", "record": "node", "title": "DESIGN"}
+{"hash": "51513ab5de3df54c84a2c11a1cea4f64f9503d74fe6ade6cc24a141da47aef87", "id": "file:d20406be908dc1a5e15b5f6a", "kind": "file", "path": ".agents/domains/blog.md", "record": "node", "title": "Blog domain"}
+{"hash": "d08c4b4b277c2f4f3e47eadbea633f8049741e000004de40cef08d6c371f6d11", "id": "file:d28abe56b21f8fea75e88c55", "kind": "file", "path": ".agents/decisions/README.md", "record": "node", "title": "Architectural decisions"}
+{"hash": "72f7a8cc7ecad5fe23265e141a97fdd5bde68cf0f5cca03e3235c51fd3a6e450", "id": "file:ecb9830603c1c262e0e855b7", "kind": "file", "path": ".agents/tasks/README.md", "record": "node", "title": "Task review and knowledge-delta protocol"}
+{"hash": "025f73522e52c51863a1283f43ee22b69e6dca7c8d62c5afdd93fece46e0ced1", "id": "file:eec53dacdd28eb5d163ff50d", "kind": "file", "path": "package.json", "record": "node", "title": "package"}
+{"hash": "bd998d5f9de9aa2a7e71fef43606b113b7bb9fc1d8fc231495a52cbb9403413b", "id": "file:f7454d4e4c53e611d0b34fbc", "kind": "file", "path": "src/components/BlogPostView.tsx", "record": "node", "title": "BlogPostView"}
+{"hash": "190c877db466995bf1482f4a16abd06e04a89ede3119341e2a86ff96e1737b27", "id": "file:f8c9e58fec2ff13db2199367", "kind": "file", "path": "postcss.config.js", "record": "node", "title": "postcss.config"}
+{"hash": "5f49dce6e6cc4b5d678cf529ef892af0ab7dfa6afb300b11ad559224019b8b05", "id": "file:fa282dc49ec48f22a3fecd73", "kind": "file", "path": "src/main.tsx", "record": "node", "title": "main"}
+{"hash": "d03fd873763bb3c27364879cfaa1f1fbf0630f3f2ba53de4e521527d9a07e497", "id": "heading:075ce1f45780b3a42a784580", "kind": "heading", "level": 2, "line": 82, "path": "src/data/README.md#editar-una-entrada", "record": "node", "title": "Editar una entrada"}
+{"hash": "1d9534ad22f341fefd945435000be6ec158e27c4a45d5fe4ceffbfbd4d2d6b96", "id": "heading:0b85d840b259b51211200c27", "kind": "heading", "level": 2, "line": 32, "path": ".agents/tasks/README.md#bounded-storage-rules", "record": "node", "title": "Bounded storage rules"}
+{"hash": "4e34a6d633b52c0d0db33c77040f870bbc20a116ff16b46cce607bce699751ee", "id": "heading:0f36bc673a61b29da49c1bc8", "kind": "heading", "level": 2, "line": 35, "path": ".agents/context/architecture.md#styling-and-interaction", "record": "node", "title": "Styling and interaction"}
+{"hash": "2b698735919b45f93920e4a2d0af0bdbbb5a7243133826f515c51c0319994107", "id": "heading:1124649a73fd0f819da25cbc", "kind": "heading", "level": 2, "line": 3, "path": "ops/github-webhook-autodeploy.md#current-architecture", "record": "node", "title": "Current architecture"}
+{"hash": "d3368cbffe23c98da887d279a1b5c74b7618ba5c0488cbed30cf304f8f9398a1", "id": "heading:13b33e858531216ba3d3b1d6", "kind": "heading", "level": 3, "line": 159, "path": ".agents/DESIGN.md#accessibility", "record": "node", "title": "Accessibility"}
+{"hash": "999f23fcd7bec7075e54bb5dea0d9c548bfe7261f95b911ed8e23d2f4188724f", "id": "heading:1445b7c0c7b2506fd93debbc", "kind": "heading", "level": 2, "line": 3, "path": ".agents/context/project.md#identity", "record": "node", "title": "Identity"}
+{"hash": "b075227630256ee9a60d5dccb1c6699de4f30efbf5572cdba56ef4e291299efd", "id": "heading:16cd2f3c6a83c002e9e84ff9", "kind": "heading", "level": 2, "line": 86, "path": "src/data/README.md#eliminar-una-entrada", "record": "node", "title": "Eliminar una entrada"}
+{"hash": "b3e0749019ec3f9318e101cc64733b3e8a7ad065e11a71d15d02e624195e2a6d", "id": "heading:1a73be60964c4ce6f5aac809", "kind": "heading", "level": 2, "line": 11, "path": ".agents/decisions/README.md#file-convention", "record": "node", "title": "File convention"}
+{"hash": "140bfc6338ac738467ad47a8bd897fab8f3c3649af574e34c89e9544b5d93586", "id": "heading:1b2d1c11db714ec0405cf73f", "kind": "heading", "level": 2, "line": 30, "path": ".agents/domains/blog.md#reading-design", "record": "node", "title": "Reading design"}
+{"hash": "5e17cdaf65d504f9d64b4bf8b744c1a1db2b5d0fe67a59b72f47913373d13a2e", "id": "heading:1b863ea248b6288e9e17284d", "kind": "heading", "level": 2, "line": 7, "path": ".agents/domains/portfolio.md#source-map", "record": "node", "title": "Source map"}
+{"hash": "1a3ec0b0a3ad3b932fef5699ef297ee81e65f41e0f2f1b709277504dc88074de", "id": "heading:1dcc57c15d874ff442b1142c", "kind": "heading", "level": 2, "line": 5, "path": ".agents/tasks/README.md#producer-step", "record": "node", "title": "Producer step"}
+{"hash": "7cb4a36ed7d2e78c3d6e3e84b6040498bee4ee5ecde385161cd4d584c8c4ec2a", "id": "heading:1def995f2ad629d29c8a2089", "kind": "heading", "level": 2, "line": 126, "path": ".agents/DESIGN.md#layout-spacing", "record": "node", "title": "Layout & Spacing"}
+{"hash": "dc8524837a51dafa5b9ffba6d59e17d93ef867fb62ed8290a135e923b85ae20a", "id": "heading:1e5fbe4f0b2c3939dd5473b5", "kind": "heading", "level": 2, "line": 13, "path": ".agents/graph/README.md#stable-identity", "record": "node", "title": "Stable identity"}
+{"hash": "d4e8830a71c73edffe0115b8abad16b0b5cb2e121047c64cd01995203cfad062", "id": "heading:28b24c394238354731a1b128", "kind": "heading", "level": 2, "line": 3, "path": ".agents/domains/portfolio.md#purpose", "record": "node", "title": "Purpose"}
+{"hash": "5106ac513e8b8df8b5553b7b1595c6f988a9daba4311e26927c9bfc1cbd2ef08", "id": "heading:28f050c1646c93f7eb323655", "kind": "heading", "level": 2, "line": 5, "path": "src/data/README.md#modelo-de-una-entrada", "record": "node", "title": "Modelo de una entrada"}
+{"hash": "ff78b45e3c9127c26cebe39f1f39b199c4227b27cf0410f23244d49351c3c288", "id": "heading:291caf2e150d894d61ae5d2b", "kind": "heading", "level": 2, "line": 29, "path": ".agents/context/architecture.md#blog-flow", "record": "node", "title": "Blog flow"}
+{"hash": "aca52cd3855038a806c7216edabda61e319a8c1389b28f0af27824f58eabc0bb", "id": "heading:2ace735f0df93f43b2cdbc75", "kind": "heading", "level": 1, "line": 1, "path": ".agents/README.md#marc-portfolio-project-knowledge", "record": "node", "title": "Marc Portfolio project knowledge"}
+{"hash": "440e1c8799669167d041fa0a598210b273748c2cefb2071882a21674c15c5efc", "id": "heading:320e9e1d108d667f27849b76", "kind": "heading", "level": 2, "line": 19, "path": ".agents/domains/blog.md#views-and-states", "record": "node", "title": "Views and states"}
+{"hash": "a150ce22160259313c47bc66940b905a9c2196924fd447f802cff12dbb1e9702", "id": "heading:36df2b927f56e16ae92b1d7d", "kind": "heading", "level": 2, "line": 150, "path": ".agents/DESIGN.md#components", "record": "node", "title": "Components"}
+{"hash": "ca99cc80903ab6dde000c490fe62c2dc1f5b33d554c2618ecee048737c074cd4", "id": "heading:36e6f237e89b34ebc7f2d8d9", "kind": "heading", "level": 2, "line": 17, "path": ".agents/domains/portfolio.md#stable-product-contracts", "record": "node", "title": "Stable product contracts"}
+{"hash": "88c45d9e526c08dd7f8b9d1d3ab96a72d68205232090be5da57e05251bfea650", "id": "heading:37ba2047488e759e6f10268b", "kind": "heading", "level": 2, "line": 104, "path": ".agents/DESIGN.md#colors", "record": "node", "title": "Colors"}
+{"hash": "38a3a81b461737956f7cf28a91b985199794d126be15fa95ec527fb15d68d412", "id": "heading:3b415dd60dce79b3b93548e6", "kind": "heading", "level": 2, "line": 165, "path": ".agents/DESIGN.md#do-s-and-don-ts", "record": "node", "title": "Do's and Don'ts"}
+{"hash": "f4ccc0238a12c9578dbbb4c225157d211198fccabdae8497d28b66165bf52d01", "id": "heading:4439edf678ae5e8234dbde17", "kind": "heading", "level": 1, "line": 1, "path": ".agents/domains/blog.md#blog-domain", "record": "node", "title": "Blog domain"}
+{"hash": "0f8f1b4c9e56f295f1c914ffc9464217bc0cf29ad0f8001ad5fd84f6b51319cb", "id": "heading:44a279650d7c1b56981dc821", "kind": "heading", "level": 2, "line": 40, "path": ".agents/graph/README.md#search-boundary", "record": "node", "title": "Search boundary"}
+{"hash": "be258ad5b57f653e4f04e5a2c5f8c6cd6d7b41fdc03c15f717d3b1c129198397", "id": "heading:4610cced0ad6ac7bd977c33a", "kind": "heading", "level": 1, "line": 1, "path": ".agents/context/operations.md#operational-context", "record": "node", "title": "Operational context"}
+{"hash": "e3c415d0cb2c7765330689761ea8b08fa78303dd800744a568133238fa7f39a1", "id": "heading:4a752912312bf4e68e2634d3", "kind": "heading", "level": 2, "line": 41, "path": ".agents/context/architecture.md#data-and-service-boundaries", "record": "node", "title": "Data and service boundaries"}
+{"hash": "3223db90ed9e47192d3555d306cc855668c0ebe2d5ea487ffcb06139b4665111", "id": "heading:4bd14fb4c19983aed6b812a1", "kind": "heading", "level": 1, "line": 1, "path": ".agents/domains/release.md#release-and-deployment-domain", "record": "node", "title": "Release and deployment domain"}
+{"hash": "e5a8c9b1dded6c6b6b873d7a250e97460c174a9ffef50e40bf417dfa25511bf1", "id": "heading:4cd1e727c0c15781cb73145c", "kind": "heading", "level": 1, "line": 1, "path": ".agents/graph/schema.md#generated-index-schema", "record": "node", "title": "Generated index schema"}
+{"hash": "b269dc4e81a528a4d42e9e74101923514a626f55f8dd76b1461e0690e72d041a", "id": "heading:4ec3341a927b4b5380079ff7", "kind": "heading", "level": 2, "line": 28, "path": ".agents/README.md#commands", "record": "node", "title": "Commands"}
+{"hash": "b880057610fb5ec0fc63efceacf94960a4c9a74537465b6cee6a10efeb4cecf2", "id": "heading:4ec73c45f0e20a487d6c3e43", "kind": "heading", "level": 2, "line": 56, "path": ".agents/graph/schema.md#freshness-state", "record": "node", "title": "Freshness state"}
+{"hash": "44ec0e54134159614525ce6c5e8457700e4c0a2425c2df1eccd1d6771e04bc21", "id": "heading:5cb2a9d5ee2e634fc2c0cad0", "kind": "heading", "level": 2, "line": 134, "path": ".agents/DESIGN.md#elevation-depth", "record": "node", "title": "Elevation & Depth"}
+{"hash": "469e90a917efdedd8eb9f0a15ba5e7e1d9eeaaf7cffe490c2a2a97f248d56d19", "id": "heading:5dfe97f8842da1db3d51841b", "kind": "heading", "level": 2, "line": 26, "path": ".agents/domains/blog.md#search-semantics", "record": "node", "title": "Search semantics"}
+{"hash": "cab94aba84f97f7f8d3f46516a5f92c25363f39f9492415c4d76be84b2873883", "id": "heading:5e578045bf8fdc52f1bfd369", "kind": "heading", "level": 2, "line": 114, "path": ".agents/DESIGN.md#typography", "record": "node", "title": "Typography"}
+{"hash": "8d14859db4685f7cc303ea2cfa9e160a818c37423fa02e5e7285b41e0f2b282c", "id": "heading:5e801e71e4c30c07c3930486", "kind": "heading", "level": 2, "line": 16, "path": ".agents/context/operations.md#repository-operations", "record": "node", "title": "Repository operations"}
+{"hash": "19ffbf7affcbc73718d0e9f4b3008c1cc11fcd63ea2a80e6ecef309ae55f3235", "id": "heading:5fe01441ee8d5ccc595a0ca3", "kind": "heading", "level": 2, "line": 5, "path": ".agents/decisions/README.md#when-an-adr-is-warranted", "record": "node", "title": "When an ADR is warranted"}
+{"hash": "d455d7e8b3e9c2af3e45543ed4e44cd02da3f51acf4c1371b6e2caaac70bd7fb", "id": "heading:6109bf2869a7756ccd8fbda1", "kind": "heading", "level": 2, "line": 26, "path": ".agents/domains/portfolio.md#visual-and-accessibility-rules", "record": "node", "title": "Visual and accessibility rules"}
+{"hash": "08af40b035280df76fe8c2dde749f3e6df658e0edb957cfacec00a5f99bad625", "id": "heading:67a4d815319d54215afd17b8", "kind": "heading", "level": 2, "line": 90, "path": "src/data/README.md#verificar-el-contenido-y-publicar", "record": "node", "title": "Verificar el contenido y publicar"}
+{"hash": "34ad54288cdbebb4d4bc072ed8a7bffbf33f780af2d6ea76ce1fa8f3483a4d67", "id": "heading:682e965935fb9a26d421b191", "kind": "heading", "level": 1, "line": 1, "path": "src/data/README.md#gestión-del-blog", "record": "node", "title": "Gestión del blog"}
+{"hash": "39f4e5e0781cc83e7d7f652241ecb450c140909348a24127e0831b9d0f7ae86a", "id": "heading:6bd759855b6e7763db992152", "kind": "heading", "level": 2, "line": 3, "path": ".agents/domains/blog.md#content-model", "record": "node", "title": "Content model"}
+{"hash": "a536a3b4ed49e54af291f7eae28bfeb6216fea2cb713cb2caa31e3332eee99e4", "id": "heading:6f7bbf877f35ecd7c3fa63ab", "kind": "heading", "level": 2, "line": 16, "path": ".agents/context/architecture.md#landing-composition", "record": "node", "title": "Landing composition"}
+{"hash": "396a2362859c75352fad92a36d307b40b67ab8ef5241436ddff4aa559dd9a8ae", "id": "heading:717229614c2631c4c8825df4", "kind": "heading", "level": 2, "line": 25, "path": ".agents/graph/README.md#edge-types", "record": "node", "title": "Edge types"}
+{"hash": "7e28e1d334b1039ec7c365d65e5aa000ebd7d41676a6481187c609b8866cd104", "id": "heading:71eedd2f944b043b49e505df", "kind": "heading", "level": 2, "line": 3, "path": ".agents/domains/release.md#source-of-truth", "record": "node", "title": "Source of truth"}
+{"hash": "b09f2ae17efe8aa3d3360702596d91a99e72bb4ba036d50c223a24f64c851625", "id": "heading:721fa8ff9966d6c3c53454da", "kind": "heading", "level": 2, "line": 5, "path": ".agents/graph/schema.md#graph-jsonl", "record": "node", "title": "Graph JSONL"}
+{"hash": "71854cd7999f96052334c0d2a76e49aadcf94b7b90fd5e661e4b3b1e18471d8c", "id": "heading:725d375f08a9731f7f201737", "kind": "heading", "level": 2, "line": 20, "path": "ops/github-webhook-autodeploy.md#deployment-verification", "record": "node", "title": "Deployment verification"}
+{"hash": "36a1d21c056090252b2f5db8f1da95858dfb5c6ee58e5b9e40f6df7a97996649", "id": "heading:773ed6930d113af283a40a43", "kind": "heading", "level": 2, "line": 7, "path": ".agents/context/operations.md#build-and-deployment-boundary", "record": "node", "title": "Build and deployment boundary"}
+{"hash": "f579f6082034ad1655e3dd810bde62cca175aead9550812eea88f1764989766a", "id": "heading:7d778f80df41343e9cd7bfdf", "kind": "heading", "level": 2, "line": 45, "path": ".agents/context/architecture.md#build-boundary", "record": "node", "title": "Build boundary"}
+{"hash": "069d2f3ba04fd08cabe0a2bcf2dca00de9ae74c99aac0e308b58c2ae9a1daf06", "id": "heading:81627439c042b2a9039475bb", "kind": "heading", "level": 2, "line": 7, "path": ".agents/domains/release.md#current-contract", "record": "node", "title": "Current contract"}
+{"hash": "09f63aa15aa599b1b81081f7fb1ee78d7c26205b45492735a103c702e1f8570a", "id": "heading:8593ffa48c948065c7b355de", "kind": "heading", "level": 2, "line": 17, "path": ".agents/domains/release.md#required-order", "record": "node", "title": "Required order"}
+{"hash": "b5ecd702ccaf21a8ede02eb0c79fb808a76bc34387f407653df0471513069543", "id": "heading:8713778cb8c013c4f8d7e960", "kind": "heading", "level": 1, "line": 4, "path": "ops/auto-deploy-production.sh#build-and-atomically-publish-marc-portfolio-from-its-dedicated-production-checkout", "record": "node", "title": "Build and atomically publish marc-portfolio from its dedicated production checkout."}
+{"hash": "314ae71b8c8dc9c952f0ffc58e35e6d9a41b5cf4756471c7cab0c9476cd5d20b", "id": "heading:8731b2dbad5551bd9b6b4c28", "kind": "heading", "level": 2, "line": 5, "path": ".agents/graph/README.md#artifacts", "record": "node", "title": "Artifacts"}
+{"hash": "3359606bcde3061aea87346dee0ac50a945fe0afb1edf273315c87305ba18979", "id": "heading:8a7dab52f9543fe148a79db1", "kind": "heading", "level": 1, "line": 1, "path": ".agents/decisions/README.md#architectural-decisions", "record": "node", "title": "Architectural decisions"}
+{"hash": "d6640c83f0523669008d9e3ba66dff74204eec7f9d7b33a8cdcf660a150de4db", "id": "heading:9345ea8ba177e22e04055a51", "kind": "heading", "level": 3, "line": 176, "path": ".agents/DESIGN.md#don-t", "record": "node", "title": "Don't"}
+{"hash": "2c5b669bcdeb51bffbcb9fb4feb1c3aa8b6b73aa79c3aeef41a188624c68e143", "id": "heading:94a5842b5979bd25a0bbb7fb", "kind": "heading", "level": 2, "line": 9, "path": ".agents/domains/blog.md#routes", "record": "node", "title": "Routes"}
+{"hash": "3213a21ff2da21f3d68ca69b8a3995af8e7e13243fa58774385c05c7389ffed3", "id": "heading:975c42b85858ce363632d0f6", "kind": "heading", "level": 1, "line": 1, "path": ".agents/tasks/README.md#task-review-and-knowledge-delta-protocol", "record": "node", "title": "Task review and knowledge-delta protocol"}
+{"hash": "bfcedf737cbb684d04c91ad454648b3a31b09ebffc58632532482e3d2e80346e", "id": "heading:a807016774de3392f61c5d1d", "kind": "heading", "level": 2, "line": 22, "path": ".agents/tasks/README.md#independent-review-step", "record": "node", "title": "Independent review step"}
+{"hash": "f4e75541e5cf314eecda52d7ec140ddaa3f0674ebd84c63fe8aa75f7c22bd23e", "id": "heading:aa6ce3e3024137f6cca2b817", "kind": "heading", "level": 2, "line": 13, "path": ".agents/README.md#authored-and-generated-boundaries", "record": "node", "title": "Authored and generated boundaries"}
+{"hash": "9f8fa07d833d0e4fad26a9ae9f7bf91f91f1e2adba877738c48a1d2173314587", "id": "heading:ac3b0423818722cd00442fc6", "kind": "heading", "level": 2, "line": 45, "path": ".agents/README.md#index-behaviour", "record": "node", "title": "Index behaviour"}
+{"hash": "2957c0e125a80a487d8661f169afa2786e7e1c035f5fdb88f7d7a1ff4bb91f13", "id": "heading:ae193803e56317b319b0e540", "kind": "heading", "level": 2, "line": 11, "path": ".agents/context/project.md#authority-order", "record": "node", "title": "Authority order"}
+{"hash": "71a7c96c55148f0c000d70ec6edef9ee19524e2313cc8e9236cbc4b36efd8adf", "id": "heading:ae791ca05e72074469df9eac", "kind": "heading", "level": 2, "line": 43, "path": "src/data/README.md#rutas-públicas", "record": "node", "title": "Rutas públicas"}
+{"hash": "1877e4c03797025355823de78ebb1969be872c4955efdb9586df51a83e3e7f08", "id": "heading:b9d9527b2719f2370f712336", "kind": "heading", "level": 1, "line": 1, "path": "ops/github-webhook-autodeploy.md#marc-portfolio-github-webhook-autodeploy", "record": "node", "title": "marc-portfolio GitHub webhook autodeploy"}
+{"hash": "121099a0b2b52f3bcc115d5f30834be80c9a8eff15d1f4affbfa857ae6475bc7", "id": "heading:bc659f0637a3ef18c41bb712", "kind": "heading", "level": 1, "line": 1, "path": ".agents/context/project.md#project-context", "record": "node", "title": "Project context"}
+{"hash": "acb96780bd5d60d155f2654e6c45e27e308f8c3ab972436ee5596a47decaf4d3", "id": "heading:c296ab82ae6169e01791ae8e", "kind": "heading", "level": 2, "line": 56, "path": "src/data/README.md#crear-una-entrada", "record": "node", "title": "Crear una entrada"}
+{"hash": "e551641242ce7246ae460270ed60105e4c8370fd38b7144debd8688931c703f6", "id": "heading:c3bc1e92d53935cd600e5335", "kind": "heading", "level": 2, "line": 21, "path": ".agents/context/project.md#stack", "record": "node", "title": "Stack"}
+{"hash": "029c5187db86d93e3d34ef27ff25a372702a5cd031e35e8c088f0fd4579f85ec", "id": "heading:c6f28104b7d0bb16948006e3", "kind": "heading", "level": 1, "line": 1, "path": ".agents/graph/README.md#project-graph-and-search-index", "record": "node", "title": "Project graph and search index"}
+{"hash": "2d2eef3e092af52b5837160fe2e3954907a4bfed1469edd2e6422749a6b16b7a", "id": "heading:d39733f829567ae9639c350f", "kind": "heading", "level": 2, "line": 27, "path": ".agents/graph/schema.md#sqlite", "record": "node", "title": "SQLite"}
+{"hash": "30094e0bec0046da8f925ebda9575f3d8377a75692436516260782fafd709a6f", "id": "heading:d43f53123e787c9bee87858a", "kind": "heading", "level": 3, "line": 167, "path": ".agents/DESIGN.md#do", "record": "node", "title": "Do"}
+{"hash": "ee50ba00ef5c4d9b43ab1ae9eeac6e16c0f9c22f347564eae4472aa4247b5a79", "id": "heading:d729d7be436ec659b51fd008", "kind": "heading", "level": 2, "line": 19, "path": ".agents/graph/README.md#node-kinds", "record": "node", "title": "Node kinds"}
+{"hash": "75e8028a7913992e177895b466dd201f9be97e6fc0d435f1ffaeb531c5302581", "id": "heading:d7dd9457d2e93c5061ca4321", "kind": "heading", "level": 2, "line": 140, "path": ".agents/DESIGN.md#shapes", "record": "node", "title": "Shapes"}
+{"hash": "6dee682861fc51509c6c59589f2ebb60a653e267acc6f3b5230949bc3c589243", "id": "heading:dd9fcdca16bdf8e1fc55d9fb", "kind": "heading", "level": 2, "line": 35, "path": ".agents/context/project.md#safe-working-baseline", "record": "node", "title": "Safe working baseline"}
+{"hash": "0b33a3a4d67f3f4d04ac9569d6de1af18b69628b6e81d498e7d960a11860a700", "id": "heading:dee44bf33a7c62f3cd3f4a3b", "kind": "heading", "level": 2, "line": 34, "path": ".agents/graph/README.md#incremental-and-validation-behaviour", "record": "node", "title": "Incremental and validation behaviour"}
+{"hash": "d4b1ea5708dd532930a85188b45aff6f0a3ed458500c7577e0127a538eb0d100", "id": "heading:e0d90829c3815708766f95b5", "kind": "heading", "level": 2, "line": 98, "path": ".agents/DESIGN.md#overview", "record": "node", "title": "Overview"}
+{"hash": "d8d384f14f6e0d2ceeab0f0b57288b417b19b8320fe7441d28ef829c89f23a68", "id": "heading:e11acf18ca4c7694e44798be", "kind": "heading", "level": 1, "line": 1, "path": ".agents/domains/portfolio.md#portfolio-landing-domain", "record": "node", "title": "Portfolio landing domain"}
+{"hash": "fc49cc9f7011a670010863f6c33184836096ccadbcd40f9b1cf424aa60323fe9", "id": "heading:e45e39e5e7913a017ae53f95", "kind": "heading", "level": 2, "line": 3, "path": ".agents/context/architecture.md#entry-and-route-selection", "record": "node", "title": "Entry and route selection"}
+{"hash": "f7ed47611808b1651e76cbf08cbad7a0d5bf5fea7de2e7cb8b91cef1239f15a1", "id": "heading:ea3e977eb4f19562643c3703", "kind": "heading", "level": 2, "line": 31, "path": ".agents/context/project.md#product-language-and-audience", "record": "node", "title": "Product language and audience"}
+{"hash": "2adc964c084749b1f2d8aef24030988b667dbda2e38a6a1699556c93e07c1cea", "id": "heading:ed4b111d32ea98007d50f26d", "kind": "heading", "level": 2, "line": 5, "path": ".agents/README.md#start-here", "record": "node", "title": "Start here"}
+{"hash": "5b27a1aeeca906c1016713867bb81ace01e23ff0fdb4f0b437d6c35243454fd5", "id": "heading:ef04e80e148bdaf2a9fab632", "kind": "heading", "level": 1, "line": 1, "path": ".agents/context/architecture.md#application-architecture", "record": "node", "title": "Application architecture"}
+{"hash": "cca7bebb0b9a1bb7b2544ed13320b04153a935a5716295f43d5f9ec79861023a", "id": "heading:f7143ca77da9313c77c116cf", "kind": "heading", "level": 2, "line": 55, "path": ".agents/README.md#review-rule", "record": "node", "title": "Review rule"}
+{"hash": "9e471951a1b4106e54be128a21112b02914fe98cc79b2c92b49ee80c5464487c", "id": "heading:f7564d8482bc5ef7b1b802d7", "kind": "heading", "level": 2, "line": 3, "path": ".agents/context/operations.md#environment", "record": "node", "title": "Environment"}
+{"hash": "905134f8005d22642edd82705e362d301656675783d8781b84bdb9dac14cbc50", "id": "heading:f90a5ef62d8e793dbb52fc51", "kind": "heading", "level": 2, "line": 20, "path": ".agents/context/operations.md#knowledge-index-operations", "record": "node", "title": "Knowledge-index operations"}
+{"hash": "5f8cf8412ec0a0f85354c554631315d15124a301f9e8017f69e4b2e5172038c6", "id": "project:224060e6b79a9d2e817d11d2", "kind": "project", "path": ".", "record": "node", "title": "marc-portfolio-publish-t_51b4e88f"}
+{"record": "edge", "source": "file:09ca90d157e573d1c66d063b", "target": "heading:4bd14fb4c19983aed6b812a1", "type": "contains"}
+{"record": "edge", "source": "file:09ca90d157e573d1c66d063b", "target": "heading:71eedd2f944b043b49e505df", "type": "contains"}
+{"record": "edge", "source": "file:09ca90d157e573d1c66d063b", "target": "heading:81627439c042b2a9039475bb", "type": "contains"}
+{"record": "edge", "source": "file:09ca90d157e573d1c66d063b", "target": "heading:8593ffa48c948065c7b355de", "type": "contains"}
+{"record": "edge", "source": "file:29902c5645394f9ee56daad4", "target": "heading:2ace735f0df93f43b2cdbc75", "type": "contains"}
+{"record": "edge", "source": "file:29902c5645394f9ee56daad4", "target": "heading:4ec3341a927b4b5380079ff7", "type": "contains"}
+{"record": "edge", "source": "file:29902c5645394f9ee56daad4", "target": "heading:aa6ce3e3024137f6cca2b817", "type": "contains"}
+{"record": "edge", "source": "file:29902c5645394f9ee56daad4", "target": "heading:ac3b0423818722cd00442fc6", "type": "contains"}
+{"record": "edge", "source": "file:29902c5645394f9ee56daad4", "target": "heading:ed4b111d32ea98007d50f26d", "type": "contains"}
+{"record": "edge", "source": "file:29902c5645394f9ee56daad4", "target": "heading:f7143ca77da9313c77c116cf", "type": "contains"}
+{"record": "edge", "source": "file:44a6f521868b8f35e5432401", "target": "heading:1e5fbe4f0b2c3939dd5473b5", "type": "contains"}
+{"record": "edge", "source": "file:44a6f521868b8f35e5432401", "target": "heading:44a279650d7c1b56981dc821", "type": "contains"}
+{"record": "edge", "source": "file:44a6f521868b8f35e5432401", "target": "heading:717229614c2631c4c8825df4", "type": "contains"}
+{"record": "edge", "source": "file:44a6f521868b8f35e5432401", "target": "heading:8731b2dbad5551bd9b6b4c28", "type": "contains"}
+{"record": "edge", "source": "file:44a6f521868b8f35e5432401", "target": "heading:c6f28104b7d0bb16948006e3", "type": "contains"}
+{"record": "edge", "source": "file:44a6f521868b8f35e5432401", "target": "heading:d729d7be436ec659b51fd008", "type": "contains"}
+{"record": "edge", "source": "file:44a6f521868b8f35e5432401", "target": "heading:dee44bf33a7c62f3cd3f4a3b", "type": "contains"}
+{"record": "edge", "source": "file:46c5aaea01c6a732f66c80b9", "target": "heading:1445b7c0c7b2506fd93debbc", "type": "contains"}
+{"record": "edge", "source": "file:46c5aaea01c6a732f66c80b9", "target": "heading:ae193803e56317b319b0e540", "type": "contains"}
+{"record": "edge", "source": "file:46c5aaea01c6a732f66c80b9", "target": "heading:bc659f0637a3ef18c41bb712", "type": "contains"}
+{"record": "edge", "source": "file:46c5aaea01c6a732f66c80b9", "target": "heading:c3bc1e92d53935cd600e5335", "type": "contains"}
+{"record": "edge", "source": "file:46c5aaea01c6a732f66c80b9", "target": "heading:dd9fcdca16bdf8e1fc55d9fb", "type": "contains"}
+{"record": "edge", "source": "file:46c5aaea01c6a732f66c80b9", "target": "heading:ea3e977eb4f19562643c3703", "type": "contains"}
+{"record": "edge", "source": "file:50cf4ee61dfed1efb5ddc9a0", "target": "heading:4cd1e727c0c15781cb73145c", "type": "contains"}
+{"record": "edge", "source": "file:50cf4ee61dfed1efb5ddc9a0", "target": "heading:4ec73c45f0e20a487d6c3e43", "type": "contains"}
+{"record": "edge", "source": "file:50cf4ee61dfed1efb5ddc9a0", "target": "heading:721fa8ff9966d6c3c53454da", "type": "contains"}
+{"record": "edge", "source": "file:50cf4ee61dfed1efb5ddc9a0", "target": "heading:d39733f829567ae9639c350f", "type": "contains"}
+{"record": "edge", "source": "file:5f7af62de8d86d82d4bbdc9a", "target": "heading:1b863ea248b6288e9e17284d", "type": "contains"}
+{"record": "edge", "source": "file:5f7af62de8d86d82d4bbdc9a", "target": "heading:28b24c394238354731a1b128", "type": "contains"}
+{"record": "edge", "source": "file:5f7af62de8d86d82d4bbdc9a", "target": "heading:36e6f237e89b34ebc7f2d8d9", "type": "contains"}
+{"record": "edge", "source": "file:5f7af62de8d86d82d4bbdc9a", "target": "heading:6109bf2869a7756ccd8fbda1", "type": "contains"}
+{"record": "edge", "source": "file:5f7af62de8d86d82d4bbdc9a", "target": "heading:e11acf18ca4c7694e44798be", "type": "contains"}
+{"record": "edge", "source": "file:61136396a55fb3ddd081bc9e", "target": "heading:1124649a73fd0f819da25cbc", "type": "contains"}
+{"record": "edge", "source": "file:61136396a55fb3ddd081bc9e", "target": "heading:725d375f08a9731f7f201737", "type": "contains"}
+{"record": "edge", "source": "file:61136396a55fb3ddd081bc9e", "target": "heading:b9d9527b2719f2370f712336", "type": "contains"}
+{"record": "edge", "source": "file:77056848a1876efb6d3b710f", "target": "heading:0f36bc673a61b29da49c1bc8", "type": "contains"}
+{"record": "edge", "source": "file:77056848a1876efb6d3b710f", "target": "heading:291caf2e150d894d61ae5d2b", "type": "contains"}
+{"record": "edge", "source": "file:77056848a1876efb6d3b710f", "target": "heading:4a752912312bf4e68e2634d3", "type": "contains"}
+{"record": "edge", "source": "file:77056848a1876efb6d3b710f", "target": "heading:6f7bbf877f35ecd7c3fa63ab", "type": "contains"}
+{"record": "edge", "source": "file:77056848a1876efb6d3b710f", "target": "heading:7d778f80df41343e9cd7bfdf", "type": "contains"}
+{"record": "edge", "source": "file:77056848a1876efb6d3b710f", "target": "heading:e45e39e5e7913a017ae53f95", "type": "contains"}
+{"record": "edge", "source": "file:77056848a1876efb6d3b710f", "target": "heading:ef04e80e148bdaf2a9fab632", "type": "contains"}
+{"record": "edge", "source": "file:a96b20b6089327ae05660eb5", "target": "heading:8713778cb8c013c4f8d7e960", "type": "contains"}
+{"record": "edge", "source": "file:bd923804a8d5cac72dac9a1c", "target": "heading:075ce1f45780b3a42a784580", "type": "contains"}
+{"record": "edge", "source": "file:bd923804a8d5cac72dac9a1c", "target": "heading:16cd2f3c6a83c002e9e84ff9", "type": "contains"}
+{"record": "edge", "source": "file:bd923804a8d5cac72dac9a1c", "target": "heading:28f050c1646c93f7eb323655", "type": "contains"}
+{"record": "edge", "source": "file:bd923804a8d5cac72dac9a1c", "target": "heading:67a4d815319d54215afd17b8", "type": "contains"}
+{"record": "edge", "source": "file:bd923804a8d5cac72dac9a1c", "target": "heading:682e965935fb9a26d421b191", "type": "contains"}
+{"record": "edge", "source": "file:bd923804a8d5cac72dac9a1c", "target": "heading:ae791ca05e72074469df9eac", "type": "contains"}
+{"record": "edge", "source": "file:bd923804a8d5cac72dac9a1c", "target": "heading:c296ab82ae6169e01791ae8e", "type": "contains"}
+{"record": "edge", "source": "file:c83f6dc2c4b83b1f7e5ea523", "target": "heading:4610cced0ad6ac7bd977c33a", "type": "contains"}
+{"record": "edge", "source": "file:c83f6dc2c4b83b1f7e5ea523", "target": "heading:5e801e71e4c30c07c3930486", "type": "contains"}
+{"record": "edge", "source": "file:c83f6dc2c4b83b1f7e5ea523", "target": "heading:773ed6930d113af283a40a43", "type": "contains"}
+{"record": "edge", "source": "file:c83f6dc2c4b83b1f7e5ea523", "target": "heading:f7564d8482bc5ef7b1b802d7", "type": "contains"}
+{"record": "edge", "source": "file:c83f6dc2c4b83b1f7e5ea523", "target": "heading:f90a5ef62d8e793dbb52fc51", "type": "contains"}
+{"record": "edge", "source": "file:c8a8ba00580b26640604b60d", "target": "heading:13b33e858531216ba3d3b1d6", "type": "contains"}
+{"record": "edge", "source": "file:c8a8ba00580b26640604b60d", "target": "heading:1def995f2ad629d29c8a2089", "type": "contains"}
+{"record": "edge", "source": "file:c8a8ba00580b26640604b60d", "target": "heading:36df2b927f56e16ae92b1d7d", "type": "contains"}
+{"record": "edge", "source": "file:c8a8ba00580b26640604b60d", "target": "heading:37ba2047488e759e6f10268b", "type": "contains"}
+{"record": "edge", "source": "file:c8a8ba00580b26640604b60d", "target": "heading:3b415dd60dce79b3b93548e6", "type": "contains"}
+{"record": "edge", "source": "file:c8a8ba00580b26640604b60d", "target": "heading:5cb2a9d5ee2e634fc2c0cad0", "type": "contains"}
+{"record": "edge", "source": "file:c8a8ba00580b26640604b60d", "target": "heading:5e578045bf8fdc52f1bfd369", "type": "contains"}
+{"record": "edge", "source": "file:c8a8ba00580b26640604b60d", "target": "heading:9345ea8ba177e22e04055a51", "type": "contains"}
+{"record": "edge", "source": "file:c8a8ba00580b26640604b60d", "target": "heading:d43f53123e787c9bee87858a", "type": "contains"}
+{"record": "edge", "source": "file:c8a8ba00580b26640604b60d", "target": "heading:d7dd9457d2e93c5061ca4321", "type": "contains"}
+{"record": "edge", "source": "file:c8a8ba00580b26640604b60d", "target": "heading:e0d90829c3815708766f95b5", "type": "contains"}
+{"record": "edge", "source": "file:d20406be908dc1a5e15b5f6a", "target": "heading:1b2d1c11db714ec0405cf73f", "type": "contains"}
+{"record": "edge", "source": "file:d20406be908dc1a5e15b5f6a", "target": "heading:320e9e1d108d667f27849b76", "type": "contains"}
+{"record": "edge", "source": "file:d20406be908dc1a5e15b5f6a", "target": "heading:4439edf678ae5e8234dbde17", "type": "contains"}
+{"record": "edge", "source": "file:d20406be908dc1a5e15b5f6a", "target": "heading:5dfe97f8842da1db3d51841b", "type": "contains"}
+{"record": "edge", "source": "file:d20406be908dc1a5e15b5f6a", "target": "heading:6bd759855b6e7763db992152", "type": "contains"}
+{"record": "edge", "source": "file:d20406be908dc1a5e15b5f6a", "target": "heading:94a5842b5979bd25a0bbb7fb", "type": "contains"}
+{"record": "edge", "source": "file:d28abe56b21f8fea75e88c55", "target": "heading:1a73be60964c4ce6f5aac809", "type": "contains"}
+{"record": "edge", "source": "file:d28abe56b21f8fea75e88c55", "target": "heading:5fe01441ee8d5ccc595a0ca3", "type": "contains"}
+{"record": "edge", "source": "file:d28abe56b21f8fea75e88c55", "target": "heading:8a7dab52f9543fe148a79db1", "type": "contains"}
+{"record": "edge", "source": "file:ecb9830603c1c262e0e855b7", "target": "heading:0b85d840b259b51211200c27", "type": "contains"}
+{"record": "edge", "source": "file:ecb9830603c1c262e0e855b7", "target": "heading:1dcc57c15d874ff442b1142c", "type": "contains"}
+{"record": "edge", "source": "file:ecb9830603c1c262e0e855b7", "target": "heading:975c42b85858ce363632d0f6", "type": "contains"}
+{"record": "edge", "source": "file:ecb9830603c1c262e0e855b7", "target": "heading:a807016774de3392f61c5d1d", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:03fc26223fa2204fb3eba016", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:084e48c19cf800d722e88456", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:09ca90d157e573d1c66d063b", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:11dc8987cb4d3be7fb3c45a0", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:29902c5645394f9ee56daad4", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:2a404272b6a6d18eb0ce7689", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:2ac4d0068aa5b67f167321a2", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:34f64a130c872fd5f44cf347", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:389a219263563226584cf4a0", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:3921938be33d4b695d48cff6", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:398d7e8674fc3b23eff79f4e", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:3dd2730e859dc75ab5e9695d", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:421cb2c2245d9977ecd121bd", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:44a6f521868b8f35e5432401", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:46c5aaea01c6a732f66c80b9", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:4928c6d8bac8a7a71bbd8144", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:4ad82745f002a1706b995d1b", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:4dde9e0b18c68a0a8c3577ba", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:50c17cb98fbfa49a1731be8e", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:50cf4ee61dfed1efb5ddc9a0", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:5d0486254aee8dd1e5f27e6b", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:5df61f3b735e3ecac400c265", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:5f7af62de8d86d82d4bbdc9a", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:61136396a55fb3ddd081bc9e", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:677316277e7381477c189b7c", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:77056848a1876efb6d3b710f", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:7c86134c11c79c995739fa14", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:7f9f42b9f8dd935e14a22175", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:818083744bc70a093e6d0ae9", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:8a419252fdf58b8140c6c9a2", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:94aa7e13d274c8a63b26e79a", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:9a1afcb74b0b9453506c7511", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:9b366825d86e80fb7958bef7", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:a4d75497f57a37a70e192e13", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:a72dbd18bf9ec3d04eb067d1", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:a96b20b6089327ae05660eb5", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:ac0f2cbaf3cda543b04b0dde", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:ae48d9a9f631f5e18f3039ca", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:af36c73e86a0e21108cf402d", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:af9d37f0a9a0ef70a2c9961f", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:bc772b7df244c3f45cd04f63", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:bd923804a8d5cac72dac9a1c", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:c1946fcbbed00282279f560a", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:c83f6dc2c4b83b1f7e5ea523", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:c8a8ba00580b26640604b60d", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:d20406be908dc1a5e15b5f6a", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:d28abe56b21f8fea75e88c55", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:ecb9830603c1c262e0e855b7", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:eec53dacdd28eb5d163ff50d", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:f7454d4e4c53e611d0b34fbc", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:f8c9e58fec2ff13db2199367", "type": "contains"}
+{"record": "edge", "source": "project:224060e6b79a9d2e817d11d2", "target": "file:fa282dc49ec48f22a3fecd73", "type": "contains"}
+{"record": "edge", "source": "file:29902c5645394f9ee56daad4", "target": "file:2a404272b6a6d18eb0ce7689", "type": "documents"}
+{"record": "edge", "source": "file:29902c5645394f9ee56daad4", "target": "file:44a6f521868b8f35e5432401", "type": "documents"}
+{"record": "edge", "source": "file:29902c5645394f9ee56daad4", "target": "file:46c5aaea01c6a732f66c80b9", "type": "documents"}
+{"record": "edge", "source": "file:29902c5645394f9ee56daad4", "target": "file:77056848a1876efb6d3b710f", "type": "documents"}
+{"record": "edge", "source": "file:29902c5645394f9ee56daad4", "target": "file:c8a8ba00580b26640604b60d", "type": "documents"}
+{"record": "edge", "source": "file:29902c5645394f9ee56daad4", "target": "file:ecb9830603c1c262e0e855b7", "type": "documents"}
+{"record": "edge", "source": "file:44a6f521868b8f35e5432401", "target": "file:50cf4ee61dfed1efb5ddc9a0", "type": "documents"}
+{"record": "edge", "source": "file:46c5aaea01c6a732f66c80b9", "target": "file:29902c5645394f9ee56daad4", "type": "documents"}
+{"record": "edge", "source": "file:46c5aaea01c6a732f66c80b9", "target": "file:34f64a130c872fd5f44cf347", "type": "documents"}
+{"record": "edge", "source": "file:46c5aaea01c6a732f66c80b9", "target": "file:a72dbd18bf9ec3d04eb067d1", "type": "documents"}
+{"record": "edge", "source": "file:46c5aaea01c6a732f66c80b9", "target": "file:c8a8ba00580b26640604b60d", "type": "documents"}
+{"record": "edge", "source": "file:5f7af62de8d86d82d4bbdc9a", "target": "file:084e48c19cf800d722e88456", "type": "documents"}
+{"record": "edge", "source": "file:5f7af62de8d86d82d4bbdc9a", "target": "file:4928c6d8bac8a7a71bbd8144", "type": "documents"}
+{"record": "edge", "source": "file:5f7af62de8d86d82d4bbdc9a", "target": "file:94aa7e13d274c8a63b26e79a", "type": "documents"}
+{"record": "edge", "source": "file:5f7af62de8d86d82d4bbdc9a", "target": "file:9b366825d86e80fb7958bef7", "type": "documents"}
+{"record": "edge", "source": "file:5f7af62de8d86d82d4bbdc9a", "target": "file:a4d75497f57a37a70e192e13", "type": "documents"}
+{"record": "edge", "source": "file:5f7af62de8d86d82d4bbdc9a", "target": "file:af9d37f0a9a0ef70a2c9961f", "type": "documents"}
+{"record": "edge", "source": "file:5f7af62de8d86d82d4bbdc9a", "target": "file:c8a8ba00580b26640604b60d", "type": "documents"}
+{"record": "edge", "source": "file:77056848a1876efb6d3b710f", "target": "file:2ac4d0068aa5b67f167321a2", "type": "documents"}
+{"record": "edge", "source": "file:77056848a1876efb6d3b710f", "target": "file:34f64a130c872fd5f44cf347", "type": "documents"}
+{"record": "edge", "source": "file:77056848a1876efb6d3b710f", "target": "file:398d7e8674fc3b23eff79f4e", "type": "documents"}
+{"record": "edge", "source": "file:77056848a1876efb6d3b710f", "target": "file:9a1afcb74b0b9453506c7511", "type": "documents"}
+{"record": "edge", "source": "file:77056848a1876efb6d3b710f", "target": "file:9b366825d86e80fb7958bef7", "type": "documents"}
+{"record": "edge", "source": "file:77056848a1876efb6d3b710f", "target": "file:af9d37f0a9a0ef70a2c9961f", "type": "documents"}
+{"record": "edge", "source": "file:77056848a1876efb6d3b710f", "target": "file:c8a8ba00580b26640604b60d", "type": "documents"}
+{"record": "edge", "source": "file:77056848a1876efb6d3b710f", "target": "file:fa282dc49ec48f22a3fecd73", "type": "documents"}
+{"record": "edge", "source": "file:d20406be908dc1a5e15b5f6a", "target": "file:2ac4d0068aa5b67f167321a2", "type": "documents"}
+{"record": "edge", "source": "file:d20406be908dc1a5e15b5f6a", "target": "file:398d7e8674fc3b23eff79f4e", "type": "documents"}
+{"record": "edge", "source": "file:d20406be908dc1a5e15b5f6a", "target": "file:9a1afcb74b0b9453506c7511", "type": "documents"}
+{"record": "edge", "source": "file:03fc26223fa2204fb3eba016", "target": "file:2ac4d0068aa5b67f167321a2", "type": "imports"}
+{"record": "edge", "source": "file:03fc26223fa2204fb3eba016", "target": "file:398d7e8674fc3b23eff79f4e", "type": "imports"}
+{"record": "edge", "source": "file:03fc26223fa2204fb3eba016", "target": "file:7f9f42b9f8dd935e14a22175", "type": "imports"}
+{"record": "edge", "source": "file:03fc26223fa2204fb3eba016", "target": "file:9a1afcb74b0b9453506c7511", "type": "imports"}
+{"record": "edge", "source": "file:084e48c19cf800d722e88456", "target": "file:3921938be33d4b695d48cff6", "type": "imports"}
+{"record": "edge", "source": "file:084e48c19cf800d722e88456", "target": "file:4dde9e0b18c68a0a8c3577ba", "type": "imports"}
+{"record": "edge", "source": "file:084e48c19cf800d722e88456", "target": "file:677316277e7381477c189b7c", "type": "imports"}
+{"record": "edge", "source": "file:084e48c19cf800d722e88456", "target": "file:af9d37f0a9a0ef70a2c9961f", "type": "imports"}
+{"record": "edge", "source": "file:421cb2c2245d9977ecd121bd", "target": "file:2ac4d0068aa5b67f167321a2", "type": "imports"}
+{"record": "edge", "source": "file:421cb2c2245d9977ecd121bd", "target": "file:3921938be33d4b695d48cff6", "type": "imports"}
+{"record": "edge", "source": "file:421cb2c2245d9977ecd121bd", "target": "file:398d7e8674fc3b23eff79f4e", "type": "imports"}
+{"record": "edge", "source": "file:421cb2c2245d9977ecd121bd", "target": "file:7f9f42b9f8dd935e14a22175", "type": "imports"}
+{"record": "edge", "source": "file:4928c6d8bac8a7a71bbd8144", "target": "file:3921938be33d4b695d48cff6", "type": "imports"}
+{"record": "edge", "source": "file:4928c6d8bac8a7a71bbd8144", "target": "file:5df61f3b735e3ecac400c265", "type": "imports"}
+{"record": "edge", "source": "file:4928c6d8bac8a7a71bbd8144", "target": "file:af9d37f0a9a0ef70a2c9961f", "type": "imports"}
+{"record": "edge", "source": "file:7f9f42b9f8dd935e14a22175", "target": "file:2ac4d0068aa5b67f167321a2", "type": "imports"}
+{"record": "edge", "source": "file:7f9f42b9f8dd935e14a22175", "target": "file:398d7e8674fc3b23eff79f4e", "type": "imports"}
+{"record": "edge", "source": "file:818083744bc70a093e6d0ae9", "target": "file:3921938be33d4b695d48cff6", "type": "imports"}
+{"record": "edge", "source": "file:818083744bc70a093e6d0ae9", "target": "file:af9d37f0a9a0ef70a2c9961f", "type": "imports"}
+{"record": "edge", "source": "file:94aa7e13d274c8a63b26e79a", "target": "file:3921938be33d4b695d48cff6", "type": "imports"}
+{"record": "edge", "source": "file:94aa7e13d274c8a63b26e79a", "target": "file:af9d37f0a9a0ef70a2c9961f", "type": "imports"}
+{"record": "edge", "source": "file:9a1afcb74b0b9453506c7511", "target": "file:398d7e8674fc3b23eff79f4e", "type": "imports"}
+{"record": "edge", "source": "file:9b366825d86e80fb7958bef7", "target": "file:03fc26223fa2204fb3eba016", "type": "imports"}
+{"record": "edge", "source": "file:9b366825d86e80fb7958bef7", "target": "file:084e48c19cf800d722e88456", "type": "imports"}
+{"record": "edge", "source": "file:9b366825d86e80fb7958bef7", "target": "file:2ac4d0068aa5b67f167321a2", "type": "imports"}
+{"record": "edge", "source": "file:9b366825d86e80fb7958bef7", "target": "file:421cb2c2245d9977ecd121bd", "type": "imports"}
+{"record": "edge", "source": "file:9b366825d86e80fb7958bef7", "target": "file:4928c6d8bac8a7a71bbd8144", "type": "imports"}
+{"record": "edge", "source": "file:9b366825d86e80fb7958bef7", "target": "file:818083744bc70a093e6d0ae9", "type": "imports"}
+{"record": "edge", "source": "file:9b366825d86e80fb7958bef7", "target": "file:94aa7e13d274c8a63b26e79a", "type": "imports"}
+{"record": "edge", "source": "file:9b366825d86e80fb7958bef7", "target": "file:a4d75497f57a37a70e192e13", "type": "imports"}
+{"record": "edge", "source": "file:9b366825d86e80fb7958bef7", "target": "file:f7454d4e4c53e611d0b34fbc", "type": "imports"}
+{"record": "edge", "source": "file:a4d75497f57a37a70e192e13", "target": "file:3921938be33d4b695d48cff6", "type": "imports"}
+{"record": "edge", "source": "file:a4d75497f57a37a70e192e13", "target": "file:4dde9e0b18c68a0a8c3577ba", "type": "imports"}
+{"record": "edge", "source": "file:f7454d4e4c53e611d0b34fbc", "target": "file:2ac4d0068aa5b67f167321a2", "type": "imports"}
+{"record": "edge", "source": "file:f7454d4e4c53e611d0b34fbc", "target": "file:398d7e8674fc3b23eff79f4e", "type": "imports"}
+{"record": "edge", "source": "file:fa282dc49ec48f22a3fecd73", "target": "file:34f64a130c872fd5f44cf347", "type": "imports"}
+{"record": "edge", "source": "file:fa282dc49ec48f22a3fecd73", "target": "file:9b366825d86e80fb7958bef7", "type": "imports"}
+{"record": "edge", "source": "file:ae48d9a9f631f5e18f3039ca", "target": "file:3dd2730e859dc75ab5e9695d", "type": "tests"}
