@@ -6,13 +6,13 @@ The landing page communicates Marc's professional profile, experience, service a
 
 ## Source map
 
-- Composition and route switching: [`src/App.tsx`](../../src/App.tsx)
-- Hero and navigation: [`src/components/HeroSection.tsx`](../../src/components/HeroSection.tsx)
-- About and experience: [`src/components/AboutSection.tsx`](../../src/components/AboutSection.tsx)
-- Services: [`src/components/ServicesSection.tsx`](../../src/components/ServicesSection.tsx)
-- Projects and contact footer: [`src/components/ProjectsSection.tsx`](../../src/components/ProjectsSection.tsx)
+- Landing composition: [`src/pages/index.astro`](../../src/pages/index.astro)
+- Hero and navigation: [`src/components/HeroSection.astro`](../../src/components/HeroSection.astro)
+- About and experience: [`src/components/AboutSection.astro`](../../src/components/AboutSection.astro)
+- Services: [`src/components/ServicesSection.astro`](../../src/components/ServicesSection.astro)
+- Projects and contact footer: [`src/components/ProjectsSection.astro`](../../src/components/ProjectsSection.astro)
 - Typed portfolio content: [`src/data/portfolio.ts`](../../src/data/portfolio.ts)
-- Shared motion: `FadeIn`, `AnimatedText`, `Magnet`, and `MarqueeSection`
+- Shared progressive enhancement: [`src/scripts/enhancements.ts`](../../src/scripts/enhancements.ts) and [`src/components/MarqueeSection.astro`](../../src/components/MarqueeSection.astro)
 
 ## Stable product contracts
 

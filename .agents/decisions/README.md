@@ -1,6 +1,6 @@
 # Architectural decisions
 
-This directory holds concise accepted ADRs for durable choices that are not obvious from source. There are no accepted ADRs in the MVP baseline.
+This directory holds concise accepted ADRs for durable choices that are not obvious from source.
 
 ## When an ADR is warranted
 

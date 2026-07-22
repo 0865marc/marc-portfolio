@@ -1,6 +1,6 @@
 schema_version: 1
 task_id: dev-20260722-0719-astro-migration
-review_status: pending
+review_status: approved
 summary: Review durable knowledge changes introduced by the Astro static migration.
 knowledge_delta:
   added_nodes:
@@ -24,6 +24,6 @@ knowledge_delta:
   design_notes: Existing visual tokens and hierarchy are preserved; implementation technology changed.
   stale_knowledge:
     - .agents/domains/release.md needs Astro output checks and the separately activated Nginx designed-404 prerequisite.
-reviewed_by: ''
-reviewed_at: null
-reindex_approved: false
+reviewed_by: Marc Teixidó
+reviewed_at: '2026-07-22'
+reindex_approved: true

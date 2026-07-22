@@ -1,4 +1,4 @@
-schema_version: 1
+schema_version: 2
 project:
   name: marc-portfolio
   root: .
@@ -14,7 +14,7 @@ source_of_truth:
     - operator-local Hermes project registry
   application:
     - package.json
-    - index.html
+    - astro.config.mjs
     - src
     - tailwind.config.js
     - tsconfig.json
@@ -27,60 +27,27 @@ source_of_truth:
     - .agents/domains
     - .agents/decisions
     - .agents/tasks
-    - .agents/graph
 boundaries:
   application_source_wins_over_curated_summaries: true
-  generated_index_is_authoritative: false
+  codegraph_index_is_authoritative: false
+  codegraph_index_is_version_controlled: false
   workflow_history_is_knowledge_source: false
-index:
-  engine: sqlite-fts5
-  hash_algorithm: sha256
-  chunk_strategy: markdown-headings-and-line-windows
-  maximum_document_bytes: 1000000
-  include:
-    - project text and source files with supported extensions
-    - authored .agents files
-  exclude_directories:
-    - .git
+code_intelligence:
+  provider: CodeGraph
+  package: '@colbymchenry/codegraph'
+  config: codegraph.json
+  local_index: .codegraph
+  include: application and operations source supported by CodeGraph
+  exclude:
+    - .agents
     - .workflow
-    - .agents/generated
-    - node_modules
-    - dist
-    - build
-    - coverage
-    - vendor
-    - caches
-  exclude_files:
-    - operator-local .hermes.md
-    - environment files beginning with .env
-    - common credential and private-key files
-    - binary or non-UTF-8 files
-    - symlinks
-  generated_artifacts:
-    database: .agents/generated/index.sqlite3
-    graph: .agents/generated/graph.jsonl
-    state: .agents/generated/state.json
-  generated_snapshot:
-    version_controlled: true
-    purpose: bootstrap fresh checkouts without an initial full re-index
-    update_rule: regenerate and commit database, graph, and state together
-freshness:
-  source: .agents/generated/state.json
-  indexed_at_field: freshness.indexed_at
-  source_digest_field: freshness.source_digest
-  document_count_field: freshness.documents
-  stale_when: repository source hashes differ from the indexed document hashes
-provenance:
-  source: .agents/generated/state.json
-  indexer_field: provenance.indexer
-  indexer_hash_field: provenance.indexer_sha256
-  search_engine_field: provenance.search_engine
+  commands:
+    initialize: npm run codegraph:init
+    synchronize: npm run codegraph:sync
+    status: npm run codegraph:status
+    explore: codegraph explore "<question>"
 review:
   protocol: .agents/tasks/README.md
   template: .agents/tasks/knowledge-delta.template.yaml
   independent_review_required: true
-  reindex_only_after_approved_knowledge_change: true
-extensions:
-  hybrid_search:
-    enabled: false
-    requirement: preserve stable document and chunk identifiers and retain FTS5 fallback
+  refresh_codegraph_after_source_change: true

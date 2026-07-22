@@ -9,18 +9,19 @@ Release policy is defined by [`.hermes.md`](../../.hermes.md) and the operator-l
 - Environment: production.
 - Branch: `main`.
 - Public target: `portfolio.mybrawl.io`.
-- Delivery model: direct static release.
-- Automatic deployment after implementation: disabled.
+- Delivery model: Astro directory-format static release through an atomic publisher.
+- Automatic deployment after implementation: disabled; an explicitly approved push to `origin/main` triggers the host-managed production webhook.
 - Commit and push permission for agents: disabled.
 - Approval before deployment: required.
 
 ## Required order
 
-1. Implement a closed task without deployment.
-2. Run the requested tests/build and inspect the scoped diff.
-3. Obtain independent review.
-4. Obtain explicit production deployment approval.
-5. Only then may the documented release command be considered by the user-facing owner.
-6. Verify the activated release and public HTTPS result independently.
+1. Complete and close the implementation run without waiting for production deployment.
+2. Run `npm run verify`, inspect the scoped diff, and obtain independent implementation verification.
+3. Open a distinct release run bound to the closed implementation result and exact commit.
+4. Obtain separately approved, digest-bound Nginx activation when the reviewed configuration is not yet active.
+5. Obtain a single-use deployment approval for the exact commit, `origin/main`, `production`, and `github_push_webhook` trigger.
+6. Push only under that approval; the push inherently triggers deployment.
+7. Verify the activated release and public HTTPS result independently.
 
-Knowledge indexing is local and has no deployment effect. `.agents/generated/` is versioned only as a reproducible knowledge bootstrap snapshot; publishing it is not an application release or deployment.
+CodeGraph indexing is local and has no deployment effect. `.codegraph/` is ignored, must not be published, and is not an application release artifact or deployment input.

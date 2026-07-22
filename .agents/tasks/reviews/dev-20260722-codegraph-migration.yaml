@@ -1,0 +1,31 @@
+schema_version: 1
+task_id: dev-20260722-codegraph-migration
+review_status: approved
+summary: Replace the custom committed code index with a local CodeGraph index while preserving reviewed project knowledge.
+knowledge_delta:
+  added_nodes:
+    - path: .agents/decisions/0002-codegraph-for-code-intelligence.md
+      fact: CodeGraph owns structural code intelligence while .agents remains the reviewed human knowledge layer.
+      evidence: codegraph.json, package.json, and .agents/manifest.yaml
+  changed_nodes:
+    - path: .agents/context/project.md
+      fact: The machine-local .codegraph directory is a disposable projection and never source authority.
+      evidence: .gitignore and codegraph.json
+    - path: .agents/context/operations.md
+      fact: Project indexing uses CodeGraph initialization, synchronization, status, shell exploration, and Codex MCP registration.
+      evidence: package.json and Codex MCP configuration
+  deprecated_nodes:
+    - path: .agents/scripts/index_project.py
+      fact: The custom SQLite FTS5 and JSONL graph implementation is retired.
+      evidence: ADR 0002 and removal from the repository
+    - path: .agents/generated
+      fact: Committed generated index snapshots are retired.
+      evidence: ADR 0002 and .gitignore
+  adr_needed: true
+  adr_reason: Replacing the code-intelligence provider and source-of-truth boundary is a durable architectural decision.
+  design_changed: false
+  design_notes: The visual system and application design are unaffected.
+  stale_knowledge: []
+reviewed_by: Marc Teixidó
+reviewed_at: '2026-07-22'
+reindex_approved: true

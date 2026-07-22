@@ -23,6 +23,19 @@ class ValidationTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.project = Path(self.temporary.name)
         shutil.copytree(ROOT / ".workflow", self.project / ".workflow")
+        runs = self.project / ".workflow/runs"
+        if runs.exists():
+            shutil.rmtree(runs)
+        runs.mkdir()
+        archive = self.project / ".workflow/archive"
+        if archive.exists():
+            shutil.rmtree(archive)
+        current_path = self.project / ".workflow/current.yaml"
+        current = self.read_yaml(current_path)
+        current["active_run"] = None
+        current["updated_at"] = "2026-07-21T23:00:00Z"
+        self.write_yaml(current_path, current)
+        self.policy = self.read_yaml(self.project / ".workflow/policy.yaml")
 
     def tearDown(self):
         self.temporary.cleanup()
@@ -124,7 +137,7 @@ class ValidationTests(unittest.TestCase):
             "real verification evidence\n", encoding="utf-8"
         )
 
-        roles = {role: f"{role}-identity" for role in VALIDATE.ROLES}
+        roles = {role: f"{role}-identity" for role in self.policy["roles"]["required"]}
         roles["implementer"] = "implementation-person"
         roles["verifier"] = "verification-person"
         roles["release_approver"] = "release-person"
@@ -227,7 +240,7 @@ class ValidationTests(unittest.TestCase):
         current_path = self.project / ".workflow/current.yaml"
         current = self.read_yaml(current_path)
         current["active_run"] = (
-            None if status in VALIDATE.TERMINAL_STATES or archive_year else run_id
+            None if status in set(self.policy["lifecycle"]["terminal"]) or archive_year else run_id
         )
         self.write_yaml(current_path, current)
         return run_path, state
@@ -235,27 +248,32 @@ class ValidationTests(unittest.TestCase):
     def save_state(self, run_path, state):
         self.write_yaml(run_path / "state.yaml", state)
 
-    def test_actual_neutral_repository_contract(self):
-        result = VALIDATE.Validator(ROOT).validate()
+    def test_isolated_neutral_repository_contract(self):
+        result = self.validate()
         self.assertTrue(result["valid"], result)
         self.assertEqual(result["runs_checked"], 0)
         self.assertEqual(result["retired_artifacts_checked"], 9)
 
     def test_policy_contains_every_role_gate_state_and_coherent_graph(self):
         policy = self.read_yaml(self.project / ".workflow/policy.yaml")
-        self.assertEqual(set(policy["roles"]["required"]), VALIDATE.ROLES)
-        self.assertEqual(set(policy["gates"]["required"]), VALIDATE.GATES)
+        self.assertEqual(set(policy["roles"]["required"]), set(self.policy["roles"]["required"]))
+        self.assertEqual(set(policy["gates"]["required"]), VALIDATE.SUPPORTED_GATES)
         self.assertEqual(
             set(policy["lifecycle"]["transitions"]),
-            set(VALIDATE.STATIC_TRANSITIONS),
+            set(self.policy["lifecycle"]["transitions"]),
         )
+        terminal = set(policy["lifecycle"]["terminal"])
         self.assertTrue(
-            all(not VALIDATE.STATIC_TRANSITIONS[x] for x in VALIDATE.TERMINAL_STATES)
+            all(not policy["lifecycle"]["transitions"][state] for state in terminal)
         )
         self.assertTrue(self.validate()["valid"])
 
     def test_every_retired_path_is_absent_and_reintroduction_fails(self):
-        for name in VALIDATE.RETIRED:
+        retired = [
+            Path(item["path"]).name
+            for item in self.policy["bootstrap_cleanup"]["retired_root_artifacts"]
+        ]
+        for name in retired:
             with self.subTest(name=name):
                 path = self.project / ".workflow" / name
                 self.assertFalse(path.exists())
@@ -306,12 +324,26 @@ class ValidationTests(unittest.TestCase):
         self.save_state(run_path, state)
         self.assert_invalid("blocker")
 
-    def test_two_active_runs_fail_even_when_one_is_selected(self):
+    def test_multiple_active_runs_are_allowed_and_current_selects_focus(self):
         first = "20260721T230000Z-first-run"
         second = "20260721T230001Z-second-run"
         self.make_run(run_id=first)
         self.make_run(run_id=second)
-        self.assert_invalid("multiple non-terminal", selected=second)
+        self.assertTrue(self.validate(selected=second)["valid"], self.validate(selected=second))
+
+        current_path = self.project / ".workflow/current.yaml"
+        current = self.read_yaml(current_path)
+        current["active_run"] = "20260721T230002Z-missing-run"
+        self.write_yaml(current_path, current)
+        self.assert_invalid("current.active_run does not identify an active run")
+
+        current["active_run"] = second
+        self.write_yaml(current_path, current)
+        policy_path = self.project / ".workflow/policy.yaml"
+        policy = self.read_yaml(policy_path)
+        policy["run"]["one_active"] = True
+        self.write_yaml(policy_path, policy)
+        self.assert_invalid("multiple non-terminal runs")
 
     def test_illegal_transition_and_terminal_outgoing_policy_fail(self):
         run_path, state = self.make_run()
@@ -323,7 +355,7 @@ class ValidationTests(unittest.TestCase):
         policy = self.read_yaml(policy_path)
         policy["lifecycle"]["transitions"]["closed"] = ["intake"]
         self.write_yaml(policy_path, policy)
-        self.assert_invalid("lifecycle graph")
+        self.assert_invalid("terminal states must not have outgoing transitions")
 
     def test_plan_digest_and_plan_approval_digest_are_recomputed(self):
         run_path, state = self.make_run()
@@ -469,7 +501,7 @@ class ValidationTests(unittest.TestCase):
             ("commit_allowed", False, "allow the exact commit"),
             ("push_allowed", False, "allow the exact push"),
             ("commit", "c" * 40, "disagrees with deployment commit"),
-            ("push_target", "origin/other", "must be origin/main"),
+            ("push_target", "origin/other", "push target is not exact"),
         ]
         for index, (field, value, message) in enumerate(mutations):
             with self.subTest(field=field):

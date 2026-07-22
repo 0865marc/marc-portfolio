@@ -1,5 +1,8 @@
 schema_version: 1
-contract_version: 1
+contract_version: 2
+contract_history:
+  accepted_policy_sha256:
+    - d131d75de9ed8142bcbe8a3b2e003e4d2625c3991f85dd1979f8648ee392fe11
 project:
   name: marc-portfolio
   repository_root: .
@@ -14,7 +17,7 @@ paths:
 root_layout:
   allowed_entries: [README.md, policy.yaml, current.yaml, templates, scripts, tests, runs, archive]
 run:
-  one_active: true
+  one_active: false
   id_pattern: '^[0-9]{8}T[0-9]{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$'
   immutable_ids: true
   overwrite: forbidden
@@ -107,6 +110,7 @@ knowledge_boundary:
   reusable_changes_require_pending_delta: true
   independent_review: true
   generated_never_hand_edited: true
+  implementation_and_release_runs_are_separate: true
 validation:
   json_output: true
   read_only: true

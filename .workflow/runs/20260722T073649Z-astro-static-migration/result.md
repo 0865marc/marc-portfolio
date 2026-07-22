@@ -1,6 +1,6 @@
 # Status
 
-Implementation complete; production intentionally blocked.
+Implementation complete; awaiting independent closure verification.
 
 # Summary
 
@@ -8,7 +8,7 @@ The revised WebKit, full-media CLS, and Certbot-safe Nginx preparation scope is 
 
 # Git and release boundary
 
-Scoped commits `9e6e28c`, `3662c95`, `4c3746f`, `231d857`, and the following additive workflow evidence commit are local only. No push, deployment, Certbot, system Nginx validation/reload, production checkout, certificate, DNS, webhook, or release-symlink mutation occurred. Production remains blocked pending independent exact-head/digest verification, separately approved privileged Nginx activation, and a later single-use exact deployment approval.
+Scoped commits `9e6e28c`, `3662c95`, `4c3746f`, `231d857`, and the following additive workflow evidence commit are local only. No push, deployment, Certbot, system Nginx validation/reload, production checkout, certificate, DNS, webhook, or release-symlink mutation occurred. Under the current contract, production activation and deployment belong to a distinct future release run after this implementation receives independent closure verification.
 
 # Verification
 
@@ -16,8 +16,8 @@ See `evidence/20260722T100600Z-unblock-verification.md` for the original unblock
 
 # Residual risk
 
-Physical Safari remains unavailable; pinned Playwright 1.61.1 WebKit is the automated representation. WebKit history traversal can be slow in the pinned container and required a proven 180-second test timeout, but passed without retries. Remote full-media transfer remains externally controlled and very large; its best-practices score remains 79 solely from the approved media host's third-party cookie findings, while the governed controlled first-party score is 100. The complete workflow unit suite retains three known active-run fixture failures even though the active validator and new revised-plan regression pass.
+Physical Safari remains unavailable; pinned Playwright 1.61.1 WebKit is the automated representation. WebKit history traversal can be slow in the pinned container and required a proven 180-second test timeout, but passed without retries. Remote full-media transfer remains externally controlled and very large; its best-practices score remains 79 solely from the approved media host's third-party cookie findings, while the governed controlled first-party score is 100. The workflow test fixtures were subsequently isolated from live runs and the complete workflow unit suite passes.
 
 # Blocker
 
-Independent final-head review and exact artifact/config digest binding are still required. A privileged actor must then receive a separate Nginx activation approval, execute and evidence it, after which a distinct single-use push/deployment approval may authorize the production webhook trigger.
+Independent final-head review and exact artifact/config digest binding are still required before this implementation run can close. Nginx activation and any single-use push/deployment approval must be handled later by a distinct release run.

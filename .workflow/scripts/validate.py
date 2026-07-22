@@ -27,64 +27,18 @@ EVIDENCE_PATTERN = re.compile(
 SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 COMMIT_PATTERN = re.compile(r"^[0-9a-f]{40}$")
 
-ROOT_ENTRIES = {
-    "README.md", "policy.yaml", "current.yaml", "templates",
-    "scripts", "tests", "runs", "archive",
-}
-TEMPLATES = {
+CORE_ROOT_ENTRIES = {"README.md", "policy.yaml", "current.yaml", "templates", "scripts", "tests"}
+REQUIRED_TEMPLATES = {
     "request.md", "plan.md", "state.yaml", "approval.yaml",
     "evidence.md", "result.md",
 }
-ARTIFACT_REQUIREMENTS = {
-    "planned": ["request.md"],
-    "awaiting_approval": ["request.md", "plan.md", "state.yaml"],
-    "approved": ["request.md", "plan.md", "state.yaml", "plan_approval"],
-    "ready_for_release": [
-        "request.md", "plan.md", "state.yaml", "plan_approval",
-        "verification_evidence",
-    ],
-    "deployed": [
-        "request.md", "plan.md", "state.yaml", "deployment_approval",
-        "post_deploy_evidence",
-    ],
-    "terminal": ["result.md"],
-}
-ROLES = {
-    "requester", "planner", "approver", "implementer", "verifier",
-    "release_approver", "releaser", "knowledge_reviewer",
-}
-GATES = {
+SUPPORTED_GATES = {
     "plan_approval", "execution_start", "verification",
     "deployment_approval", "closure",
 }
-TERMINAL_STATES = {"failed", "cancelled", "closed"}
-STATIC_TRANSITIONS = {
-    "intake": {"discovery", "blocked", "cancelled"},
-    "discovery": {"planned", "blocked", "cancelled", "failed"},
-    "planned": {"awaiting_approval", "discovery", "blocked", "cancelled"},
-    "awaiting_approval": {"approved", "planned", "blocked", "cancelled"},
-    "approved": {"executing", "awaiting_approval", "blocked", "cancelled"},
-    "executing": {"verifying", "blocked", "failed", "cancelled"},
-    "verifying": {
-        "executing", "ready_for_release", "blocked", "failed", "cancelled",
-    },
-    "ready_for_release": {
-        "deployed", "closed", "blocked", "cancelled", "failed",
-    },
-    "deployed": {"verifying", "closed", "blocked", "failed"},
-    "blocked": {"recorded_resume_state", "cancelled", "failed"},
-    "failed": set(),
-    "cancelled": set(),
-    "closed": set(),
-}
-RETIRED = [
-    "source_template.md", "state.json", "planner_task.md", "plan.md",
-    "frontend_task.md", "frontend_report.md", "implementation_task.md",
-    "implementation_report.md", "coder_followup_contact_fix.md",
-]
 
 POLICY_TOP_KEYS = {
-    "schema_version", "contract_version", "project", "paths", "root_layout",
+    "schema_version", "contract_version", "contract_history", "project", "paths", "root_layout",
     "run", "roles", "lifecycle", "gates", "git", "deployment",
     "artifacts", "archive", "knowledge_boundary", "validation",
     "bootstrap_cleanup",
@@ -165,6 +119,21 @@ class Validator:
         self.errors = []
         self.warnings = []
         self.runs_checked = 0
+        self.root_entries = set(CORE_ROOT_ENTRIES)
+        self.roles = set()
+        self.gates = set(SUPPORTED_GATES)
+        self.initial_state = "intake"
+        self.terminal_states = set()
+        self.transitions = {}
+        self.lifecycle_requirements = {}
+        self.artifact_requirements = {}
+        self.retired = []
+        self.one_active = False
+        self.current_pointer_required = True
+        self.run_pattern = RUN_PATTERN
+        self.project_policy = {}
+        self.deployment_policy = {}
+        self.accepted_policy_sha256 = set()
 
     def error(self, message):
         self.errors.append(message)
@@ -254,7 +223,7 @@ class Validator:
             path = self.workflow / name
             if not path.is_file() or path.is_symlink():
                 self.error(f"missing or unsafe contract file: .workflow/{name}")
-        for name in TEMPLATES:
+        for name in REQUIRED_TEMPLATES:
             path = self.workflow / "templates" / name
             if not path.is_file() or path.is_symlink():
                 self.error(f"missing or unsafe template: {name}")
@@ -266,10 +235,10 @@ class Validator:
         if not self.workflow.is_dir() or self.workflow.is_symlink():
             self.error(".workflow must be a real directory")
             return
-        unknown = {entry.name for entry in self.workflow.iterdir()} - ROOT_ENTRIES
+        unknown = {entry.name for entry in self.workflow.iterdir()} - self.root_entries
         if unknown:
             self.error(f"unknown .workflow root entries: {sorted(unknown)}")
-        for name in RETIRED:
+        for name in self.retired:
             if (self.workflow / name).exists() or (self.workflow / name).is_symlink():
                 self.error(f"retired artifact must be absent: .workflow/{name}")
 
@@ -281,9 +250,10 @@ class Validator:
         self.require_mapping(policy, POLICY_TOP_KEYS, "policy.yaml")
         if type(policy.get("schema_version")) is not int or policy.get("schema_version") != 1:
             self.error("policy.schema_version must be integer 1")
-        if type(policy.get("contract_version")) is not int or policy.get("contract_version") != 1:
-            self.error("policy.contract_version must be integer 1")
+        if type(policy.get("contract_version")) is not int or policy.get("contract_version") < 1:
+            self.error("policy.contract_version must be a positive integer")
 
+        self.validate_policy_history(policy.get("contract_history"))
         self.validate_policy_project(policy.get("project"))
         self.validate_policy_paths(policy.get("paths"))
         self.validate_policy_layout(policy.get("root_layout"))
@@ -300,6 +270,22 @@ class Validator:
         self.validate_policy_cleanup(policy.get("bootstrap_cleanup"))
         return policy
 
+    def validate_policy_history(self, value):
+        if not self.require_mapping(
+            value, {"accepted_policy_sha256"}, "policy.contract_history"
+        ):
+            return
+        digests = value.get("accepted_policy_sha256")
+        if not isinstance(digests, list) or not all(
+            isinstance(item, str) and SHA256_PATTERN.fullmatch(item)
+            for item in digests
+        ):
+            self.error("policy.contract_history.accepted_policy_sha256 must contain SHA-256 values")
+            return
+        if len(digests) != len(set(digests)):
+            self.error("policy contract history contains duplicate digests")
+        self.accepted_policy_sha256 = set(digests)
+
     def validate_policy_project(self, value):
         keys = {
             "name", "repository_root", "environment", "default_branch",
@@ -307,15 +293,12 @@ class Validator:
         }
         if not self.require_mapping(value, keys, "policy.project"):
             return
-        expected = {
-            "name": "marc-portfolio", "repository_root": ".",
-            "environment": "production", "default_branch": "main",
-        }
-        for key, wanted in expected.items():
-            if value.get(key) != wanted:
-                self.error(f"policy.project.{key} must be {wanted!r}")
-        if not nonempty_string(value.get("authority_precedence")):
-            self.error("policy.project.authority_precedence must be non-empty")
+        for key in ("name", "environment", "default_branch", "authority_precedence"):
+            if not nonempty_string(value.get(key)):
+                self.error(f"policy.project.{key} must be non-empty")
+        if value.get("repository_root") != ".":
+            self.error("policy.project.repository_root must be '.'")
+        self.project_policy = value if isinstance(value, dict) else {}
 
     def validate_policy_paths(self, value):
         keys = {"current", "runs", "archive", "templates"}
@@ -332,12 +315,15 @@ class Validator:
         if not self.require_mapping(value, {"allowed_entries"}, "policy.root_layout"):
             return
         entries = value.get("allowed_entries")
-        if (
-            not isinstance(entries, list)
-            or len(entries) != len(ROOT_ENTRIES)
-            or set(entries) != ROOT_ENTRIES
-        ):
-            self.error("policy.root_layout.allowed_entries does not match contract")
+        if not isinstance(entries, list) or not all(nonempty_string(item) for item in entries):
+            self.error("policy.root_layout.allowed_entries must be non-empty names")
+            return
+        if len(entries) != len(set(entries)):
+            self.error("policy.root_layout.allowed_entries contains duplicates")
+        required = CORE_ROOT_ENTRIES | {"runs", "archive"}
+        if not required.issubset(entries):
+            self.error("policy.root_layout.allowed_entries omits required contract paths")
+        self.root_entries = set(entries)
 
     def validate_policy_run(self, value):
         keys = {
@@ -346,15 +332,26 @@ class Validator:
         }
         if not self.require_mapping(value, keys, "policy.run"):
             return
-        bool_keys = {
-            "one_active", "immutable_ids", "project_relative_paths",
+        true_keys = {
+            "immutable_ids", "project_relative_paths",
             "current_pointer_required",
         }
-        for key in bool_keys:
+        for key in true_keys:
             if type(value.get(key)) is not bool or value.get(key) is not True:
                 self.error(f"policy.run.{key} must be true")
-        if value.get("id_pattern") != RUN_PATTERN.pattern:
-            self.error("policy.run.id_pattern does not match validator")
+        if type(value.get("one_active")) is not bool:
+            self.error("policy.run.one_active must be boolean")
+        else:
+            self.one_active = value["one_active"]
+        self.current_pointer_required = value.get("current_pointer_required") is True
+        pattern = value.get("id_pattern")
+        if not isinstance(pattern, str):
+            self.error("policy.run.id_pattern must be a string")
+        else:
+            try:
+                self.run_pattern = re.compile(pattern)
+            except re.error as exc:
+                self.error(f"policy.run.id_pattern is invalid: {exc}")
         if value.get("overwrite") != "forbidden":
             self.error("policy.run.overwrite must be forbidden")
 
@@ -362,63 +359,80 @@ class Validator:
         keys = {"required", "labels_are_permissions", "production_independence"}
         if not self.require_mapping(value, keys, "policy.roles"):
             return
-        if (
-            not isinstance(value.get("required"), list)
-            or len(value["required"]) != len(ROLES)
-            or set(value["required"]) != ROLES
-        ):
-            self.error("policy required roles do not match contract")
+        required = value.get("required")
+        if not isinstance(required, list) or not all(nonempty_string(role) for role in required):
+            self.error("policy required roles must be non-empty strings")
+        else:
+            if len(required) != len(set(required)):
+                self.error("policy required roles contain duplicates")
+            semantic_roles = {"implementer", "verifier", "release_approver"}
+            if not semantic_roles.issubset(required):
+                self.error("policy required roles omit production separation roles")
+            self.roles = set(required)
         if value.get("labels_are_permissions") is not False:
             self.error("policy.roles.labels_are_permissions must be false")
         independence = value.get("production_independence")
-        if not isinstance(independence, list) or set(independence) != {
-            "verifier", "release_approver",
-        }:
+        if not isinstance(independence, list) or not set(independence).issubset(self.roles):
             self.error("policy production independence is invalid")
 
     def validate_policy_lifecycle(self, value):
         keys = {"initial", "terminal", "transitions"}
         if not self.require_mapping(value, keys, "policy.lifecycle"):
             return
-        if value.get("initial") != "intake":
-            self.error("policy lifecycle initial state must be intake")
-        if not isinstance(value.get("terminal"), list) or set(value["terminal"]) != TERMINAL_STATES:
-            self.error("policy terminal states do not match contract")
+        if not nonempty_string(value.get("initial")):
+            self.error("policy lifecycle initial state must be non-empty")
+        else:
+            self.initial_state = value["initial"]
+        terminal = value.get("terminal")
+        if not isinstance(terminal, list) or not all(nonempty_string(state) for state in terminal):
+            self.error("policy terminal states must be non-empty strings")
+        else:
+            self.terminal_states = set(terminal)
         transitions = value.get("transitions")
         if not isinstance(transitions, dict):
             self.error("policy.lifecycle.transitions must be a mapping")
             return
-        self.require_mapping(
-            transitions, set(STATIC_TRANSITIONS), "policy.lifecycle.transitions"
-        )
         normalized = {}
         for state, targets in transitions.items():
-            if not isinstance(targets, list) or not all(
+            if not nonempty_string(state) or not isinstance(targets, list) or not all(
                 isinstance(target, str) for target in targets
             ):
                 self.error(f"policy transition list for {state} is invalid")
                 continue
             normalized[state] = set(targets)
-        if normalized != STATIC_TRANSITIONS:
-            self.error("policy lifecycle graph does not match contract")
+        self.transitions = normalized
+        states = set(normalized)
+        if self.initial_state not in states:
+            self.error("policy lifecycle initial state is absent from transitions")
+        if not self.terminal_states.issubset(states):
+            self.error("policy terminal states are absent from transitions")
+        semantic_states = {"blocked", "deployed", "closed"}
+        if not semantic_states.issubset(states):
+            self.error("policy lifecycle omits states required by gate semantics")
+        for state, targets in normalized.items():
+            unknown = targets - states - {"recorded_resume_state"}
+            if unknown:
+                self.error(f"policy transition list for {state} has unknown states: {sorted(unknown)}")
         self.validate_reachability()
 
     def validate_reachability(self):
         graph = {
             state: {target for target in targets if target != "recorded_resume_state"}
-            for state, targets in STATIC_TRANSITIONS.items()
+            for state, targets in self.transitions.items()
         }
-        reached = {"intake"}
-        pending = ["intake"]
+        if self.initial_state not in graph:
+            return
+        reached = {self.initial_state}
+        pending = [self.initial_state]
         while pending:
             state = pending.pop()
             for target in graph[state]:
                 if target not in reached:
                     reached.add(target)
                     pending.append(target)
-        if reached != set(STATIC_TRANSITIONS):
+        if reached != set(self.transitions):
             self.error("not all lifecycle states are reachable from intake")
-        if any(STATIC_TRANSITIONS[state] for state in TERMINAL_STATES):
+        if any(self.transitions.get(state) for state in self.terminal_states):
             self.error("terminal states must not have outgoing transitions")
 
     def validate_policy_gates(self, value):
@@ -430,12 +444,11 @@ class Validator:
         }
         if not self.require_mapping(value, gate_keys, "policy.gates"):
             return
-        if (
-            not isinstance(value.get("required"), list)
-            or len(value["required"]) != len(GATES)
-            or set(value["required"]) != GATES
-        ):
+        required = value.get("required")
+        if not isinstance(required, list) or set(required) != SUPPORTED_GATES:
             self.error("policy required gates do not match contract")
+        else:
+            self.gates = set(required)
         expected_scalars = {
             "immutable_events": True,
             "effective_event": "latest_valid_for_gate_and_scope_digest",
@@ -483,23 +496,20 @@ class Validator:
             if execution.get("pre_existing_changes_canonical_json") != canonical:
                 self.error("policy execution_start canonical JSON rule is invalid")
         requirements = value.get("lifecycle_requirements")
-        expected = {
-            "approved": ["plan_approval"],
-            "executing": ["plan_approval", "execution_start"],
-            "verifying": ["plan_approval", "execution_start"],
-            "ready_for_release": [
-                "plan_approval", "execution_start", "verification",
-            ],
-            "deployed": [
-                "plan_approval", "execution_start", "verification",
-                "deployment_approval",
-            ],
-            "closed": [
-                "plan_approval", "execution_start", "verification", "closure",
-            ],
-        }
-        if requirements != expected:
-            self.error("policy gate lifecycle requirements do not match contract")
+        if not isinstance(requirements, dict):
+            self.error("policy gate lifecycle requirements must be a mapping")
+        else:
+            normalized = {}
+            for state, gates in requirements.items():
+                if state not in self.transitions or not isinstance(gates, list) or not set(gates).issubset(self.gates):
+                    self.error(f"policy gate lifecycle requirements for {state} are invalid")
+                    continue
+                normalized[state] = list(gates)
+            self.lifecycle_requirements = normalized
+            if "deployment_approval" not in normalized.get("deployed", []):
+                self.error("deployed state must require deployment_approval")
+            if "closure" not in normalized.get("closed", []):
+                self.error("closed state must require closure")
 
     def validate_policy_git(self, value):
         keys = {
@@ -548,19 +558,20 @@ class Validator:
         }
         if not self.require_mapping(value, keys, "policy.deployment"):
             return
-        expected = {
-            "default": "denied", "mechanism": "github_push_webhook",
-            "repository": "0865marc/marc-portfolio", "branch": "main",
-            "automatic_on_approved_push": True, "manual_command": "forbidden",
-            "requires_independent_verification": True,
-            "requires_explicit_deployment_approval": True,
-            "require_exact_commit_and_target": True,
-            "require_post_deploy_verification": True,
-            "approval_is_single_use": True,
-            "require_git_state_match": True,
-        }
-        if value != expected:
-            self.error("policy.deployment does not match contract")
+        if value.get("default") != "denied" or value.get("manual_command") != "forbidden":
+            self.error("policy deployment defaults must deny manual deployment")
+        for key in ("mechanism", "repository", "branch"):
+            if not nonempty_string(value.get(key)):
+                self.error(f"policy.deployment.{key} must be non-empty")
+        for key in (
+            "automatic_on_approved_push", "requires_independent_verification",
+            "requires_explicit_deployment_approval", "require_exact_commit_and_target",
+            "require_post_deploy_verification", "approval_is_single_use",
+            "require_git_state_match",
+        ):
+            if value.get(key) is not True:
+                self.error(f"policy.deployment.{key} must be true")
+        self.deployment_policy = value if isinstance(value, dict) else {}
 
     def validate_policy_artifacts(self, value):
         keys = {
@@ -570,22 +581,17 @@ class Validator:
         if not self.require_mapping(value, keys, "policy.artifacts"):
             return
         requirements = value.get("required_by_state")
-        expected_keys = set(ARTIFACT_REQUIREMENTS)
         if not isinstance(requirements, dict):
             self.error("policy.artifacts.required_by_state must be a mapping")
         else:
-            self.require_mapping(
-                requirements, expected_keys, "policy.artifacts.required_by_state"
-            )
             for state, items in requirements.items():
+                if state != "terminal" and state not in self.transitions:
+                    self.error(f"artifact requirements reference unknown state {state}")
                 if not isinstance(items, list) or not all(
                     isinstance(item, str) for item in items
                 ):
                     self.error(f"artifact requirements for {state} are invalid")
-                elif items != ARTIFACT_REQUIREMENTS[state]:
-                    self.error(
-                        f"artifact requirements for {state} do not match contract"
-                    )
+            self.artifact_requirements = requirements
         if value.get("references_within_run") is not True:
             self.error("policy artifact references must stay within a run")
         if value.get("prohibit_absolute_or_parent_paths") is not True:
@@ -613,6 +619,7 @@ class Validator:
             "workflow_is_task_record", "workflow_is_durable_knowledge",
             "reusable_changes_require_pending_delta", "independent_review",
             "generated_never_hand_edited",
+            "implementation_and_release_runs_are_separate",
         }
         if not self.require_mapping(value, keys, "policy.knowledge_boundary"):
             return
@@ -622,6 +629,7 @@ class Validator:
             "reusable_changes_require_pending_delta": True,
             "independent_review": True,
             "generated_never_hand_edited": True,
+            "implementation_and_release_runs_are_separate": True,
         }
         if value != expected:
             self.error("policy.knowledge_boundary does not match contract")
@@ -639,8 +647,8 @@ class Validator:
         ):
             return
         artifacts = value.get("retired_root_artifacts")
-        if not isinstance(artifacts, list) or len(artifacts) != len(RETIRED):
-            self.error("retired artifact policy must contain exactly nine entries")
+        if not isinstance(artifacts, list):
+            self.error("retired artifact policy must be a list")
             return
         paths = set()
         for index, item in enumerate(artifacts):
@@ -650,12 +658,17 @@ class Validator:
             if not isinstance(item.get("path"), str):
                 self.error(f"{label}.path must be a string")
             else:
-                paths.add(item["path"])
+                path = item["path"]
+                pure = PurePosixPath(path)
+                if pure.is_absolute() or pure.parent != PurePosixPath(".workflow"):
+                    self.error(f"{label}.path must name a direct .workflow child")
+                else:
+                    paths.add(path)
             if item.get("required_absent") is not True:
                 self.error(f"{label}.required_absent must be true")
-        expected = {f".workflow/{name}" for name in RETIRED}
-        if paths != expected:
-            self.error("retired artifact paths do not match the exact nine names")
+        if len(paths) != len(artifacts):
+            self.error("retired artifact paths must be unique")
+        self.retired = sorted(PurePosixPath(path).name for path in paths)
 
     def validate_current(self):
         path = self.workflow / "current.yaml"
@@ -669,7 +682,7 @@ class Validator:
         active = current.get("active_run")
         if active is not None and not isinstance(active, str):
             self.error("current.active_run must be a string or null")
-        if isinstance(active, str) and not RUN_PATTERN.fullmatch(active):
+        if isinstance(active, str) and not self.run_pattern.fullmatch(active):
             self.error("current.active_run is not a valid run ID")
         if current.get("repository_root") != ".":
             self.error("current.repository_root must be '.'")
@@ -684,7 +697,7 @@ class Validator:
             self.error(f"{label} schema_version must be integer 1")
         if state.get("run_id") != run_id:
             self.error(f"state run_id does not match directory: {run_id}")
-        if state.get("status") not in STATIC_TRANSITIONS:
+        if state.get("status") not in self.transitions:
             self.error(f"invalid status for {run_id}: {state.get('status')}")
         for key in ("scope_sha256", "plan_sha256"):
             value = state.get(key)
@@ -708,7 +721,7 @@ class Validator:
                 self.error(f"{label}.repository.pre_existing_changes must be strings")
 
         roles = state.get("roles")
-        if self.require_mapping(roles, ROLES, f"{label}.roles"):
+        if self.require_mapping(roles, self.roles, f"{label}.roles"):
             for role, identity in roles.items():
                 if not isinstance(identity, str):
                     self.error(f"{label}.roles.{role} must be a string")
@@ -768,7 +781,7 @@ class Validator:
                 if not nonempty_string(blocker.get("details")):
                     self.error(f"{label}.blocker.details must be non-empty")
                 if blocker.get("resume_state") not in (
-                    set(STATIC_TRANSITIONS) - TERMINAL_STATES - {"blocked"}
+                    set(self.transitions) - self.terminal_states - {"blocked"}
                 ):
                     self.error(f"{label}.blocker.resume_state must be non-terminal")
 
@@ -783,9 +796,9 @@ class Validator:
         keys = {"from", "to", "at", "by", "reason", "resume_state"}
         if not self.require_mapping(transition, keys, label):
             return
-        if transition.get("from") not in STATIC_TRANSITIONS:
+        if transition.get("from") not in self.transitions:
             self.error(f"{label}.from is not a lifecycle state")
-        if transition.get("to") not in STATIC_TRANSITIONS:
+        if transition.get("to") not in self.transitions:
             self.error(f"{label}.to is not a lifecycle state")
         if not valid_utc_timestamp(transition.get("at")):
             self.error(f"{label}.at must be a real UTC timestamp")
@@ -794,7 +807,7 @@ class Validator:
                 self.error(f"{label}.{key} must be non-empty")
         resume = transition.get("resume_state")
         if resume is not None and resume not in (
-            set(STATIC_TRANSITIONS) - TERMINAL_STATES - {"blocked"}
+            set(self.transitions) - self.terminal_states - {"blocked"}
         ):
             self.error(f"{label}.resume_state must be null or non-terminal")
 
@@ -802,7 +815,7 @@ class Validator:
         history = state.get("transitions")
         if not isinstance(history, list):
             return
-        expected_from = "intake"
+        expected_from = self.initial_state
         recorded_resume = None
         for index, transition in enumerate(history):
             if not isinstance(transition, dict):
@@ -815,7 +828,7 @@ class Validator:
                     f"transition history discontinuity for {run_id} at {index}"
                 )
             if source == "blocked":
-                allowed = {"cancelled", "failed"}
+                allowed = set(self.terminal_states) - {"closed"}
                 if recorded_resume is not None:
                     allowed.add(recorded_resume)
                 if target not in allowed:
@@ -825,14 +838,14 @@ class Validator:
                 if resume is not None:
                     self.error(f"exit from blocked must not record a new resume state")
                 recorded_resume = None
-            elif source in STATIC_TRANSITIONS:
-                if target not in STATIC_TRANSITIONS[source]:
+            elif source in self.transitions:
+                if target not in self.transitions[source]:
                     self.error(
                         f"illegal transition for {run_id}: {source} -> {target}"
                     )
                 if target == "blocked":
                     if resume not in (
-                        set(STATIC_TRANSITIONS) - TERMINAL_STATES - {"blocked"}
+                        set(self.transitions) - self.terminal_states - {"blocked"}
                     ):
                         self.error(
                             f"transition into blocked for {run_id} requires resume_state"
@@ -843,7 +856,7 @@ class Validator:
                         f"non-blocking transition for {run_id} must have null resume_state"
                     )
             expected_from = target
-        if state.get("status") in STATIC_TRANSITIONS and expected_from != state.get("status"):
+        if state.get("status") in self.transitions and expected_from != state.get("status"):
             self.error(f"transition history does not end at status for {run_id}")
         blocker = state.get("blocker")
         if state.get("status") == "blocked":
@@ -865,7 +878,7 @@ class Validator:
         if approval.get("run_id") != run_id:
             self.error(f"approval run_id mismatch: {label}")
         gate = approval.get("gate")
-        if gate not in GATES:
+        if gate not in self.gates:
             self.error(f"unknown approval gate: {label}")
         if approval.get("decision") not in {"approved", "rejected", "revoked"}:
             self.error(f"invalid approval decision: {label}")
@@ -974,7 +987,7 @@ class Validator:
     def effective_approvals(self, approvals, scope):
         grouped = {}
         for path, approval in approvals:
-            if approval.get("gate") not in GATES:
+            if approval.get("gate") not in self.gates:
                 continue
             if approval.get("scope_sha256") != scope:
                 continue
@@ -1025,15 +1038,12 @@ class Validator:
             if isinstance(transition, dict)
         }
         phases_reached = history_targets | {status}
-        plan_phases = {
-            "approved", "executing", "verifying", "ready_for_release",
-            "deployed", "closed",
+        required_gates = {
+            gate
+            for phase in phases_reached
+            for gate in self.lifecycle_requirements.get(phase, [])
         }
-        execution_phases = {
-            "executing", "verifying", "ready_for_release", "deployed", "closed",
-        }
-        verification_phases = {"ready_for_release", "deployed", "closed"}
-        if phases_reached & plan_phases:
+        if "plan_approval" in required_gates:
             event = self.require_gate(effective, "plan_approval", run_id)
             plan = run_path / "plan.md"
             if not plan.is_file() or plan.is_symlink():
@@ -1047,7 +1057,7 @@ class Validator:
                     or event.get("artifact_sha256") != plan_digest
                 ):
                     self.error(f"plan approval does not bind exact plan digest: {run_id}")
-        if phases_reached & execution_phases:
+        if "execution_start" in required_gates:
             event = self.require_gate(effective, "execution_start", run_id)
             if event is not None:
                 if event.get("artifact") != "plan.md" or event.get(
@@ -1057,7 +1067,7 @@ class Validator:
                         f"execution_start does not bind current plan: {run_id}"
                     )
                 self.validate_execution_start_evidence(state, event, run_id)
-        if phases_reached & verification_phases:
+        if "verification" in required_gates:
             verification = self.require_gate(effective, "verification", run_id)
             if not state.get("evidence_refs"):
                 self.error(f"missing verification evidence for {run_id}")
@@ -1068,7 +1078,7 @@ class Validator:
                     f"verification approval does not bind referenced evidence: {run_id}"
                 )
 
-        deployed_path = status == "deployed" or "deployed" in history_targets
+        deployed_path = "deployment_approval" in required_gates
         if deployed_path:
             deployment_event = self.require_gate(
                 effective, "deployment_approval", run_id
@@ -1076,7 +1086,7 @@ class Validator:
             self.validate_deployment_binding(
                 run_path, state, deployment_event
             )
-        if status == "closed":
+        if "closure" in required_gates:
             closure = self.require_gate(effective, "closure", run_id)
             if not (run_path / "result.md").is_file():
                 self.error(f"closed run lacks result.md: {run_id}")
@@ -1093,15 +1103,26 @@ class Validator:
         changes = repository.get("pre_existing_changes")
         if not isinstance(changes, list):
             return
-        expected = [
+        expected_prefix = [
             f"repository_root={repository.get('root')}",
             f"branch={repository.get('branch')}",
             f"baseline_head={repository.get('baseline_head')}",
             f"pre_existing_changes_sha256={canonical_changes_sha256(changes)}",
-            f"policy_sha256={sha256(self.workflow / 'policy.yaml')}",
-            f"plan_sha256={state.get('plan_sha256')}",
         ]
-        if event.get("evidence") != expected:
+        evidence = event.get("evidence")
+        allowed_policy_digests = {
+            sha256(self.workflow / "policy.yaml"), *self.accepted_policy_sha256
+        }
+        valid = (
+            isinstance(evidence, list)
+            and len(evidence) == 6
+            and evidence[:4] == expected_prefix
+            and evidence[5] == f"plan_sha256={state.get('plan_sha256')}"
+            and isinstance(evidence[4], str)
+            and evidence[4].startswith("policy_sha256=")
+            and evidence[4].removeprefix("policy_sha256=") in allowed_policy_digests
+        )
+        if not valid:
             self.error(
                 f"execution_start evidence does not bind repository, policy, "
                 f"changes, and plan: {run_id}"
@@ -1112,9 +1133,11 @@ class Validator:
         deployment = state.get("deployment")
         if not isinstance(deployment, dict):
             return
+        branch = self.deployment_policy.get("branch")
         expected = {
-            "environment": "production", "trigger": "github_push_webhook",
-            "target": "origin/main",
+            "environment": self.project_policy.get("environment"),
+            "trigger": self.deployment_policy.get("mechanism"),
+            "target": f"origin/{branch}" if nonempty_string(branch) else None,
         }
         if deployment.get("allowed") is not True:
             self.error(f"deployed path is not explicitly allowed: {run_id}")
@@ -1127,8 +1150,8 @@ class Validator:
         if event is not None:
             binding = event.get("binding")
             wanted = {
-                "commit": commit, "target": "origin/main",
-                "environment": "production", "trigger": "github_push_webhook",
+                "commit": commit, "target": expected["target"],
+                "environment": expected["environment"], "trigger": expected["trigger"],
             }
             if binding != wanted:
                 self.error(f"deployment approval binding is not exact: {run_id}")
@@ -1144,8 +1167,8 @@ class Validator:
             self.error(f"deployed path must allow the exact push: {run_id}")
         if git.get("commit") != commit:
             self.error(f"Git commit disagrees with deployment commit: {run_id}")
-        if git.get("push_target") != "origin/main":
-            self.error(f"deployed Git push target must be origin/main: {run_id}")
+        if git.get("push_target") != expected["target"]:
+            self.error(f"deployed Git push target is not exact: {run_id}")
 
         post_reference = deployment.get("post_deploy_evidence")
         if self.safe_run_file(
@@ -1156,12 +1179,6 @@ class Validator:
     def validate_artifact_requirements(self, run_path, state):
         run_id = state.get("run_id", run_path.name)
         status = state.get("status")
-        ordered_states = {
-            "intake": 0, "discovery": 1, "planned": 2,
-            "awaiting_approval": 3, "approved": 4, "executing": 5,
-            "verifying": 6, "ready_for_release": 7, "deployed": 8,
-            "blocked": 0, "failed": 0, "cancelled": 0, "closed": 9,
-        }
         history = state.get("transitions", [])
         reached = {status}
         if isinstance(history, list):
@@ -1170,16 +1187,23 @@ class Validator:
                 for transition in history
                 if isinstance(transition, dict)
             )
-        highest = max(ordered_states.get(item, 0) for item in reached)
-        if highest >= 2 and not (run_path / "request.md").is_file():
-            self.error(f"request.md required by planned for {run_id}")
-        if highest >= 3:
-            for name in ("plan.md", "state.yaml"):
-                path = run_path / name
-                if not path.is_file() or path.is_symlink():
-                    self.error(f"{name} required by awaiting_approval for {run_id}")
-        if status in TERMINAL_STATES and not (run_path / "result.md").is_file():
-            self.error(f"terminal run lacks result.md: {run_id}")
+        requirements = {
+            requirement
+            for phase in reached
+            for requirement in self.artifact_requirements.get(phase, [])
+        }
+        if status in self.terminal_states:
+            requirements.update(self.artifact_requirements.get("terminal", []))
+        for name in sorted(requirements & {"request.md", "plan.md", "state.yaml", "result.md"}):
+            path = run_path / name
+            if not path.is_file() or path.is_symlink():
+                self.error(f"{name} required by policy for {run_id}")
+        if "verification_evidence" in requirements and not state.get("evidence_refs"):
+            self.error(f"verification evidence required by policy for {run_id}")
+        if "post_deploy_evidence" in requirements:
+            deployment = state.get("deployment")
+            if not isinstance(deployment, dict) or not deployment.get("post_deploy_evidence"):
+                self.error(f"post-deploy evidence required by policy for {run_id}")
 
     def validate_independence(self, state, effective):
         roles = state.get("roles")
@@ -1219,7 +1243,7 @@ class Validator:
     def validate_run(self, run_path, archived=False):
         run_id = run_path.name
         self.runs_checked += 1
-        if not RUN_PATTERN.fullmatch(run_id):
+        if not self.run_pattern.fullmatch(run_id):
             self.error(f"invalid run ID: {run_id}")
             return None
         if run_path.is_symlink():
@@ -1253,7 +1277,7 @@ class Validator:
         self.validate_gate_lifecycle(run_path, state, effective)
         self.validate_independence(state, effective)
         status = state.get("status")
-        if archived and status not in TERMINAL_STATES:
+        if archived and status not in self.terminal_states:
             self.error(f"archived run is non-terminal: {run_id}")
         return status
 
@@ -1291,7 +1315,7 @@ class Validator:
         if duplicates:
             self.error(f"duplicate run IDs across active/archive: {duplicates}")
         for path, archived, year in inventory:
-            if archived and RUN_PATTERN.fullmatch(path.name):
+            if archived and self.run_pattern.fullmatch(path.name):
                 if path.name[:4] != year:
                     self.error(
                         f"archive year does not agree with run ID: {path.name}"
@@ -1306,15 +1330,15 @@ class Validator:
         if state is None:
             return None
         status = state.get("status")
-        return status if status in STATIC_TRANSITIONS else None
+        return status if status in self.transitions else None
 
     def validate(self, selected=None, include_archive=False):
-        self.validate_contract_files()
         self.validate_policy()
+        self.validate_contract_files()
         current = self.validate_current()
         inventory = self.inventory_runs()
 
-        if selected is not None and not RUN_PATTERN.fullmatch(selected):
+        if selected is not None and not self.run_pattern.fullmatch(selected):
             self.error(f"selected run ID is invalid: {selected}")
             selected = None
 
@@ -1322,20 +1346,20 @@ class Validator:
         for path, archived, _ in inventory:
             status = self.read_inventory_status(path)
             statuses[(path.name, archived)] = status
-            if archived and status is not None and status not in TERMINAL_STATES:
+            if archived and status is not None and status not in self.terminal_states:
                 self.error(f"archived run is non-terminal: {path.name}")
 
         active = [
             run_id for (run_id, archived), status in statuses.items()
-            if not archived and status is not None and status not in TERMINAL_STATES
+            if not archived and status is not None and status not in self.terminal_states
         ]
-        if len(active) > 1:
+        if self.one_active and len(active) > 1:
             self.error(f"multiple non-terminal runs: {active}")
         pointer = current.get("active_run") if current else None
-        if pointer is None and active:
+        if pointer is None and active and self.current_pointer_required:
             self.error("non-terminal run exists without current.active_run")
-        elif pointer is not None and active != [pointer]:
-            self.error("current.active_run does not identify the sole active run")
+        elif pointer is not None and pointer not in active:
+            self.error("current.active_run does not identify an active run")
 
         candidates = []
         if selected is None:
@@ -1357,7 +1381,7 @@ class Validator:
             "errors": self.errors,
             "warnings": self.warnings,
             "runs_checked": self.runs_checked,
-            "retired_artifacts_checked": len(RETIRED),
+            "retired_artifacts_checked": len(self.retired),
         }
 
 

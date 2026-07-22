@@ -99,7 +99,7 @@ components:
 
 Marc Portfolio is a Spanish-language professional portfolio with an editorial, technical tone. Its identity comes from a near-black canvas, cool blue-grey type, oversized condensed-feeling Kanit headings, white inverse sections, generous rounded surfaces, and motion that supports hierarchy without blocking reading.
 
-This file formalizes values already present in `src/index.css`, `index.html`, and current component utility classes. It is a design constraint for future work, not a request to redesign the application.
+This file formalizes values already present in `src/index.css`, `src/layouts/BaseLayout.astro`, and current component utility classes. It is a design constraint for future work, not a request to redesign the application.
 
 ## Colors
 
@@ -179,4 +179,4 @@ Color, position, motion, or hover must never be the only state indicator. New lo
 - Copy desktop spacing to mobile or force horizontal card/filter rows.
 - Hide content behind animation, hover, remote imagery, or precise pointer input.
 - Add a new radius, color, or typography role when an existing token expresses the same purpose.
-- Treat generated index data as design authority; source plus reviewed `DESIGN.md` remain authoritative.
+- Treat CodeGraph results as design authority; source plus reviewed `DESIGN.md` remain authoritative.

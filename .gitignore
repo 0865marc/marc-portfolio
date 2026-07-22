@@ -12,6 +12,7 @@ benchmark-results
 *.DS_Store
 __pycache__/
 *.pyc
+.codegraph/
 
 # Local Hermes workflow artifacts and generated browser audit outputs
 .workflow/deploy_implementation_task.md

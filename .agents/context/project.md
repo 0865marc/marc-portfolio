@@ -6,7 +6,7 @@
 - Product: Marc's Spanish-language professional portfolio and technical blog.
 - Public production target: `portfolio.mybrawl.io`.
 - Repository branch: `main`; resolve the checkout root dynamically with Git.
-- Runtime: static React application built by Vite; there is no application backend in this repository.
+- Runtime: Astro static output with small framework-free TypeScript enhancements; there is no application backend in this repository.
 
 ## Authority order
 
@@ -14,18 +14,17 @@
 2. Application source and configuration define current behaviour.
 3. Accepted ADRs and [DESIGN.md](../DESIGN.md) define reviewed cross-cutting decisions.
 4. Curated context and domain notes in `.agents/` are navigation aids. If they disagree with source, treat them as stale and flag a knowledge delta.
-5. `.agents/generated/` is a disposable search/index projection, not a source of truth.
+5. `.codegraph/` is a disposable, machine-local code projection, not a source of truth; application source wins over index results.
 
-`.workflow/` contains historical and in-flight work artifacts. The index excludes it deliberately; reusable facts enter `.agents/` only through independent review.
+`.workflow/` contains historical and in-flight work artifacts. CodeGraph excludes both `.workflow/` and `.agents/` deliberately; reusable facts enter `.agents/` only through independent review.
 
 ## Stack
 
-- React 18 and TypeScript.
-- Vite 5 build pipeline.
+- Astro 7 static directory output and TypeScript.
 - Tailwind CSS 3 utility classes plus global rules in [`src/index.css`](../../src/index.css).
-- Framer Motion for entrance and scroll effects.
-- Lucide React for icons.
-- Kanit loaded from Google Fonts in [`index.html`](../../index.html).
+- Astro components render all primary content without a client framework runtime.
+- Small scripts under [`src/scripts/`](../../src/scripts/) progressively enhance navigation, filtering, reveal motion, and image fallbacks.
+- Kanit is loaded from Google Fonts in [`src/layouts/BaseLayout.astro`](../../src/layouts/BaseLayout.astro).
 - Static typed content under [`src/data/`](../../src/data/).
 
 ## Product language and audience
@@ -38,5 +37,5 @@ Visible product copy is Spanish. The portfolio presents Marc as a project direct
 - Do not commit, push, or deploy automatically.
 - Do not edit environment/credential files or production data.
 - Preserve unrelated working-tree and workflow history.
-- Normal application verification is `npm run build`.
+- Normal repository verification is `npm run verify`; `npm run build` is the narrower application-build gate.
 - Knowledge-index verification is documented in [the `.agents` README](../README.md).

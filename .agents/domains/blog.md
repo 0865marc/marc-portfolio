@@ -8,20 +8,21 @@ The current entries cover IoT platform architecture, RabbitMQ/Celery heavy proce
 
 ## Routes
 
-[`src/lib/blogRoutes.ts`](../../src/lib/blogRoutes.ts) defines the hash route and return-source contract. Preserve:
+[`src/lib/blogRoutes.ts`](../../src/lib/blogRoutes.ts) defines canonical static routes, legacy-hash translation, and the return-source contract. Preserve:
 
-- `BLOG_INDEX_HREF = '/#/blog'`
+- `BLOG_INDEX_HREF = '/blog/'`
 - `LANDING_BLOG_HREF = '/#blog'`
+- `MISSING_POST_HREF = '/blog/articulo-no-encontrado/'`
 - `BlogSource = 'landing' | 'index'`
 - URL-encoded article IDs
-- safe fallback for malformed or missing IDs
+- safe legacy fallback for malformed or missing IDs
 
 ## Views and states
 
-- `BlogSection` shows up to three posts and an empty state.
-- `BlogIndexView` provides text search, tag filtering, result counts through a polite live region, clear-filter actions, no-match state, and no-post state.
-- `BlogPostView` renders article content or a not-found state and preserves the source-aware back link.
-- `BlogCard` uses the requested heading level and includes tags in the accessible link name.
+- `BlogSection.astro` shows up to three posts and an empty state on the landing page.
+- `BlogFilters.astro` renders every post before JavaScript runs; `src/scripts/blogFilters.ts` progressively adds text search, tag filtering, polite result counts, clear actions, and the no-match state.
+- `src/pages/blog/[id].astro` emits one article per stable ID and preserves the source-aware back link.
+- `BlogCard.astro` uses the requested heading level and includes tags in the accessible link name.
 
 ## Search semantics
 
@@ -29,4 +30,4 @@ The current entries cover IoT platform architecture, RabbitMQ/Celery heavy proce
 
 ## Reading design
 
-Index routes use the dark canvas. Article content uses a white rounded surface with dark text, a constrained reading width, generous line height, and explicit heading hierarchy. Long titles, tags, and links must wrap without horizontal overflow. Focus moves to the route heading after hash navigation.
+Index routes use the dark canvas. Article content uses a white rounded surface with dark text, a constrained reading width, generous line height, and explicit heading hierarchy. Long titles, tags, and links must wrap without horizontal overflow. Canonical page navigation and legacy hash translation move focus to the route heading without turning the site back into a client router.

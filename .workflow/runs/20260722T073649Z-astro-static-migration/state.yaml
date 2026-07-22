@@ -42,7 +42,7 @@ deployment:
   target: null
   post_deploy_evidence: null
 blocker:
-  details: Repository implementation and controlled 127.0.0.1 Lighthouse revalidation pass, but production requires independent final-head review, separately approved privileged Nginx activation, and a later single-use push/deployment approval.
+  details: Repository implementation and controlled 127.0.0.1 Lighthouse revalidation pass; independent final-head review remains required before implementation closure. Production activation and deployment belong to a distinct future release run and do not block unrelated implementation work.
   resume_state: verifying
 transitions:
   - from: intake
