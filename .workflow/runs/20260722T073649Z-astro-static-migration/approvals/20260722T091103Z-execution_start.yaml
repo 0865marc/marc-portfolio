@@ -1,0 +1,26 @@
+schema_version: 1
+run_id: 20260722T073649Z-astro-static-migration
+gate: execution_start
+decision: approved
+by: Marc Teixidó
+at: '2026-07-22T09:11:03Z'
+scope_sha256: 2caafd60bea7ba476fdc32f812681bb38a6b9e3cd52dc63d0f85008fe746018f
+artifact: plan.md
+artifact_sha256: ee8f543e69bc8cc6456d4d91938158e050b4e7f0cc231c4a68a13d0b666285c6
+binding:
+  commit: 1028ec86ec7e50577f1f3546f1b80bd73f29ab3c
+  target: feat/astro-static-migration
+  environment: isolated-continuation
+  trigger: local-approved-execution-resume
+conditions:
+  - Continue only from clean feature candidate 1028ec86ec7e50577f1f3546f1b80bd73f29ab3c in the named worktree and branch.
+  - Preserve existing commits and rollback baseline c45c6be1d0ccc91a2bc293db21a9b49503fdf5ed; no reset, clean, stash, rebase, amend, or squash.
+  - Commit is allowed only after relevant validation; push and all production/release actions remain denied.
+evidence:
+  - repository_root=.
+  - branch=feat/astro-static-migration
+  - baseline_head=c45c6be1d0ccc91a2bc293db21a9b49503fdf5ed
+  - pre_existing_changes_sha256=4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+  - policy_sha256=d131d75de9ed8142bcbe8a3b2e003e4d2625c3991f85dd1979f8648ee392fe11
+  - plan_sha256=ee8f543e69bc8cc6456d4d91938158e050b4e7f0cc231c4a68a13d0b666285c6
+reason: The current user instruction supplies explicit revised-plan approval and authorizes execution resume from the verified clean feature candidate while retaining the run's release prohibitions.

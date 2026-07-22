@@ -16,14 +16,18 @@ roles:
   releaser: Unassigned
   knowledge_reviewer: Independent knowledge reviewer
 scope_sha256: 2caafd60bea7ba476fdc32f812681bb38a6b9e3cd52dc63d0f85008fe746018f
-plan_sha256: b4be436ff952d65f8525e669f2fb920533c53b30edec6dc4da7e5e4a36216423
+plan_sha256: ee8f543e69bc8cc6456d4d91938158e050b4e7f0cc231c4a68a13d0b666285c6
 approval_refs:
   - approvals/20260722T072919Z-plan_approval.yaml
   - approvals/20260722T073649Z-execution_start.yaml
+  - approvals/20260722T091103Z-plan_approval.yaml
+  - approvals/20260722T091103Z-execution_start.yaml
 evidence_refs:
   - evidence/20260722T075525Z-candidate-validation.md
   - evidence/20260722T084300Z-completion-validation.md
   - evidence/20260722T085508Z-independent-verification.md
+  - evidence/20260722T091256Z-execution-resume.md
+  - evidence/20260722T100600Z-unblock-verification.md
 git:
   commit_allowed: true
   push_allowed: false
@@ -37,7 +41,7 @@ deployment:
   target: null
   post_deploy_evidence: null
 blocker:
-  details: Pinned WebKit route/history/new-tab/ten-navigation acceptance failed repeatedly during independent verification; production readiness is blocked.
+  details: Repository implementation and verification pass, but production requires independent final-head review, separately approved privileged Nginx activation, and a later single-use push/deployment approval.
   resume_state: verifying
 transitions:
   - from: intake
@@ -93,4 +97,28 @@ transitions:
     at: '2026-07-22T08:55:08Z'
     by: Independent supervising Dev agent
     reason: Repeated pinned WebKit route/history/new-tab/ten-navigation failures prevent the required browser gate from passing.
+    resume_state: verifying
+  - from: blocked
+    to: verifying
+    at: '2026-07-22T09:12:56Z'
+    by: Supervising Dev agent
+    reason: Exact revised-plan approval and execution-resume evidence authorize continuation from the clean approved feature candidate.
+    resume_state: null
+  - from: verifying
+    to: executing
+    at: '2026-07-22T09:12:56Z'
+    by: Supervising Dev agent
+    reason: Resume the approved narrow implementation for the remaining WebKit, full-media CLS, and Certbot-safe Nginx preparation blockers.
+    resume_state: null
+  - from: executing
+    to: verifying
+    at: '2026-07-22T10:06:00Z'
+    by: Codex
+    reason: WebKit, CLS, browser, build, static, and fake-root Nginx preparation gates pass at the scoped local implementation commits.
+    resume_state: null
+  - from: verifying
+    to: blocked
+    at: '2026-07-22T10:06:00Z'
+    by: Codex
+    reason: Production activation and release remain intentionally outside this execution and require independent verification plus separate privileged and deployment approvals.
     resume_state: verifying

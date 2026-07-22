@@ -328,14 +328,42 @@ class ValidationTests(unittest.TestCase):
     def test_plan_digest_and_plan_approval_digest_are_recomputed(self):
         run_path, state = self.make_run()
         (run_path / "plan.md").write_text("changed plan\n", encoding="utf-8")
-        self.assert_invalid("artifact digest mismatch")
+        self.assert_invalid("plan approval does not bind exact plan digest")
 
         (run_path / "plan.md").write_text("# Plan\n", encoding="utf-8")
         event_path = run_path / state["approval_refs"][0]
         event = self.read_yaml(event_path)
         event["artifact_sha256"] = "f" * 64
         self.write_yaml(event_path, event)
-        self.assert_invalid("artifact digest mismatch")
+        self.assert_invalid("plan approval does not bind exact plan digest")
+
+    def test_revised_plan_keeps_superseded_approval_history_auditable(self):
+        current_path = self.project / ".workflow/current.yaml"
+        original_active_run = self.read_yaml(current_path)["active_run"]
+        run_path, state = self.make_run(status="closed")
+        current = self.read_yaml(current_path)
+        current["active_run"] = original_active_run
+        self.write_yaml(current_path, current)
+        (run_path / "plan.md").write_text("# Revised plan\n", encoding="utf-8")
+        state["plan_sha256"] = digest(run_path / "plan.md")
+        self.approval(
+            run_path, state, "plan_approval", "plan.md",
+            state["roles"]["approver"], 20,
+        )
+        self.approval(
+            run_path, state, "execution_start", "plan.md",
+            state["roles"]["implementer"], 21,
+        )
+        self.save_state(run_path, state)
+
+        result = self.validate(selected=state["run_id"])
+        self.assertTrue(result["valid"], result)
+
+        latest = run_path / state["approval_refs"][-2]
+        event = self.read_yaml(latest)
+        event["artifact_sha256"] = "f" * 64
+        self.write_yaml(latest, event)
+        self.assert_invalid("plan approval does not bind exact plan digest")
 
     def test_every_lifecycle_gate_is_required(self):
         cases = [

@@ -887,7 +887,21 @@ class Validator:
         artifact = self.safe_run_file(
             run_path, approval.get("artifact"), f"{label}.artifact"
         )
-        if artifact is not None and artifact_hash != sha256(artifact):
+        # plan.md is intentionally mutable across reviewed plan revisions. Older
+        # immutable plan/execution events retain the digest of the bytes they
+        # approved, which can no longer be recomputed from the current file.
+        # The effective (latest) events are bound to the current plan below in
+        # validate_gate_lifecycle; all other approval artifacts remain directly
+        # reproducible and are always re-hashed here.
+        superseded_plan_event = (
+            approval.get("artifact") == "plan.md"
+            and artifact_hash != state.get("plan_sha256")
+        )
+        if (
+            artifact is not None
+            and not superseded_plan_event
+            and artifact_hash != sha256(artifact)
+        ):
             self.error(f"approval artifact digest mismatch: {label}")
         for key in ("conditions", "evidence"):
             items = approval.get(key)
