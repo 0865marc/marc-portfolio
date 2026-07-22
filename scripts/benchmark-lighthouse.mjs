@@ -61,12 +61,24 @@ try {
             sum[key] += request.transferSize ?? 0
             return sum
           }, { firstParty: 0, thirdParty: 0 })
+          const layoutShifts = (lhr.audits['layout-shifts']?.details?.items ?? []).map(item => ({
+            score: item.score ?? 0,
+            selector: item.node?.selector ?? null,
+            label: item.node?.nodeLabel ?? null,
+            causes: (item.subItems?.items ?? []).map(cause => ({
+              cause: cause.cause ?? null,
+              url: cause.extra?.value ?? null,
+            })),
+          }))
+          const failedRemoteRequests = requests
+            .filter(request => new URL(request.url).origin !== origin && (!request.statusCode || request.statusCode >= 400))
+            .map(request => ({ url: request.url, statusCode: request.statusCode ?? 0 }))
           const record = {
             target, route, routeIndex, mode: mode.name, run, url,
             categories: Object.fromEntries(Object.entries(lhr.categories).map(([key, category]) => [key, round(category.score * 100)])),
             lcpMs: round(lhr.audits['largest-contentful-paint'].numericValue),
             cls: round(lhr.audits['cumulative-layout-shift'].numericValue),
-            transfer,
+            transfer, layoutShifts, failedRemoteRequests,
             runtimeError: lhr.runtimeError ?? null,
           }
           records.push(record)
@@ -100,7 +112,10 @@ const failures = []
 for (const candidate of groups.filter(group => group.target === 'candidate')) {
   const baseline = groups.find(group => group.target === 'baseline' && group.routeIndex === candidate.routeIndex && group.mode === candidate.mode)
   const value = candidate.medians
-  if (candidate.mode !== 'first-party') continue
+  if (candidate.mode === 'full-media') {
+    if (candidate.routeIndex === 0 && value.cls > .1) failures.push(`${candidate.route} ${candidate.mode}: CLS ${value.cls} > 0.10`)
+    continue
+  }
   if (value.lcpMs > 2500) failures.push(`${candidate.route} ${candidate.mode}: LCP ${value.lcpMs}ms > 2500ms`)
   if (value.cls > .1) failures.push(`${candidate.route} ${candidate.mode}: CLS ${value.cls} > 0.10`)
   for (const category of ['accessibility', 'bestPractices', 'seo']) if (value[category] < 95) failures.push(`${candidate.route} ${candidate.mode}: ${category} ${value[category]} < 95`)

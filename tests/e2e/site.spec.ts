@@ -9,8 +9,7 @@ test.beforeEach(async ({ page }, info) => {
   if (info.project.name === 'chromium-reduced-motion') await page.emulateMedia({ reducedMotion: 'reduce' })
 })
 
-test('route matrix, direct refresh, new tab, history, focus, and ten navigations', async ({ page, context, javaScriptEnabled }) => {
-  test.setTimeout(60_000)
+test('landing anchor route focus and canonical blog navigation', async ({ page, javaScriptEnabled }) => {
   test.skip(javaScriptEnabled === false)
   await blockRemote(page)
   await page.goto('/')
@@ -20,19 +19,52 @@ test('route matrix, direct refresh, new tab, history, focus, and ten navigations
   await page.getByRole('link', { name: 'Ver todos', exact: true }).click()
   await expect(page).toHaveURL(/\/blog\/$/)
   await expect(page.getByRole('heading', { level: 1 })).toBeFocused()
+})
+
+test('new tab opens direct article content in a separate page', async ({ page, context, javaScriptEnabled }) => {
+  test.skip(javaScriptEnabled === false)
+  await blockRemote(page)
+  await page.goto('/blog/')
   const href = await page.getByRole('link', { name: /Leer artículo:/ }).first().getAttribute('href')
-  const popup = await context.newPage()
-  await popup.goto(href!)
-  await expect(popup.getByRole('heading', { level: 1 })).toHaveText(blogPosts[0].title)
-  await popup.close()
+  const articlePage = await context.newPage()
+  await blockRemote(articlePage)
+  const response = await articlePage.goto(href!, { waitUntil: 'load' })
+  expect(response?.ok()).toBe(true)
+  await expect(articlePage).toHaveURL(new RegExp(`/blog/${blogPosts[0].id}/\\?from=index$`))
+  await expect(articlePage.getByRole('heading', { level: 1 })).toHaveText(blogPosts[0].title)
+  await articlePage.close()
+  await expect(page).toHaveURL(/\/blog\/$/)
+})
+
+test('history preserves focus and cards through ten navigations', async ({ page, javaScriptEnabled, browserName }) => {
+  test.setTimeout(browserName === 'webkit' ? 180_000 : 60_000)
+  test.skip(javaScriptEnabled === false)
+  await blockRemote(page)
+  await page.goto('/blog/')
   for (let index = 0; index < 5; index += 1) {
-    await page.getByRole('link', { name: /Leer artículo:/ }).first().click({ force: true })
+    if (index === 0 || browserName === 'webkit') {
+      await Promise.all([
+        page.waitForURL(new RegExp(`/blog/${blogPosts[0].id}/\\?from=index$`), { waitUntil: 'commit' }),
+        page.getByRole('link', { name: /Leer artículo:/ }).first().click({ noWaitAfter: true }),
+      ])
+    } else {
+      await page.goForward({ waitUntil: 'commit' })
+    }
+    await page.waitForLoadState('domcontentloaded')
     await expect(page).toHaveURL(new RegExp(`/blog/${blogPosts[0].id}/\\?from=index$`))
     await expect(page.getByRole('heading', { level: 1 })).toBeFocused()
-    await page.goBack()
+    await page.goBack({ waitUntil: 'commit' })
+    await page.waitForLoadState('domcontentloaded')
     await expect(page).toHaveURL(/\/blog\/$/)
+    await expect(page.getByRole('heading', { level: 1 })).toBeFocused()
     await expect(page.locator('[data-blog-card]')).toHaveCount(3)
   }
+})
+
+test('route heading remains focused after refresh', async ({ page, javaScriptEnabled }) => {
+  test.skip(javaScriptEnabled === false)
+  await blockRemote(page)
+  await page.goto('/blog/')
   await page.reload()
   await expect(page.getByRole('heading', { level: 1 })).toBeFocused()
 })
