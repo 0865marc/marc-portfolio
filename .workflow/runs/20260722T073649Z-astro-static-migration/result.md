@@ -1,10 +1,10 @@
 # Status
 
-Implementation complete; independent verification pending.
+Partial/Blocked.
 
 # Summary
 
-The approved Astro static migration, mandatory comparison prototypes, reproducible Lighthouse harness, exhaustive browser coverage, operations/static-host checks, and pending knowledge delta are complete in the isolated feature worktree. Controlled acceptance gates pass. Full-media remote variability is disclosed in completion evidence.
+The approved Astro static migration, mandatory comparison prototypes, reproducible Lighthouse harness, operations/static-host checks, and pending knowledge delta are implemented in the isolated feature worktree. Static, Chromium, Firefox, accessibility, controlled Lighthouse, and Nginx gates pass. Independent verification found repeated failures in the required pinned WebKit route/history/new-tab/ten-navigation case, so the browser hard gate and production-readiness claim do not pass.
 
 # Git and release boundary
 
@@ -16,8 +16,12 @@ Framework-free filtering wins over the temporary React island on shipped bytes w
 
 # Verification
 
-See `evidence/20260722T084300Z-completion-validation.md` for raw/median benchmark summaries, prototype measurements, browser matrices, clean install/build cycles, Nginx real-404 evidence, test results, limitations, and boundaries.
+See `evidence/20260722T084300Z-completion-validation.md` for implementation measurements and `evidence/20260722T085508Z-independent-verification.md` for the independent pass/fail disposition.
 
 # Residual risk
 
-Unchanged remote landing images are externally controlled and produced very large, variable full-media transfers. Controlled first-party performance and all enforced gates pass; no field INP is claimed.
+Pinned WebKit automation is not green; physical Safari was unavailable. Unchanged remote landing images are externally controlled and produced very large, variable full-media transfers. No field INP is claimed.
+
+# Blocker
+
+Resolve and independently rerun the pinned WebKit route/history/new-tab/ten-navigation matrix. A failed required browser gate cannot be waived without a new scoped approval.

@@ -1,6 +1,6 @@
 schema_version: 1
 run_id: 20260722T073649Z-astro-static-migration
-status: verifying
+status: blocked
 repository:
   root: .
   branch: feat/astro-static-migration
@@ -23,6 +23,7 @@ approval_refs:
 evidence_refs:
   - evidence/20260722T075525Z-candidate-validation.md
   - evidence/20260722T084300Z-completion-validation.md
+  - evidence/20260722T085508Z-independent-verification.md
 git:
   commit_allowed: true
   push_allowed: false
@@ -35,7 +36,9 @@ deployment:
   commit: null
   target: null
   post_deploy_evidence: null
-blocker: null
+blocker:
+  details: Pinned WebKit route/history/new-tab/ten-navigation acceptance failed repeatedly during independent verification; production readiness is blocked.
+  resume_state: verifying
 transitions:
   - from: intake
     to: discovery
@@ -85,3 +88,9 @@ transitions:
     by: Codex
     reason: Approved implementation, comparative prototypes, controlled benchmarks, exhaustive browser matrix, and local verification are complete for independent review.
     resume_state: null
+  - from: verifying
+    to: blocked
+    at: '2026-07-22T08:55:08Z'
+    by: Independent supervising Dev agent
+    reason: Repeated pinned WebKit route/history/new-tab/ten-navigation failures prevent the required browser gate from passing.
+    resume_state: verifying

@@ -27,6 +27,7 @@ test('route matrix, direct refresh, new tab, history, focus, and ten navigations
   await popup.close()
   for (let index = 0; index < 5; index += 1) {
     await page.getByRole('link', { name: /Leer artículo:/ }).first().click({ force: true })
+    await expect(page).toHaveURL(new RegExp(`/blog/${blogPosts[0].id}/\\?from=index$`))
     await expect(page.getByRole('heading', { level: 1 })).toBeFocused()
     await page.goBack()
     await expect(page).toHaveURL(/\/blog\/$/)
