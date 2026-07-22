@@ -14,7 +14,8 @@
     "test:e2e": "playwright test",
     "measure:assets": "node scripts/measure-route-assets.mjs",
     "benchmark:lighthouse": "node scripts/benchmark-lighthouse.mjs",
-    "verify": "npm run check && npm run test:unit && npm run build && npm run test:static && npm run measure:assets"
+    "test:ops": "bash tests/ops/nginx-activation.test.sh",
+    "verify": "npm run check && npm run test:unit && npm run build && npm run test:static && npm run measure:assets && npm run test:ops"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.9",

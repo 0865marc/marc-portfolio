@@ -17,6 +17,7 @@ EXPECTED_TITLE='<title>Marc — Director de proyectos y desarrollador fullstack<
 
 usage() {
     printf 'Usage: %s {prepare|enable-http|enable-tls}\n' "$0" >&2
+    printf 'Bootstrap only: existing Certbot TLS sites must use activate-nginx-static.sh.\n' >&2
 }
 
 fail() {
