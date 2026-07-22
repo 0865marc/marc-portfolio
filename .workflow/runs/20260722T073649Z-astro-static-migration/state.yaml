@@ -28,6 +28,7 @@ evidence_refs:
   - evidence/20260722T085508Z-independent-verification.md
   - evidence/20260722T091256Z-execution-resume.md
   - evidence/20260722T100600Z-unblock-verification.md
+  - evidence/20260722T102200Z-favicon-lighthouse-revalidation.md
 git:
   commit_allowed: true
   push_allowed: false
@@ -41,7 +42,7 @@ deployment:
   target: null
   post_deploy_evidence: null
 blocker:
-  details: Repository implementation and verification pass, but production requires independent final-head review, separately approved privileged Nginx activation, and a later single-use push/deployment approval.
+  details: Repository implementation and controlled 127.0.0.1 Lighthouse revalidation pass, but production requires independent final-head review, separately approved privileged Nginx activation, and a later single-use push/deployment approval.
   resume_state: verifying
 transitions:
   - from: intake
