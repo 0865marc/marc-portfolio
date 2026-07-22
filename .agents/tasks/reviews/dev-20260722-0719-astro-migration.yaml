@@ -1,0 +1,29 @@
+schema_version: 1
+task_id: dev-20260722-0719-astro-migration
+review_status: pending
+summary: Review durable knowledge changes introduced by the Astro static migration.
+knowledge_delta:
+  added_nodes:
+    - path: .agents/context/architecture.md
+      fact: Astro emits directory-format static documents while narrowly scoped vanilla scripts provide progressive enhancement.
+      evidence: astro.config.mjs and src/layouts/BaseLayout.astro
+  changed_nodes:
+    - path: .agents/context/project.md
+      fact: The application stack is Astro 7 static output without a global React, Vite, or Framer Motion runtime.
+      evidence: package.json and astro.config.mjs
+    - path: .agents/domains/blog.md
+      fact: Canonical directory routes coexist with legacy hash translation and framework-free filtering over stable article IDs.
+      evidence: src/lib/blogRoutes.ts and src/scripts/blogFilters.ts
+  deprecated_nodes:
+    - path: .agents/domains/portfolio.md
+      fact: Magnet and Framer Motion guidance no longer describes the implemented portfolio motion boundary.
+      evidence: src/components/ProjectsSection.astro and src/scripts/enhancements.ts
+  adr_needed: true
+  adr_reason: Canonical static routes plus bounded legacy hash compatibility are a durable routing decision.
+  design_changed: false
+  design_notes: Existing visual tokens and hierarchy are preserved; implementation technology changed.
+  stale_knowledge:
+    - .agents/domains/release.md needs Astro output checks and the separately activated Nginx designed-404 prerequisite.
+reviewed_by: ''
+reviewed_at: null
+reindex_approved: false

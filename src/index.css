@@ -19,10 +19,10 @@
 html {
   background: #0c0c0c;
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
-body,
-#root {
+body {
   width: 100%;
   min-width: 0;
   min-height: 100%;
@@ -61,6 +61,20 @@ a:focus-visible {
   background: #0c0c0c;
 }
 
+[hidden] { display: none !important; }
+.js-only { display: none; }
+.js .js-only { display: block; }
+.control { display:inline-flex; min-height:44px; align-items:center; border:1px solid rgb(215 226 234 / .4); border-radius:9999px; padding:0 1.25rem; text-transform:uppercase; letter-spacing:.12em; }
+.button-light,.button-dark { display:inline-flex; min-height:44px; align-items:center; border-radius:9999px; padding:0 1.25rem; text-transform:uppercase; letter-spacing:.12em; font-size:.875rem; }
+.button-light { background:#d7e2ea;color:#0c0c0c }.button-dark{background:#0c0c0c;color:#d7e2ea}
+.filter-pill { min-height:44px; max-width:100%; border:1px solid rgb(215 226 234 / .4); border-radius:9999px; padding:.5rem 1rem; text-transform:uppercase; letter-spacing:.1em; }
+.filter-pill.active { background:#d7e2ea;color:#0c0c0c }.filter-pill:disabled{opacity:.4}
+.opacity-60 { opacity:.8 }
+.article-prose { font-size:1.05rem; font-weight:300; line-height:1.8 }.article-prose p+p{margin-top:1.3rem}.article-prose section{margin-top:3rem}.article-prose h2{font-size:clamp(1.7rem,4vw,2.5rem);font-weight:500;line-height:1.15;margin-bottom:1.25rem}.article-prose ul{margin:1.25rem 0;padding-left:1.4rem;list-style:disc}.article-prose aside{margin-top:3rem;border-left:4px solid #0c0c0c;padding:1.25rem;background:#d7e2ea}
+.js [data-reveal] { opacity:0; transform:translateY(24px); transition:opacity .6s ease,transform .6s ease }.js [data-reveal].revealed{opacity:1;transform:none}
+.marquee-row{transform:translateX(-3%);animation:marquee 50s linear infinite}.marquee-reverse{animation-direction:reverse}@keyframes marquee{to{transform:translateX(-36%)}}
+@view-transition { navigation:auto } ::view-transition-old(root),::view-transition-new(root){animation-duration:.22s}
+
 .project-card-motion {
   transform-origin: top center;
 }
@@ -84,6 +98,7 @@ a:focus-visible {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  .marquee-row { animation:none; transform:none }.js [data-reveal]{opacity:1;transform:none}@view-transition{navigation:none}
 }
 
 ::selection {

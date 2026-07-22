@@ -1,0 +1,4 @@
+---
+const { name = 'arrow', size = 18 } = Astro.props
+---
+{name === 'mail' ? <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg> : <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>}

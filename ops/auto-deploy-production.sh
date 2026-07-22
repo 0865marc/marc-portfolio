@@ -13,7 +13,9 @@ BRANCH="main"
 REQUIRED_FILES=(
   "package.json"
   "package-lock.json"
-  "index.html"
+  "astro.config.mjs"
+  "src/pages/index.astro"
+  "scripts/verify-static-output.mjs"
   "ops/deploy-static.sh"
   "ops/auto-deploy-production.sh"
 )
@@ -76,6 +78,7 @@ npm ci --no-audit --no-fund
 log "Building the production static bundle"
 npm run build
 [[ -s dist/index.html ]] || fail "build did not create a non-empty dist/index.html"
+node scripts/verify-static-output.mjs dist
 grep -Fq -- "$EXPECTED_MARKER" dist/index.html \
   || fail "built index.html does not contain the expected site marker"
 
@@ -106,6 +109,11 @@ http_status="$(curl --silent --show-error --location --max-time 20 \
 [[ "$http_status" == "200" ]] || fail "public HTTPS returned HTTP $http_status"
 grep -Fq -- "$EXPECTED_MARKER" "$response_file" \
   || fail "public HTTPS response does not contain the expected site marker"
+
+for public_path in /blog/ /blog/arquitecturas-plataformas-iot/ /blog/rabbitmq-celery-procesos-pesados/ /blog/infraestructura-distribuida-latencia/; do
+  http_status="$(curl --silent --show-error --location --max-time 20 --proto '=https' --proto-redir '=https' --output "$response_file" --write-out '%{http_code}' "https://$DOMAIN$public_path")" || fail "public request failed: $public_path"
+  [[ "$http_status" == 200 ]] || fail "public route $public_path returned $http_status"
+done
 
 log "Published release: $published_target"
 log "Public HTTPS verification OK: HTTP $http_status"

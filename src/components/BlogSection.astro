@@ -1,0 +1,4 @@
+---
+import { blogPosts } from '../data/blog'; import BlogCard from './BlogCard.astro'
+---
+<section id="blog" aria-labelledby="blog-title" class="scroll-mt-6 bg-white px-5 py-20 text-[#0C0C0C] sm:px-8 md:px-10"><div class="mx-auto max-w-6xl"><div class="flex flex-wrap items-end justify-between gap-6"><h2 id="blog-title" tabindex="-1" class="text-[clamp(3rem,12vw,10rem)] font-black uppercase leading-none">Blog</h2><a href="/blog/" class="button-dark">Ver todos</a></div><div class="mt-12 grid gap-4 md:grid-cols-3">{blogPosts.map(post=><BlogCard post={post} source="landing" headingLevel={3}/>)}</div></div></section>

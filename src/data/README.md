@@ -42,15 +42,14 @@ La posición de la entrada en `blogPosts` determina el orden del índice. La lan
 
 ## Rutas públicas
 
-Las rutas usan hashes para funcionar con el hosting estático actual:
+Astro genera rutas de directorio estáticas y canónicas:
 
 - `/#blog`: sección Blog de la landing.
-- `/#/blog`: índice con todas las entradas.
-- `/#/blog/<id>`: detalle de una entrada, con el `id` codificado mediante `encodeURIComponent`.
-- `/#/blog/<id>?from=landing`: detalle abierto desde la sección Blog del portfolio; conserva un enlace explícito de vuelta a `/#blog`.
-- `/#/blog/<id>?from=index`: detalle abierto desde el índice; conserva un enlace explícito de vuelta a `/#/blog`.
+- `/blog/`: índice con todas las entradas.
+- `/blog/<id>/`: detalle generado en build con el `id` codificado mediante `encodeURIComponent`.
+- `/blog/<id>/?from=landing|index`: conserva un enlace explícito al origen.
 
-No se deben generar rutas limpias como `/blog` o `/blog/<id>`. El servidor recibe `/` y el navegador interpreta el fragmento. Un `id` eliminado conserva un resultado seguro: sus enlaces antiguos muestran `Artículo no encontrado` en lugar de seleccionar otra entrada.
+Un pequeño script progresivo conserva los antiguos `/#/blog...` bookmarks y los reemplaza por la ruta canónica. Un `id` eliminado o desconocido llega al 404 real del servidor; no existe fallback SPA. La publicación verifica el índice, cada documento generado, los assets y `404.html`.
 Un detalle abierto directamente sin `from`, con un valor desconocido o desde un enlace antiguo usa el índice del Blog como origen predeterminado. El origen forma parte del hash para que el enlace de vuelta también funcione al abrir el artículo en una pestaña nueva; no depende de `history.back()`.
 
 ## Crear una entrada

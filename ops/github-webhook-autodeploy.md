@@ -2,6 +2,8 @@
 
 ## Current architecture
 
+The application now emits Astro static directory output. The shared gateway contract is unchanged. The hook verifies the landing page, blog index, all known articles, `404.html`, hashed assets, and canonical public routes. Activating the reviewed Nginx cache and internal designed-404 rules is a separate privileged release prerequisite; the webhook does not install Nginx configuration.
+
 marc-portfolio uses the host's shared GitHub webhook gateway. The repository keeps the application deploy backend, `ops/auto-deploy-production.sh`, and the atomic publisher, `ops/deploy-static.sh`; it does not contain or supervise a webhook receiver and its application Nginx config does not define a webhook route.
 
 Use this high-level GitHub registration:

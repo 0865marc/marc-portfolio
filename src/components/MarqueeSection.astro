@@ -1,0 +1,4 @@
+---
+import { marqueeRows } from '../data/portfolio'
+---
+<section data-marquee aria-label="Selección visual" class="overflow-hidden py-10">{marqueeRows.map((row,i)=><div class:list={["marquee-row flex w-max gap-4 py-2", i===1&&"marquee-reverse"]}>{row.map(src=><div class="h-28 w-48 shrink-0 overflow-hidden rounded-[28px] bg-gradient-to-br from-[#1A1724] to-[#334554]"><img data-image-fallback src={src} alt="" aria-hidden="true" width="192" height="112" loading="lazy" decoding="async" class="h-full w-full object-cover" /></div>)}</div>)}</section>

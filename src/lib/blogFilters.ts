@@ -1,4 +1,4 @@
-import type { BlogPost } from '../data/blog'
+export type SearchableBlogPost = { id: string; title: string; excerpt: string; category: string; tags: string[] }
 
 export function normalizeBlogSearch(value: string) {
   return value
@@ -8,13 +8,13 @@ export function normalizeBlogSearch(value: string) {
     .trim()
 }
 
-export function getBlogTags(posts: BlogPost[]) {
+export function getBlogTags(posts: SearchableBlogPost[]) {
   return Array.from(new Set(posts.flatMap((post) => post.tags).filter((tag) => tag.trim().length > 0))).sort(
     (first, second) => first.localeCompare(second, 'es', { sensitivity: 'base' }),
   )
 }
 
-export function filterBlogPosts(posts: BlogPost[], query: string, selectedTag: string | null) {
+export function filterBlogPosts(posts: SearchableBlogPost[], query: string, selectedTag: string | null) {
   const queryTerms = normalizeBlogSearch(query).split(/\s+/).filter(Boolean)
 
   return posts.filter((post) => {

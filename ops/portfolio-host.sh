@@ -13,7 +13,7 @@ ENABLED_CONFIG="$NGINX_ENABLED_DIR/$DOMAIN"
 BACKUP_CONFIG="$NGINX_AVAILABLE_DIR/$DOMAIN.pre-certbot"
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_SOURCE="$SCRIPT_DIR/nginx/$DOMAIN.conf"
-EXPECTED_TITLE='<title>Marc -- Fullstack Developer</title>'
+EXPECTED_TITLE='<title>Marc — Director de proyectos y desarrollador fullstack</title>'
 
 usage() {
     printf 'Usage: %s {prepare|enable-http|enable-tls}\n' "$0" >&2

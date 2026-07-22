@@ -1,0 +1,6 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'; import Article from '../../components/Article.astro'; import { blogPosts, type BlogPost } from '../../data/blog'
+export function getStaticPaths(){ return blogPosts.map(post=>({params:{id:post.id},props:{post}})) }
+interface Props { post: BlogPost }; const {post}=Astro.props
+---
+<BaseLayout title={`${post.title} — Marc Teixidó`} description={post.excerpt}><main class="min-h-screen px-5 py-10 sm:px-8 md:px-10"><div class="mx-auto mb-8 max-w-3xl"><a data-article-back class="control" href="/blog/">Volver al Blog</a></div><Article post={post}/></main></BaseLayout>
