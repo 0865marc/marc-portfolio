@@ -1,0 +1,25 @@
+schema_version: 1
+run_id: 20260722T073649Z-astro-static-migration
+gate: execution_start
+decision: approved
+by: Marc Teixidó
+at: '2026-07-22T07:36:49Z'
+scope_sha256: 2caafd60bea7ba476fdc32f812681bb38a6b9e3cd52dc63d0f85008fe746018f
+artifact: plan.md
+artifact_sha256: b4be436ff952d65f8525e669f2fb920533c53b30edec6dc4da7e5e4a36216423
+binding:
+  commit: null
+  target: feat/astro-static-migration
+  environment: isolated-prototype
+  trigger: local-approved-execution
+conditions:
+  - Work only in the exact approved isolated repository root.
+  - Commit is allowed after validation; push and deploy remain denied.
+evidence:
+  - repository_root=.
+  - branch=feat/astro-static-migration
+  - baseline_head=c45c6be1d0ccc91a2bc293db21a9b49503fdf5ed
+  - pre_existing_changes_sha256=4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+  - policy_sha256=d131d75de9ed8142bcbe8a3b2e003e4d2625c3991f85dd1979f8648ee392fe11
+  - plan_sha256=b4be436ff952d65f8525e669f2fb920533c53b30edec6dc4da7e5e4a36216423
+reason: The current user message is Marc Teixidó's approved exceptional retry and explicitly authorizes exact local workflow records, implementation, validation, and scoped commits.

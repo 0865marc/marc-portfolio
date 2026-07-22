@@ -1,0 +1,87 @@
+schema_version: 1
+run_id: 20260722T073649Z-astro-static-migration
+status: verifying
+repository:
+  root: .
+  branch: feat/astro-static-migration
+  baseline_head: c45c6be1d0ccc91a2bc293db21a9b49503fdf5ed
+  pre_existing_changes: []
+roles:
+  requester: Marc Teixidó
+  planner: Supervising Dev agent
+  approver: Marc Teixidó
+  implementer: Codex
+  verifier: Independent supervising Dev agent
+  release_approver: Marc Teixidó
+  releaser: Unassigned
+  knowledge_reviewer: Independent knowledge reviewer
+scope_sha256: 2caafd60bea7ba476fdc32f812681bb38a6b9e3cd52dc63d0f85008fe746018f
+plan_sha256: b4be436ff952d65f8525e669f2fb920533c53b30edec6dc4da7e5e4a36216423
+approval_refs:
+  - approvals/20260722T072919Z-plan_approval.yaml
+  - approvals/20260722T073649Z-execution_start.yaml
+evidence_refs:
+  - evidence/20260722T075525Z-candidate-validation.md
+  - evidence/20260722T084300Z-completion-validation.md
+git:
+  commit_allowed: true
+  push_allowed: false
+  commit: null
+  push_target: null
+deployment:
+  allowed: false
+  environment: production
+  trigger: github_push_webhook
+  commit: null
+  target: null
+  post_deploy_evidence: null
+blocker: null
+transitions:
+  - from: intake
+    to: discovery
+    at: '2026-07-22T07:29:19Z'
+    by: Marc Teixidó
+    reason: Approved request identifies an isolated clean implementation worktree and exact rollback baseline.
+    resume_state: null
+  - from: discovery
+    to: planned
+    at: '2026-07-22T07:29:19Z'
+    by: Marc Teixidó
+    reason: External plan was completed and bound to its exact SHA-256 digest.
+    resume_state: null
+  - from: planned
+    to: awaiting_approval
+    at: '2026-07-22T07:29:19Z'
+    by: Marc Teixidó
+    reason: Exact approved plan and scope were submitted for execution approval.
+    resume_state: null
+  - from: awaiting_approval
+    to: approved
+    at: '2026-07-22T07:29:19Z'
+    by: Marc Teixidó
+    reason: External approval explicitly authorized the exact plan and isolated scope.
+    resume_state: null
+  - from: approved
+    to: executing
+    at: '2026-07-22T07:36:49Z'
+    by: Marc Teixidó
+    reason: Exceptional danger-full-access retry explicitly authorizes workflow records, implementation, validation, and scoped local commits without push or deployment.
+    resume_state: null
+  - from: executing
+    to: blocked
+    at: '2026-07-22T07:55:25Z'
+    by: Codex
+    reason: Honest hard-gate stop after implementing the static candidate; required prototype comparisons and Lighthouse evidence are absent.
+    resume_state: executing
+  - from: blocked
+    to: executing
+    at: '2026-07-22T07:57:50Z'
+    by: Codex
+    reason: Supervising agent reconfirmed the isolated baseline and approved completion of the recorded missing acceptance scope.
+    resume_state: null
+  - from: executing
+    to: verifying
+    at: '2026-07-22T08:43:00Z'
+    by: Codex
+    reason: Approved implementation, comparative prototypes, controlled benchmarks, exhaustive browser matrix, and local verification are complete for independent review.
+    resume_state: null
