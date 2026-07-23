@@ -12,6 +12,7 @@
     "test:unit": "vitest run tests/unit",
     "test:static": "vitest run tests/static-output.test.ts",
     "test:e2e": "playwright test",
+    "test:container": "bash scripts/verify-container-image.sh",
     "measure:assets": "node scripts/measure-route-assets.mjs",
     "benchmark:lighthouse": "node scripts/benchmark-lighthouse.mjs",
     "test:ops": "bash tests/ops/nginx-activation.test.sh",

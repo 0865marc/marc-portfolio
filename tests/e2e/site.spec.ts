@@ -152,3 +152,87 @@ test('image failure, reduced motion, overflow, and representative axe states', a
     expect(await seriousAxe(page)).toEqual([])
   }
 })
+
+test('refined UI keeps headings visible and exposes progressive states', async ({ page, javaScriptEnabled }) => {
+  await blockRemote(page)
+  const routes = ['/', '/blog/', `/blog/${blogPosts[0].id}/`, '/404.html']
+
+  for (const route of routes) {
+    await page.goto(route)
+    const layout = await page.evaluate(() => ({
+      viewportFits: document.documentElement.scrollWidth <= document.documentElement.clientWidth,
+      clippedHeadings: [...document.querySelectorAll<HTMLElement>('h1, h2, h3')]
+        .filter(heading => heading.scrollWidth > heading.clientWidth + 1)
+        .map(heading => heading.textContent?.trim()),
+    }))
+    expect(layout.viewportFits).toBe(true)
+    expect(layout.clippedHeadings).toEqual([])
+  }
+
+  await page.goto('/blog/')
+  if (javaScriptEnabled !== false) {
+    await expect(page.getByRole('heading', { level: 1 })).toBeFocused()
+    expect(await page.getByRole('heading', { level: 1 }).evaluate(heading => getComputedStyle(heading).outlineStyle)).toBe('none')
+  }
+
+  await page.goto(`/blog/${blogPosts[0].id}/`)
+  await expect(page.getByText(/min de lectura/)).toBeVisible()
+  await expect(page.getByRole('navigation', { name: 'Contenido del artículo' })).toBeVisible()
+  if (javaScriptEnabled !== false) {
+    await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight))
+    await expect.poll(() => page.locator('[data-reading-progress]').evaluate(element => Number(getComputedStyle(element).getPropertyValue('--reading-progress')))).toBeGreaterThan(0.9)
+  }
+})
+
+test('landing navigation, contact actions, and article reading aids stay coherent', async ({ page, javaScriptEnabled }) => {
+  await blockRemote(page)
+  await page.goto('/')
+  const primaryNavigation = page.getByRole('navigation', { name: 'Principal' })
+  await expect(primaryNavigation.locator('.control')).toHaveCount(0)
+  await expect(primaryNavigation.getByRole('link')).toHaveCount(4)
+
+  const contactPanel = page.locator('[data-contact-panel]')
+  await contactPanel.scrollIntoViewIfNeeded()
+  expect(await contactPanel.evaluate(panel => {
+    const parent = panel.getBoundingClientRect()
+    return [...panel.querySelectorAll<HTMLElement>('.contact-action')].every(action => {
+      const bounds = action.getBoundingClientRect()
+      return bounds.left >= parent.left && bounds.right <= parent.right
+    })
+  })).toBe(true)
+
+  await page.goto(`/blog/${blogPosts[0].id}/`)
+  const readingRoot = page.locator('[data-reading-root]')
+  const initialArticleBox = await readingRoot.boundingBox()
+  expect(initialArticleBox).not.toBeNull()
+  expect(Math.abs((initialArticleBox?.x ?? 0) + (initialArticleBox?.width ?? 0) / 2 - (await page.evaluate(() => innerWidth / 2)))).toBeLessThanOrEqual(1)
+
+  const proseMetrics = await page.locator('.article-prose').evaluate(prose => {
+    const bodyParagraphs = [...prose.querySelectorAll<HTMLElement>('section > p:not(.article-section-number)')]
+    const continuation = prose.querySelector<HTMLElement>(':scope > p:nth-of-type(2)')
+    return {
+      minimumFontSize: Math.min(...bodyParagraphs.map(paragraph => Number.parseFloat(getComputedStyle(paragraph).fontSize))),
+      continuationIndent: continuation ? Number.parseFloat(getComputedStyle(continuation).textIndent) : 0,
+      textAlign: bodyParagraphs[0] ? getComputedStyle(bodyParagraphs[0]).textAlign : '',
+    }
+  })
+  expect(proseMetrics.minimumFontSize).toBeGreaterThanOrEqual(17)
+  expect(proseMetrics.continuationIndent).toBeGreaterThan(0)
+  expect(proseMetrics.textAlign).toBe('justify')
+  expect(await readingRoot.locator('h1').evaluate(title => Number.parseFloat(getComputedStyle(title).fontSize))).toBeLessThanOrEqual(56)
+  expect(await readingRoot.evaluate(article => getComputedStyle(article).transitionProperty)).toContain('transform')
+
+  const floatingIndex = page.locator('[data-floating-index]')
+  await expect(floatingIndex).toHaveAttribute('aria-hidden', 'true')
+  if (javaScriptEnabled !== false && (await page.evaluate(() => innerWidth)) >= 1280) {
+    await page.locator('[data-article-section]').nth(1).scrollIntoViewIfNeeded()
+    await expect(floatingIndex).toHaveAttribute('aria-hidden', 'false')
+    await expect(page.locator('.article-reading-layout')).toHaveClass(/has-floating-index/)
+    await expect(floatingIndex.locator('[aria-current="location"]')).toHaveCount(1)
+    await expect.poll(async () => (await readingRoot.boundingBox())?.x ?? 0).toBeLessThan((initialArticleBox?.x ?? 0) - 100)
+    await page.evaluate(() => scrollTo(0, 0))
+    await expect(floatingIndex).toHaveAttribute('aria-hidden', 'true')
+    await expect(page.locator('.article-reading-layout')).not.toHaveClass(/has-floating-index/)
+    await expect.poll(async () => Math.abs(((await readingRoot.boundingBox())?.x ?? 0) - (initialArticleBox?.x ?? 0))).toBeLessThanOrEqual(1)
+  }
+})

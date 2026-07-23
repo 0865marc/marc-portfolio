@@ -1,12 +1,18 @@
-# marc-portfolio GitHub webhook autodeploy
+# Retired marc-portfolio GitHub webhook autodeploy
 
-## Current architecture
+## Status
+
+The GitHub repository webhook was deleted on 2026-07-23. A push to `main` no longer invokes this production path. This document is retained only as a record of the retired architecture and the checks required if a webhook-based deployment is ever proposed again.
+
+Do not restore the registration from this runbook without a separately reviewed deployment design, an explicit production approval, and verification that the selected immutable commit or image digest is the artifact being promoted.
+
+## Retired architecture
 
 The application now emits Astro static directory output. The shared gateway contract is unchanged. The hook verifies the landing page, blog index, all known articles, `404.html`, hashed assets, and canonical public routes. Activating the reviewed Nginx cache and internal designed-404 rules is a separate privileged release prerequisite; the webhook does not install Nginx configuration.
 
-marc-portfolio uses the host's shared GitHub webhook gateway. The repository keeps the application deploy backend, `ops/auto-deploy-production.sh`, and the atomic publisher, `ops/deploy-static.sh`; it does not contain or supervise a webhook receiver and its application Nginx config does not define a webhook route.
+marc-portfolio used the host's shared GitHub webhook gateway. The repository keeps the legacy application deploy backend, `ops/auto-deploy-production.sh`, and the atomic publisher, `ops/deploy-static.sh`; it does not contain or supervise a webhook receiver and its application Nginx config does not define a webhook route.
 
-Use this high-level GitHub registration:
+The retired GitHub registration was:
 
 - Payload URL: `https://mybrawl.io/github-webhook/marc-portfolio-production`
 - Hook ID: `marc-portfolio-production`
@@ -17,7 +23,13 @@ Use this high-level GitHub registration:
 
 The secret is independent for this registration and remains in host-managed configuration outside Git. Never put its value in this repository, commands, logs, or reports.
 
-The shared gateway validates the signature, event, repository target, and exact branch before a static allowlist invokes `ops/auto-deploy-production.sh` in the dedicated production checkout. Do not add a project-local receiver, cron watchdog, service, port, or per-project Nginx webhook location.
+The shared gateway validated the signature, event, repository target, and exact branch before a static allowlist invoked `ops/auto-deploy-production.sh` in the dedicated production checkout. Do not add a project-local receiver, cron watchdog, service, port, or per-project Nginx webhook location.
+
+## CI candidate transition
+
+The repository CI described in `ops/ci-candidates.md` verifies pull requests and publishes a digest-addressable GHCR candidate after a successful push to `main`. It does not deploy. With the repository webhook removed, merging is now a candidate-build action only.
+
+A future deployer must accept and verify the exact approved commit or image digest instead of resolving whichever commit happens to be latest on `origin/main`.
 
 ## Certbot-preserving activation prerequisite
 

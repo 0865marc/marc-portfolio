@@ -6,15 +6,19 @@ export type Service = {
 
 export type Experience = {
   id: string
+  stage: string
   title: string
   description: string
-  stack: string
+  stack: string[]
 }
 
 export type Project = {
   number: string
   category: string
   name: string
+  description: string
+  focus: string
+  technologies: string[]
   images: [string, string, string]
 }
 
@@ -50,17 +54,19 @@ export const marqueeRows = [
 export const experience: Experience[] = [
   {
     id: 'first-stage',
-    title: 'Primera etapa profesional — Desarrollo fullstack e IoT',
+    stage: 'Primera etapa',
+    title: 'Desarrollo fullstack e IoT',
     description:
       'Participé en un refactor integral hacia una plataforma web Django/Python más escalable, que recibía datos de miles de dispositivos IoT agrícolas e industriales e incorporaba herramientas de gestión ERP y CRM. Trabajé con PostgreSQL, MQTT, RabbitMQ y Celery para tareas asíncronas pesadas, además de la gestión cloud y VPS.',
-    stack: 'PostgreSQL · MQTT · RabbitMQ · Celery · cloud · VPS',
+    stack: ['Django', 'PostgreSQL', 'MQTT', 'RabbitMQ', 'Celery', 'Cloud y VPS'],
   },
   {
     id: 'project-direction',
+    stage: 'Actualidad',
     title: 'Director de proyectos e infraestructura',
     description:
       'Dirijo proyectos e infraestructura para un dispositivo IoT de cocina, gestiono la relación con clientes y distribuidores internacionales y coordino desarrolladores externos en APIs, web, Android, iOS y sistemas embebidos. Mantengo más de 15 servidores en distintos países y trabajo con Docker, Terraform y VPS para cuidar la latencia y la experiencia de usuario.',
-    stack: 'Dirección técnica · Docker · Terraform · VPS · sistemas distribuidos',
+    stack: ['Dirección técnica', 'Docker', 'Terraform', 'VPS', 'Sistemas distribuidos'],
   },
 ]
 
@@ -100,8 +106,12 @@ export const services: Service[] = [
 export const projects: Project[] = [
   {
     number: '01',
-    category: 'Client',
+    category: 'Cliente',
     name: 'Ainki Learning Platform',
+    description:
+      'Una plataforma de aprendizaje que organiza contenido, recorridos y seguimiento en una experiencia digital clara y escalable.',
+    focus: 'Producto, experiencia y plataforma',
+    technologies: ['Plataforma web', 'Arquitectura', 'Producto digital'],
     images: [
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055344_5eff02e0-87a5-41ce-b64f-eb08da8f33db.png&w=1280&q=85',
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055431_11d841fd-8b41-46a5-82e4-b04f2407a7d8.png&w=1280&q=85',
@@ -112,6 +122,10 @@ export const projects: Project[] = [
     number: '02',
     category: 'Personal',
     name: 'Gym Tracker',
+    description:
+      'Un producto personal para registrar entrenamientos, entender la evolución y convertir los datos cotidianos en decisiones útiles.',
+    focus: 'Diseño y desarrollo de principio a fin',
+    technologies: ['Fullstack', 'Datos', 'Experiencia de uso'],
     images: [
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055654_911201c5-36d9-4bc6-bac7-331adfce159f.png&w=1280&q=85',
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055723_5ceda0b8-d9c2-4665-b2e3-83ba19ba76d1.png&w=1280&q=85',
@@ -120,8 +134,12 @@ export const projects: Project[] = [
   },
   {
     number: '03',
-    category: 'Client',
+    category: 'Cliente',
     name: 'Automation Systems',
+    description:
+      'Sistemas de automatización que conectan procesos, integraciones y operación sin perder visibilidad sobre cada estado.',
+    focus: 'Arquitectura, integración y operación',
+    technologies: ['Automatización', 'Integraciones', 'Infraestructura'],
     images: [
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055759_963cfb0b-4bd1-4b0f-9d0a-09bd6cf95b2f.png&w=1280&q=85',
       'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_060108_438f781a-9846-4dcc-89ab-c4e6cb830f5b.png&w=1280&q=85',

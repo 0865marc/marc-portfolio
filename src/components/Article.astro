@@ -1,8 +1,76 @@
 ---
-import type { BlogPost } from '../data/blog'; interface Props { post: BlogPost }; const {post}=Astro.props
+import type { BlogPost } from '../data/blog'
+
+interface Props {
+  post: BlogPost
+}
+
+const { post } = Astro.props
+const articleText = [
+  ...post.introduction,
+  ...post.sections.flatMap(section => [section.heading, ...section.paragraphs, ...(section.points ?? [])]),
+  ...post.takeaway,
+].join(' ')
+const readingMinutes = Math.max(1, Math.ceil(articleText.trim().split(/\s+/).length / 210))
+const sectionId = (heading: string, index: number) => `${index + 1}-${heading.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`
 ---
-<article class="mx-auto max-w-3xl rounded-[28px] bg-white px-6 py-10 text-[#0C0C0C] sm:p-10 md:rounded-[40px] md:p-14">
-  <p class="text-xs font-medium uppercase tracking-[.2em] opacity-60">{post.category}</p><h1 data-route-heading tabindex="-1" class="mt-6 break-words text-[clamp(2.5rem,7vw,5rem)] font-black uppercase leading-none">{post.title}</h1><p class="mt-8 text-xl font-light leading-relaxed opacity-70">{post.excerpt}</p>
-  <ul class="mt-6 flex flex-wrap gap-2" aria-label="Etiquetas">{post.tags.map(tag=><li class="rounded-full border border-black/20 px-3 py-1.5 text-xs uppercase">{tag}</li>)}</ul>
-  <div class="article-prose mt-12">{post.introduction.map(p=><p>{p}</p>)}{post.sections.map(section=><section><h2>{section.heading}</h2>{section.paragraphs.map(p=><p>{p}</p>)}{section.points && <ul>{section.points.map(point=><li>{point}</li>)}</ul>}</section>)}<aside>{post.takeaway.map(p=><p>{p}</p>)}</aside></div>
-</article>
+
+<div data-reading-progress aria-hidden="true" class="reading-progress"><span></span></div>
+<div class="article-reading-layout mx-auto max-w-6xl">
+  <article data-reading-root class="surface-light mx-auto w-full max-w-3xl rounded-[28px] bg-white px-6 py-10 text-[#0C0C0C] sm:p-10 md:rounded-[40px] md:p-14">
+    <header>
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-medium uppercase tracking-[.18em] text-black/60">
+        <p>{post.category}</p>
+        <span aria-hidden="true">·</span>
+        <p>{readingMinutes} min de lectura</p>
+        {post.isSample && <><span aria-hidden="true">·</span><p>Artículo de muestra</p></>}
+      </div>
+      <h1 data-route-heading tabindex="-1" class="mt-5 break-words text-[clamp(1.9rem,4.5vw,3.5rem)] font-black uppercase leading-[.94] tracking-[-.02em]">{post.title}</h1>
+      <p class="mt-6 text-xl font-light leading-relaxed text-black/70">{post.excerpt}</p>
+      <ul class="mt-5 flex flex-wrap gap-2" aria-label="Etiquetas">
+        {post.tags.map(tag => <li class="tag-light">{tag}</li>)}
+      </ul>
+    </header>
+
+    <nav data-article-index aria-label="Contenido del artículo" class="mt-8 rounded-[24px] border border-black/15 p-5 sm:p-6">
+      <p class="text-xs font-medium uppercase tracking-[.2em] text-black/55">En este artículo</p>
+      <ol class="mt-4 grid gap-2 text-sm sm:grid-cols-2">
+        {post.sections.map((section, index) => (
+          <li><a class="article-index-link inline-flex min-h-11 items-center gap-2" href={`#${sectionId(section.heading, index)}`}><span class="text-black/60">0{index + 1}</span> {section.heading}</a></li>
+        ))}
+      </ol>
+    </nav>
+
+    <div class="article-prose mt-10">
+      {post.introduction.map(paragraph => <p>{paragraph}</p>)}
+      {post.sections.map((section, index) => (
+        <section id={sectionId(section.heading, index)} class="scroll-mt-12" data-article-section>
+          <p class="article-section-number" aria-hidden="true">0{index + 1}</p>
+          <h2>{section.heading}</h2>
+          {section.paragraphs.map(paragraph => <p>{paragraph}</p>)}
+          {section.points && <ul>{section.points.map(point => <li>{point}</li>)}</ul>}
+        </section>
+      ))}
+      <aside>
+        <p class="mb-3 text-xs font-medium uppercase tracking-[.2em]">Idea clave</p>
+        {post.takeaway.map(paragraph => <p>{paragraph}</p>)}
+      </aside>
+    </div>
+  </article>
+
+  <aside class="article-index-aside" aria-label="Navegación complementaria del artículo">
+    <nav data-floating-index inert aria-hidden="true" aria-label="Índice lateral del artículo" class="article-floating-index">
+      <p class="section-kicker">En este artículo</p>
+      <ol class="mt-4 space-y-1">
+        {post.sections.map((section, index) => (
+          <li>
+            <a data-floating-index-link class="article-floating-link" href={`#${sectionId(section.heading, index)}`}>
+              <span aria-hidden="true">0{index + 1}</span>
+              <span>{section.heading}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  </aside>
+</div>
