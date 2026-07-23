@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import BlogFilters from '../../components/BlogFilters.astro'
+import { blogPosts } from '../../data/blog'
+---
+
+<BaseLayout title="Blog técnico — Marc Teixidó" description="Artículos en español sobre IoT, procesos asíncronos e infraestructura distribuida.">
+  <main class="min-h-screen px-5 py-8 sm:px-8 md:px-10 md:py-10">
+    <div class="mx-auto max-w-6xl">
+      <a class="control" href="/#blog">Volver al portfolio <span aria-hidden="true">↗</span></a>
+      <header class="mt-16 grid items-end gap-8 lg:grid-cols-[1fr_26rem]">
+        <div>
+          <p class="section-kicker">Archivo técnico · {blogPosts.length} artículos</p>
+          <h1 data-route-heading tabindex="-1" class="mt-5 text-[clamp(3.5rem,12vw,9rem)] font-black uppercase leading-[.9]">Blog</h1>
+        </div>
+        <p class="text-xl font-light leading-relaxed opacity-70">Ideas sobre IoT, procesos asíncronos e infraestructura distribuida, escritas para entender decisiones y no solo recetas.</p>
+      </header>
+      <BlogFilters />
+    </div>
+  </main>
+</BaseLayout>

@@ -1,0 +1,142 @@
+name: CI
+
+'on':
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  verify:
+    name: Verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Initialize the disposable CodeGraph index
+        run: npm run codegraph:init
+
+      - name: Run the repository gate
+        run: npm run verify
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run browser regression tests
+        run: >-
+          npm run test:e2e --
+          --project=chromium
+          --project=chromium-mobile-320
+          --project=chromium-mobile-375
+          --project=chromium-768
+          --project=chromium-1024
+          --project=chromium-1440
+          --project=chromium-js-off
+          --project=chromium-reduced-motion
+
+  publish-candidate:
+    name: Publish candidate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      attestations: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4
+
+      - name: Build local smoke-test image
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7
+        with:
+          context: .
+          load: true
+          push: false
+          tags: marc-portfolio:ci
+          provenance: false
+          cache-from: type=gha,scope=marc-portfolio-image
+          cache-to: type=gha,mode=max,scope=marc-portfolio-image
+
+      - name: Smoke-test the production image
+        run: npm run test:container -- marc-portfolio:ci
+
+      - name: Log in to GHCR
+        uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate image metadata
+        id: meta
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          flavor: latest=false
+          tags: type=sha,prefix=sha-,format=long
+
+      - name: Publish candidate image
+        id: push
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          provenance: false
+          cache-from: type=gha,scope=marc-portfolio-image
+          cache-to: type=gha,mode=max,scope=marc-portfolio-image
+
+      - name: Attest candidate provenance
+        uses: actions/attest@f7c74d28b9d84cb8768d0b8ca14a4bac6ef463e6 # v4
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+
+      - name: Record candidate coordinates
+        env:
+          CANDIDATE_TAGS: ${{ steps.meta.outputs.tags }}
+          CANDIDATE_DIGEST: ${{ steps.push.outputs.digest }}
+        run: |
+          {
+            echo '### Production candidate'
+            echo
+            echo '```text'
+            echo "$CANDIDATE_TAGS"
+            echo "$CANDIDATE_DIGEST"
+            echo '```'
+            echo
+            echo 'This workflow publishes a candidate; it does not deploy it.'
+          } >> "$GITHUB_STEP_SUMMARY"

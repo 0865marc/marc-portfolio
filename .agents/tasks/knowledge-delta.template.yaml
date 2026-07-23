@@ -1,0 +1,16 @@
+schema_version: 1
+task_id: ""
+review_status: pending
+summary: ""
+knowledge_delta:
+  added_nodes: []
+  changed_nodes: []
+  deprecated_nodes: []
+  adr_needed: false
+  adr_reason: ""
+  design_changed: false
+  design_notes: ""
+  stale_knowledge: []
+reviewed_by: ""
+reviewed_at: null
+reindex_approved: false

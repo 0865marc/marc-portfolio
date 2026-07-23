@@ -1,0 +1,25 @@
+---
+import { services } from '../data/portfolio'
+---
+
+<section aria-labelledby="services-title" class="surface-light rounded-t-[40px] bg-white px-5 py-24 text-[#0C0C0C] sm:px-8 md:px-10 md:py-32">
+  <div class="mx-auto max-w-6xl">
+    <div class="grid items-end gap-8 lg:grid-cols-[1fr_25rem]">
+      <div>
+        <p class="section-kicker">Cómo puedo ayudar</p>
+        <h2 id="services-title" class="mt-5 text-[clamp(3rem,12vw,9rem)] font-black uppercase leading-none">Servicios</h2>
+      </div>
+      <p class="text-xl font-light leading-relaxed text-black/70">Intervengo donde producto, software e infraestructura necesitan compartir contexto y avanzar sin fricción.</p>
+    </div>
+
+    <div class="mt-16 border-b border-black/15">
+      {services.map((service, index) => (
+        <article data-reveal data-reveal-delay={String(index * 70)} class="service-row grid grid-cols-[3.25rem_1fr] gap-4 border-t border-black/15 py-8 sm:grid-cols-[5.5rem_1fr] md:items-start md:gap-8 lg:grid-cols-[7rem_minmax(15rem,.8fr)_1.2fr]">
+          <p class="text-3xl font-black sm:text-5xl" aria-hidden="true">{service.number}</p>
+          <h3 class="text-2xl font-medium uppercase leading-tight sm:text-3xl">{service.name}</h3>
+          <p class="col-start-2 font-light leading-relaxed text-black/65 lg:col-start-3">{service.description}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

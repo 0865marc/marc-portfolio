@@ -1,0 +1,25 @@
+node_modules
+dist
+.astro
+playwright-report
+test-results
+lighthouse-results*
+benchmark-results
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+*.DS_Store
+__pycache__/
+*.pyc
+.codegraph/
+
+# Local Hermes workflow artifacts and generated browser audit outputs
+.workflow/deploy_implementation_task.md
+.workflow/deployment_plan.md
+.workflow/hero_redesign_implementation_task.md
+.workflow/profile_update_implementation_task.md
+.workflow/previous_implementation_report*.md
+.workflow/previous_mobile_profile_adaptation_*.md
+.workflow/frontend_artifacts/
+.workflow/hero_consultation_artifacts/

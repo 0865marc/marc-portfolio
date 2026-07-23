@@ -1,0 +1,56 @@
+schema_version: 2
+project:
+  name: marc-portfolio
+  root: .
+  environment: production
+  default_branch: main
+  public_target: portfolio.mybrawl.io
+identity:
+  source: package.json
+  package_name: marc-portfolio
+source_of_truth:
+  workflow_policy:
+    - .workflow/policy.yaml for repository-local gates
+    - private operator policy for production promotion
+  application:
+    - package.json
+    - astro.config.mjs
+    - src
+    - tailwind.config.js
+    - tsconfig.json
+  operations:
+    - Dockerfile
+    - .github/workflows/ci.yml
+    - ops/ci-candidates.md
+    - ops/nginx/container.conf
+  curated_knowledge:
+    - .agents/README.md
+    - .agents/DESIGN.md
+    - .agents/context
+    - .agents/domains
+    - .agents/decisions
+    - .agents/tasks
+boundaries:
+  application_source_wins_over_curated_summaries: true
+  codegraph_index_is_authoritative: false
+  codegraph_index_is_version_controlled: false
+  workflow_history_is_knowledge_source: false
+code_intelligence:
+  provider: CodeGraph
+  package: '@colbymchenry/codegraph'
+  config: codegraph.json
+  local_index: .codegraph
+  include: application and operations source supported by CodeGraph
+  exclude:
+    - .agents
+    - .workflow
+  commands:
+    initialize: npm run codegraph:init
+    synchronize: npm run codegraph:sync
+    status: npm run codegraph:status
+    explore: codegraph explore "<question>"
+review:
+  protocol: .agents/tasks/README.md
+  template: .agents/tasks/knowledge-delta.template.yaml
+  independent_review_required: true
+  refresh_codegraph_after_source_change: true

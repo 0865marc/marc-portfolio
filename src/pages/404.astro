@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="Página no encontrada — Marc Teixidó" description="La página solicitada no existe.">
+  <main class="flex min-h-[100svh] items-center px-5 py-16 sm:px-8">
+    <div class="surface-light mx-auto w-full max-w-4xl overflow-hidden rounded-[40px] bg-white p-8 text-[#0C0C0C] sm:p-14">
+      <div class="grid gap-10 md:grid-cols-[11rem_minmax(0,1fr)]">
+        <p class="text-[clamp(4rem,10vw,6rem)] font-black leading-none text-black/45" aria-hidden="true">404</p>
+        <div class="min-w-0">
+          <p class="section-kicker">Ruta sin salida</p>
+          <h1 data-route-heading tabindex="-1" class="mt-5 break-words text-[clamp(2.25rem,6.5vw,5rem)] font-black uppercase leading-none tracking-[-.025em]">Página no encontrada</h1>
+          <p class="mt-8 max-w-2xl text-xl font-light leading-relaxed text-black/70">Esta dirección no existe o ha cambiado. Puedes volver al portfolio o seguir explorando las notas técnicas.</p>
+          <div class="mt-9 flex flex-wrap gap-3">
+            <a class="button-dark" href="/">Ir al portfolio <span aria-hidden="true">↗</span></a>
+            <a class="control" href="/blog/">Explorar el blog</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>

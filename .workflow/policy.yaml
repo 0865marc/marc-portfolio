@@ -1,0 +1,128 @@
+schema_version: 1
+contract_version: 2
+contract_history:
+  accepted_policy_sha256: []
+project:
+  name: marc-portfolio
+  repository_root: .
+  environment: production
+  default_branch: main
+  authority_precedence: System, platform, repository, and current user authority override workflow records.
+paths:
+  current: .workflow/current.yaml
+  runs: .workflow/runs
+  archive: .workflow/archive
+  templates: .workflow/templates
+root_layout:
+  allowed_entries: [README.md, policy.yaml, current.yaml, templates, scripts, tests, runs, archive]
+run:
+  one_active: false
+  id_pattern: '^[0-9]{8}T[0-9]{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$'
+  immutable_ids: true
+  overwrite: forbidden
+  project_relative_paths: true
+  current_pointer_required: true
+roles:
+  required: [requester, planner, approver, implementer, verifier, release_approver, releaser, knowledge_reviewer]
+  labels_are_permissions: false
+  production_independence: [verifier, release_approver]
+lifecycle:
+  initial: intake
+  terminal: [failed, cancelled, closed]
+  transitions:
+    intake: [discovery, blocked, cancelled]
+    discovery: [planned, blocked, cancelled, failed]
+    planned: [awaiting_approval, discovery, blocked, cancelled]
+    awaiting_approval: [approved, planned, blocked, cancelled]
+    approved: [executing, awaiting_approval, blocked, cancelled]
+    executing: [verifying, blocked, failed, cancelled]
+    verifying: [executing, ready_for_release, blocked, failed, cancelled]
+    ready_for_release: [deployed, closed, blocked, cancelled, failed]
+    deployed: [verifying, closed, blocked, failed]
+    blocked: [recorded_resume_state, cancelled, failed]
+    failed: []
+    cancelled: []
+    closed: []
+gates:
+  required: [plan_approval, execution_start, verification, deployment_approval, closure]
+  immutable_events: true
+  effective_event: latest_valid_for_gate_and_scope_digest
+  durable_by_history: true
+  higher_policy_override: forbidden
+  plan_approval: {requires_plan_sha256: true}
+  execution_start:
+    requires_baseline_and_matching_plan: true
+    evidence_fields: [repository_root, branch, baseline_head, pre_existing_changes_sha256, policy_sha256, plan_sha256]
+    pre_existing_changes_canonical_json: 'json.dumps(value, sort_keys=True, separators=(comma, colon)), UTF-8'
+    effective_policy_sha256: true
+  verification: {requires_independent_verifier: true}
+  deployment_approval: {single_use: true, requires_exact_commit_target_trigger: true}
+  closure: {requires_result_and_disclosed_failures: true}
+  lifecycle_requirements:
+    approved: [plan_approval]
+    executing: [plan_approval, execution_start]
+    verifying: [plan_approval, execution_start]
+    ready_for_release: [plan_approval, execution_start, verification]
+    deployed: [plan_approval, execution_start, verification, deployment_approval]
+    closed: [plan_approval, execution_start, verification, closure]
+git:
+  preserve_branch: true
+  preserve_unrelated_changes: true
+  allow_reset_hard: false
+  allow_clean_fdx: false
+  allow_stash: false
+  commit: {default: denied, requires_explicit_run_approval: true}
+  push: {default: denied, requires_explicit_run_approval: true, force_push: forbidden}
+deployment:
+  default: denied
+  mechanism: ghcr_digest_promotion
+  repository: 0865marc/marc-portfolio
+  branch: main
+  automatic_on_approved_push: false
+  manual_command: forbidden
+  requires_independent_verification: true
+  requires_explicit_deployment_approval: true
+  require_exact_commit_and_target: true
+  require_post_deploy_verification: true
+  approval_is_single_use: true
+  require_git_state_match: true
+artifacts:
+  required_by_state:
+    planned: [request.md]
+    awaiting_approval: [request.md, plan.md, state.yaml]
+    approved: [request.md, plan.md, state.yaml, plan_approval]
+    ready_for_release: [request.md, plan.md, state.yaml, plan_approval, verification_evidence]
+    deployed: [request.md, plan.md, state.yaml, deployment_approval, post_deploy_evidence]
+    terminal: [result.md]
+  references_within_run: true
+  prohibit_absolute_or_parent_paths: true
+  sensitive_data: forbidden
+archive:
+  path_pattern: '.workflow/archive/YYYY/<run-id>'
+  terminal_only: true
+  move_intact: true
+  overwrite: forbidden
+  validate_before_move: true
+knowledge_boundary:
+  workflow_is_task_record: true
+  workflow_is_durable_knowledge: false
+  reusable_changes_require_pending_delta: true
+  independent_review: true
+  generated_never_hand_edited: true
+  implementation_and_release_runs_are_separate: true
+validation:
+  json_output: true
+  read_only: true
+  safe_yaml: true
+  closed_schemas: true
+bootstrap_cleanup:
+  retired_root_artifacts:
+    - {path: .workflow/source_template.md, required_absent: true}
+    - {path: .workflow/state.json, required_absent: true}
+    - {path: .workflow/planner_task.md, required_absent: true}
+    - {path: .workflow/plan.md, required_absent: true}
+    - {path: .workflow/frontend_task.md, required_absent: true}
+    - {path: .workflow/frontend_report.md, required_absent: true}
+    - {path: .workflow/implementation_task.md, required_absent: true}
+    - {path: .workflow/implementation_report.md, required_absent: true}
+    - {path: .workflow/coder_followup_contact_fix.md, required_absent: true}
