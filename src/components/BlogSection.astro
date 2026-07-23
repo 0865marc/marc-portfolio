@@ -1,0 +1,27 @@
+---
+import { blogPosts } from '../data/blog'
+import BlogCard from './BlogCard.astro'
+---
+
+<section id="blog" aria-labelledby="blog-title" class="surface-light scroll-mt-6 bg-white px-5 py-24 text-[#0C0C0C] sm:px-8 md:px-10 md:py-32">
+  <div class="mx-auto max-w-6xl">
+    <div class="grid items-end gap-8 lg:grid-cols-[1fr_25rem]">
+      <div>
+        <p class="section-kicker">Notas de campo</p>
+        <h2 id="blog-title" data-route-heading tabindex="-1" class="mt-5 text-[clamp(3rem,12vw,9rem)] font-black uppercase leading-none">Blog</h2>
+      </div>
+      <div>
+        <p class="text-xl font-light leading-relaxed text-black/70">Decisiones de arquitectura explicadas desde la práctica, con contexto, límites y ejemplos.</p>
+        <a href="/blog/" class="button-dark mt-6">Ver todos <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+
+    <div class="mt-14 grid gap-4 md:grid-cols-3">
+      {blogPosts.map((post, index) => (
+        <div data-reveal data-reveal-delay={String(index * 80)}>
+          <BlogCard post={post} source="landing" headingLevel={3} />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

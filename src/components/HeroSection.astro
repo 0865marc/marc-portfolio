@@ -1,0 +1,38 @@
+<section aria-labelledby="hero-title" class="flex min-h-[100svh] items-center px-5 py-8 sm:px-8 md:px-10 md:py-10">
+  <div class="mx-auto flex min-h-[calc(100svh-4rem)] w-full max-w-[1440px] flex-col md:min-h-[calc(100svh-5rem)]">
+    <nav data-intro style="--intro-delay: 40ms" aria-label="Principal" class="landing-nav">
+      <p class="landing-nav-mark">Portfolio · {new Date().getFullYear()}</p>
+      <ul class="landing-nav-list">
+        <li><a class="landing-nav-link" href="#about"><span aria-hidden="true">01</span> Sobre mí</a></li>
+        <li><a class="landing-nav-link" href="#blog"><span aria-hidden="true">02</span> Blog</a></li>
+        <li><a class="landing-nav-link" href="#projects"><span aria-hidden="true">03</span> Proyectos</a></li>
+        <li><a class="landing-nav-link" href="#contact"><span aria-hidden="true">04</span> Contacto</a></li>
+      </ul>
+    </nav>
+
+    <div class="my-auto grid items-end gap-12 py-16 lg:grid-cols-[minmax(0,1fr)_22rem]">
+      <div>
+        <p data-intro style="--intro-delay: 110ms" class="text-sm uppercase tracking-[.24em] opacity-60">Director de proyectos · Desarrollador fullstack</p>
+        <h1 id="hero-title" data-intro style="--intro-delay: 180ms" class="hero-heading mt-6 text-[clamp(3.7rem,10vw,9rem)] font-black uppercase leading-[.86]">Marc<br />Teixidó</h1>
+        <p data-intro style="--intro-delay: 250ms" class="mt-8 max-w-3xl text-xl font-light leading-relaxed sm:text-2xl">
+          Convierto necesidades de producto en sistemas que se pueden construir, operar y escalar: desde dispositivos IoT hasta plataformas y equipos distribuidos.
+        </p>
+        <div data-intro style="--intro-delay: 320ms" class="mt-9 flex flex-wrap gap-3">
+          <a class="button-light" href="#projects">Ver proyectos <span aria-hidden="true">↓</span></a>
+          <a class="control" href="#contact">Cuéntame tu proyecto</a>
+        </div>
+      </div>
+
+      <aside data-intro style="--intro-delay: 300ms" aria-label="Áreas de trabajo" class="border-l border-[#D7E2EA]/25 pl-6 lg:mb-2">
+        <p class="text-xs uppercase tracking-[.22em] opacity-60">De la idea a producción</p>
+        <ul class="mt-5 space-y-3 text-lg font-light">
+          <li>Producto y dirección técnica</li>
+          <li>Software e integraciones</li>
+          <li>Infraestructura y operación</li>
+        </ul>
+      </aside>
+    </div>
+
+    <p data-intro style="--intro-delay: 380ms" class="flex items-center gap-3 text-xs uppercase tracking-[.2em] opacity-60"><span aria-hidden="true">↓</span> Explora el recorrido</p>
+  </div>
+</section>

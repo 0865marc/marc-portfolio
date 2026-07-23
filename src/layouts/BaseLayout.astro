@@ -1,0 +1,37 @@
+---
+import '../index.css'
+interface Props { title: string; description: string; routeHeading?: boolean }
+const { title, description } = Astro.props
+const canonical = new URL(Astro.url.pathname, Astro.site)
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0C0C0C" />
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={canonical} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=optional" rel="stylesheet" />
+    <title>{title}</title>
+    <script is:inline>
+      document.documentElement.classList.add('js')
+      if (location.pathname === '/') {
+        const h = location.hash
+        if (h === '#/blog') location.replace('/blog/')
+        else if (h.startsWith('#/blog/')) {
+          const value = h.slice(7), q = value.indexOf('?'), id = q < 0 ? value : value.slice(0,q)
+          const params = new URLSearchParams(q < 0 ? '' : value.slice(q+1))
+          const from = params.get('from') === 'landing' ? 'landing' : 'index'
+          let target = '/blog/articulo-no-encontrado/'
+          try { if (id && decodeURIComponent(id)) target = `/blog/${encodeURIComponent(decodeURIComponent(id))}/` } catch {}
+          location.replace(`${target}?from=${from}`)
+        }
+      }
+    </script>
+  </head>
+  <body><slot /><script src="../scripts/navigation.ts"></script><script src="../scripts/enhancements.ts"></script></body>
+</html>

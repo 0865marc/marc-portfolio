@@ -1,0 +1,57 @@
+---
+import { blogPosts } from '../data/blog'
+import { getBlogTags } from '../lib/blogFilters'
+import BlogCard from './BlogCard.astro'
+
+const tags = getBlogTags(blogPosts)
+---
+
+<section data-blog-filter-root aria-labelledby="blog-filters-title">
+  <div class="js-only mt-14 rounded-[28px] border border-[#D7E2EA]/20 p-5 sm:p-7">
+    <div class="flex flex-wrap items-start justify-between gap-4">
+      <div>
+        <p class="section-kicker">Explorar el archivo</p>
+        <h2 id="blog-filters-title" class="mt-3 text-2xl font-medium uppercase">Encuentra una idea</h2>
+      </div>
+      <p class="max-w-sm text-sm font-light leading-relaxed opacity-60">Combina una búsqueda libre con una etiqueta para acotar los resultados.</p>
+    </div>
+
+    <label for="blog-search" class="mt-7 block text-sm font-medium uppercase tracking-wider">Buscar por título, resumen, categoría o etiqueta</label>
+    <input
+      id="blog-search"
+      data-blog-search
+      type="search"
+      placeholder="Prueba con latencia, IoT o Celery"
+      autocomplete="off"
+      aria-describedby="blog-search-help"
+      class="mt-3 min-h-12 w-full rounded-2xl border border-[#D7E2EA]/35 bg-transparent px-4 text-base placeholder:text-[#D7E2EA]/45"
+    />
+    <p id="blog-search-help" class="mt-2 text-sm font-light opacity-60">La lista se actualiza mientras escribes.</p>
+
+    <fieldset class="mt-7">
+      <legend class="text-sm font-medium uppercase tracking-wider">Filtrar por etiqueta</legend>
+      <div class="mt-3 flex flex-wrap gap-2">
+        <button type="button" data-blog-tag="" aria-pressed="true" aria-controls="blog-results" class="filter-pill active">Todas</button>
+        {tags.map(tag => <button type="button" data-blog-tag={tag} aria-pressed="false" aria-controls="blog-results" class="filter-pill">{tag}</button>)}
+      </div>
+    </fieldset>
+
+    <div class="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-[#D7E2EA]/15 pt-5">
+      <p data-blog-status role="status" aria-live="polite">{blogPosts.length} artículos disponibles.</p>
+      <button data-blog-clear type="button" disabled class="filter-pill">Limpiar filtros</button>
+    </div>
+  </div>
+
+  <div id="blog-results" class="mt-10 grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    {blogPosts.map(post => <BlogCard post={post} source="index" />)}
+  </div>
+
+  <div data-blog-empty hidden class="mt-10 rounded-[28px] border border-[#D7E2EA]/20 p-8">
+    <p class="section-kicker">Sin resultados</p>
+    <h2 class="mt-3 text-2xl font-medium uppercase">No hay artículos que coincidan</h2>
+    <p class="mt-4 max-w-lg font-light opacity-80">Prueba con otra búsqueda o vuelve a mostrar el archivo completo.</p>
+    <button type="button" data-blog-empty-clear class="filter-pill mt-6">Mostrar todos</button>
+  </div>
+</section>
+
+<script src="../scripts/blogFilters.ts"></script>
