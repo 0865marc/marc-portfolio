@@ -3,11 +3,48 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
-    open-pull-requests-limit: 5
+      interval: monthly
+    open-pull-requests-limit: 1
+    allow:
+      # Keep routine maintenance incremental. This filter does not exclude
+      # Dependabot security updates, which remain eligible at every SemVer level.
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+    groups:
+      github-actions-routine:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
 
   - package-ecosystem: docker
     directory: /
     schedule:
-      interval: weekly
-    open-pull-requests-limit: 5
+      interval: monthly
+    open-pull-requests-limit: 2
+    allow:
+      # Major base-image changes are reviewed and requested manually. Security
+      # updates remain eligible because update-types only filters version updates.
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+    groups:
+      docker-build-routine:
+        applies-to: version-updates
+        patterns:
+          - node
+        update-types:
+          - minor
+          - patch
+      docker-runtime-routine:
+        applies-to: version-updates
+        patterns:
+          - nginx
+        update-types:
+          - minor
+          - patch
