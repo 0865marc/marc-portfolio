@@ -19,6 +19,7 @@ Cada `BlogPost` contiene estos campos:
     heading: string
     paragraphs: string[]
     points?: string[]
+    commands?: string[]
   }[]
   takeaway: string[]
 }
@@ -31,11 +32,12 @@ Cada `BlogPost` contiene estos campos:
 - `excerpt`: resumen breve visible en la tarjeta y como introducción destacada del detalle.
 - `isSample`: indica si el detalle debe mostrar `Artículo de muestra`.
 - `introduction`: dos o más párrafos introductorios completos.
-- `sections`: secciones ordenadas con encabezados únicos dentro de la entrada. Cada sección renderiza sus párrafos y, opcionalmente, una lista semántica de `points`.
+- `sections`: secciones ordenadas con encabezados únicos dentro de la entrada. Cada sección renderiza sus párrafos y, opcionalmente, una lista semántica de `points` y grupos `commands` en bloques `<pre><code>`.
 - `takeaway`: uno o más párrafos de cierre. La interfaz muestra el encabezado fijo `Idea final`.
 
-La posición de la entrada en `blogPosts` determina el orden del índice. La landing usa `blogPosts.slice(0, 3)`, por lo que añadir al final conserva las tres muestras actuales; reordenar el array cambia tanto el orden del índice como las tres entradas visibles en la landing. Los identificadores existentes son:
+La posición de la entrada en `blogPosts` determina el orden del índice. La landing usa `blogPosts.slice(0, 3)`: una entrada añadida al principio se presenta como la más reciente, mientras que añadirla al final conserva los destacados actuales. Los identificadores existentes son:
 
+- `hermes-agent-hetzner-instalacion-segura`
 - `arquitecturas-plataformas-iot`
 - `rabbitmq-celery-procesos-pesados`
 - `infraestructura-distribuida-latencia`
@@ -54,7 +56,7 @@ Un detalle abierto directamente sin `from`, con un valor desconocido o desde un 
 
 ## Crear una entrada
 
-Añade al final de `blogPosts` un objeto completo con un identificador nuevo, único y estable. Completa todos los campos, escribe el contenido en español y deja las tres muestras actuales en sus posiciones si la nueva entrada no debe aparecer en la landing:
+Añade a `blogPosts` un objeto completo con un identificador nuevo, único y estable. Completa todos los campos, escribe el contenido en español y elige su posición conscientemente según deba aparecer o no entre los tres destacados de la landing:
 
 ```ts
 {
@@ -70,6 +72,7 @@ Añade al final de `blogPosts` un objeto completo con un identificador nuevo, ú
       heading: 'Sección',
       paragraphs: ['Primer párrafo de la sección.', 'Segundo párrafo de la sección.'],
       points: ['Punto opcional.'],
+      commands: ['comando --con-opcion'],
     },
   ],
   takeaway: ['Idea de cierre.'],

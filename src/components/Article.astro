@@ -8,7 +8,7 @@ interface Props {
 const { post } = Astro.props
 const articleText = [
   ...post.introduction,
-  ...post.sections.flatMap(section => [section.heading, ...section.paragraphs, ...(section.points ?? [])]),
+  ...post.sections.flatMap(section => [section.heading, ...section.paragraphs, ...(section.points ?? []), ...(section.commands ?? [])]),
   ...post.takeaway,
 ].join(' ')
 const readingMinutes = Math.max(1, Math.ceil(articleText.trim().split(/\s+/).length / 210))
@@ -49,6 +49,13 @@ const sectionId = (heading: string, index: number) => `${index + 1}-${heading.no
           <h2>{section.heading}</h2>
           {section.paragraphs.map(paragraph => <p>{paragraph}</p>)}
           {section.points && <ul>{section.points.map(point => <li>{point}</li>)}</ul>}
+          {section.commands && (
+            <div class="my-7 grid gap-4" aria-label={`Comandos para ${section.heading}`}>
+              {section.commands.map(command => (
+                <pre tabindex="0" class="max-w-full overflow-x-auto rounded-[28px] bg-[#0C0C0C] p-5 text-sm font-normal leading-relaxed text-[#D7E2EA]"><code>{command}</code></pre>
+              ))}
+            </div>
+          )}
         </section>
       ))}
       <aside>

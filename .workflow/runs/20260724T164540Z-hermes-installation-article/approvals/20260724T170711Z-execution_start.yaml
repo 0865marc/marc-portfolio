@@ -1,0 +1,23 @@
+schema_version: 1
+run_id: 20260724T164540Z-hermes-installation-article
+gate: execution_start
+decision: approved
+by: Codex
+at: '2026-07-24T17:07:11Z'
+scope_sha256: edc0947b31f024f015ef1f39273494e6559650d5c09ff7d4cc8379f067afd135
+artifact: plan.md
+artifact_sha256: 6434a448d08fa1d45028cfc2c6a259fd4b86b1e3424d622145889379ba7b5168
+binding:
+  commit: null
+  target: null
+  environment: null
+  trigger: null
+conditions: []
+evidence:
+  - repository_root=.
+  - branch=main
+  - baseline_head=e6efba7d3b0974eb236235bb87d2525be55bc1a5
+  - pre_existing_changes_sha256=4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+  - policy_sha256=88cef63488a5be69a30cb51cfa99ead7c6bdb96783e6df1d7c7388b85486b89b
+  - plan_sha256=6434a448d08fa1d45028cfc2c6a259fd4b86b1e3424d622145889379ba7b5168
+reason: Execution started from the recorded clean baseline with the approved plan and denied Git and deployment mutations.

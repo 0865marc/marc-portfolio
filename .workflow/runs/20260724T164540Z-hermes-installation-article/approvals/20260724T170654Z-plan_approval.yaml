@@ -1,0 +1,17 @@
+schema_version: 1
+run_id: 20260724T164540Z-hermes-installation-article
+gate: plan_approval
+decision: approved
+by: Marc
+at: '2026-07-24T17:06:54Z'
+scope_sha256: edc0947b31f024f015ef1f39273494e6559650d5c09ff7d4cc8379f067afd135
+artifact: plan.md
+artifact_sha256: 6434a448d08fa1d45028cfc2c6a259fd4b86b1e3424d622145889379ba7b5168
+binding:
+  commit: null
+  target: null
+  environment: null
+  trigger: null
+conditions: []
+evidence: []
+reason: Marc explicitly approved the exact implementation plan in the active conversation.

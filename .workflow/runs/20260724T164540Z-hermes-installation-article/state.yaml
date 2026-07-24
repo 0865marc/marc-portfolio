@@ -1,0 +1,86 @@
+schema_version: 1
+run_id: 20260724T164540Z-hermes-installation-article
+status: verifying
+repository:
+  root: .
+  branch: main
+  baseline_head: e6efba7d3b0974eb236235bb87d2525be55bc1a5
+  pre_existing_changes: []
+roles:
+  requester: Marc
+  planner: Codex
+  approver: Marc
+  implementer: Codex
+  verifier: ''
+  release_approver: ''
+  releaser: ''
+  knowledge_reviewer: ''
+scope_sha256: edc0947b31f024f015ef1f39273494e6559650d5c09ff7d4cc8379f067afd135
+plan_sha256: 6434a448d08fa1d45028cfc2c6a259fd4b86b1e3424d622145889379ba7b5168
+approval_refs:
+  - approvals/20260724T170654Z-plan_approval.yaml
+  - approvals/20260724T170711Z-execution_start.yaml
+evidence_refs:
+  - evidence/20260724T171534Z-implementation-validation.md
+git:
+  commit_allowed: true
+  push_allowed: true
+  commit: null
+  push_target: origin/main
+deployment:
+  allowed: false
+  environment: production
+  trigger: ghcr_digest_promotion
+  commit: null
+  target: null
+  post_deploy_evidence: null
+blocker: null
+transitions:
+  - from: intake
+    to: discovery
+    at: '2026-07-24T16:45:40Z'
+    by: Codex
+    reason: Located the static blog model, render path, tests, design constraints, and release boundary.
+    resume_state: null
+  - from: discovery
+    to: planned
+    at: '2026-07-24T16:45:41Z'
+    by: Codex
+    reason: Defined the exact content, rendering extension, affected files, risks, and verification.
+    resume_state: null
+  - from: planned
+    to: awaiting_approval
+    at: '2026-07-24T16:45:42Z'
+    by: Codex
+    reason: Awaiting project-owner approval of the immutable implementation plan.
+    resume_state: null
+  - from: awaiting_approval
+    to: approved
+    at: '2026-07-24T17:06:54Z'
+    by: Marc
+    reason: Approved the exact plan and authorized implementation within its recorded scope.
+    resume_state: null
+  - from: approved
+    to: executing
+    at: '2026-07-24T17:07:11Z'
+    by: Codex
+    reason: Began implementation from the recorded baseline under the exact approved plan.
+    resume_state: null
+  - from: executing
+    to: verifying
+    at: '2026-07-24T17:15:34Z'
+    by: Codex
+    reason: Completed the approved implementation and recorded available local validation evidence for independent review.
+    resume_state: null
+  - from: verifying
+    to: executing
+    at: '2026-07-24T17:16:30Z'
+    by: Codex
+    reason: Current upstream Hermes documentation identified MESSAGING_CWD as a legacy fallback, so the article required a bounded documentation correction.
+    resume_state: null
+  - from: executing
+    to: verifying
+    at: '2026-07-24T17:18:33Z'
+    by: Codex
+    reason: Replaced the legacy fallback with terminal.cwd and repeated the complete repository verification and Chromium browser matrix successfully.
+    resume_state: null
