@@ -22,11 +22,12 @@ approval_refs:
   - approvals/20260724T170711Z-execution_start.yaml
 evidence_refs:
   - evidence/20260724T171534Z-implementation-validation.md
+  - evidence/20260724T184015Z-git-publication.md
 git:
   commit_allowed: true
   push_allowed: true
-  commit: null
-  push_target: origin/main
+  commit: 349f69fb400fc93e50497ee024003e0243e12851
+  push_target: origin/blog/hermes-installation-article
 deployment:
   allowed: false
   environment: production
