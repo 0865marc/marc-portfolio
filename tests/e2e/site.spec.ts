@@ -57,7 +57,7 @@ test('history preserves focus and cards through ten navigations', async ({ page,
     await page.waitForLoadState('domcontentloaded')
     await expect(page).toHaveURL(/\/blog\/$/)
     await expect(page.getByRole('heading', { level: 1 })).toBeFocused()
-    await expect(page.locator('[data-blog-card]')).toHaveCount(3)
+    await expect(page.locator('[data-blog-card]')).toHaveCount(blogPosts.length)
   }
 })
 
@@ -71,20 +71,20 @@ test('route heading remains focused after refresh', async ({ page, javaScriptEna
 
 test('filters cover diacritics, exact tags, clear, live region, and no match', async ({ page, javaScriptEnabled }) => {
   await page.goto('/blog/')
-  await expect(page.locator('[data-blog-card]')).toHaveCount(3)
+  await expect(page.locator('[data-blog-card]')).toHaveCount(blogPosts.length)
   if (javaScriptEnabled === false) {
     await expect(page.locator('[data-blog-search]')).toBeHidden()
-    await expect(page.locator('[data-blog-card]')).toHaveCount(3)
+    await expect(page.locator('[data-blog-card]')).toHaveCount(blogPosts.length)
     return
   }
   await page.locator('[data-blog-search]').fill('laténcia resiliencia')
   await expect(page.locator('[data-blog-card]:visible')).toHaveCount(1)
-  await expect(page.getByRole('status')).toContainText('1 de 3')
+  await expect(page.getByRole('status')).toContainText(`1 de ${blogPosts.length}`)
   await page.getByRole('button', { name: 'MQTT', exact: true }).click()
   await expect(page.locator('[data-blog-card]:visible')).toHaveCount(0)
   await expect(page.locator('[data-blog-empty]')).toBeVisible()
   await page.getByRole('button', { name: 'Mostrar todos' }).click()
-  await expect(page.locator('[data-blog-card]:visible')).toHaveCount(3)
+  await expect(page.locator('[data-blog-card]:visible')).toHaveCount(blogPosts.length)
   await expect(page.getByRole('button', { name: 'Limpiar filtros' })).toBeDisabled()
 })
 
@@ -93,6 +93,10 @@ test('articles, query-specific back link, legacy variants, malformed route and d
     await page.goto(`/blog/${post.id}/?from=index`)
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(post.title)
   }
+  const tutorial = blogPosts.find(post => post.id === 'hermes-agent-hetzner-instalacion-segura')!
+  const commandCount = tutorial.sections.flatMap(section => section.commands ?? []).length
+  await page.goto(`/blog/${tutorial.id}/?from=index`)
+  await expect(page.locator('pre code')).toHaveCount(commandCount)
   if (javaScriptEnabled !== false) {
     await page.goto(`/blog/${blogPosts[0].id}/?from=landing`)
     await expect(page.locator('[data-article-back]')).toHaveAttribute('href', '/#blog')

@@ -1,0 +1,27 @@
+schema_version: 1
+task_id: "20260724T164540Z-hermes-installation-article"
+review_status: pending
+summary: "Record the fourth blog entry and reusable semantic command-block support."
+knowledge_delta:
+  added_nodes:
+    - path: "src/data/blog.ts"
+      symbol: "BlogArticleSection"
+      fact: "Blog sections may contain optional command groups rendered as semantic preformatted code blocks."
+      evidence: "src/data/blog.ts:1-6; src/components/Article.astro:44-59"
+    - path: "src/data/blog.ts"
+      symbol: "blogPosts"
+      fact: "The blog includes a real Hermes Agent installation tutorial at the stable route ID hermes-agent-hetzner-instalacion-segura."
+      evidence: "src/data/blog.ts:19-224"
+  changed_nodes: []
+  deprecated_nodes: []
+  adr_needed: false
+  adr_reason: ""
+  design_changed: false
+  design_notes: "The renderer reuses the existing canvas, foreground color, 28 px radius, typography, and reading surface without introducing a new token."
+  stale_knowledge:
+    - path: ".agents/domains/blog.md"
+      fact: "The current-entry summary names only the original three sample posts and should include the Hermes Agent tutorial after independent review."
+      evidence: ".agents/domains/blog.md:7; src/data/blog.ts:19-224"
+reviewed_by: ""
+reviewed_at: null
+reindex_approved: false

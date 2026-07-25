@@ -4,6 +4,6 @@ describe('static output',()=>{
   it.each(['index.html','blog/index.html','404.html'])(`emits %s`,p=>expect(statSync(join(dist,p)).size).toBeGreaterThan(300))
   it('emits and references the favicon',()=>{expect(statSync(join(dist,'favicon.svg')).size).toBeGreaterThan(100);expect(read('index.html')).toContain('href="/favicon.svg"')})
   it('emits meaningful landing and blog HTML',()=>{expect(read('index.html')).toContain('Sobre mí');expect(read('blog/index.html')).toContain('Encuentra una idea');expect(read('index.html')).not.toContain('id="root"')})
-  it.each(blogPosts)('emits $id with unique metadata and full body',post=>{const html=read(`blog/${post.id}/index.html`);expect(html).toContain(post.title);expect(html).toContain(post.introduction[0]);expect(html).toContain(`https://portfolio.mybrawl.io/blog/${post.id}/`)})
+  it.each(blogPosts)('emits $id with unique metadata and full body',post=>{const html=read(`blog/${post.id}/index.html`);expect(html).toContain(post.title);expect(html).toContain(post.introduction[0]);expect(html).toContain(`https://portfolio.mybrawl.io/blog/${post.id}/`);const firstCommand=post.sections.flatMap(section=>section.commands??[])[0];if(firstCommand)expect(html).toContain(firstCommand.split('\n')[0])})
   it('keeps stable unique IDs',()=>expect(new Set(blogPosts.map(p=>p.id)).size).toBe(blogPosts.length))
 })

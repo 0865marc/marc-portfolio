@@ -2,6 +2,7 @@ export type BlogArticleSection = {
   heading: string
   paragraphs: string[]
   points?: string[]
+  commands?: string[]
 }
 
 export type BlogPost = {
@@ -17,6 +18,207 @@ export type BlogPost = {
 }
 
 export const blogPosts: BlogPost[] = [
+  {
+    id: 'hermes-agent-hetzner-instalacion-segura',
+    category: 'Infraestructura y agentes',
+    tags: ['Hermes Agent', 'Hetzner', 'Ubuntu', 'Seguridad', 'Codex', 'Telegram'],
+    title: 'Hermes Agent en Hetzner desde cero',
+    excerpt:
+      'Cómo reconstruir un VPS, aislar privilegios y dejar Hermes conectado a Codex y Telegram sin arrastrar despliegues antiguos.',
+    isSample: false,
+    introduction: [
+      'Empezar de cero en un VPS no consiste únicamente en detener unos contenedores y volver a ejecutar un instalador. Un despliegue anterior puede dejar volúmenes, unidades de systemd, tareas programadas, proxies, certificados y credenciales que siguen siendo válidas aunque el proceso principal ya no exista. Cuando el objetivo es una instalación realmente limpia, reconstruir el disco desde el proveedor suele ofrecer una frontera mucho más clara que intentar recordar cada componente instalado.',
+      'Esta guía documenta una reconstrucción de un servidor Hetzner Cloud con Ubuntu 26.04 LTS y una instalación nativa de Hermes Agent. El agente utiliza Codex como proveedor y un bot de Telegram como canal remoto, pero se ejecuta con un usuario sin sudo. La secuencia prioriza dos ideas: verificar cada acceso antes de cerrar el anterior y limitar el alcance de una instrucción remota antes de dejar el gateway funcionando de forma permanente.',
+    ],
+    sections: [
+      {
+        heading: 'Antes de borrar: delimitar qué desaparece',
+        paragraphs: [
+          'La reconstrucción del servidor es destructiva para su disco principal. Antes de confirmarla hay que identificar con precisión la instancia, anotar su dirección pública, comprobar la clave SSH asociada y decidir si existe algún dato que deba conservarse. Si hay una base de datos, un archivo o una configuración irrepetible, la copia se valida fuera del servidor antes de continuar; una copia que nunca se ha restaurado todavía es una hipótesis.',
+          'También hay recursos que viven fuera del disco reconstruido. Los volúmenes, snapshots y algunas copias del proveedor pueden seguir existiendo después del rebuild. Del mismo modo, un token de GitHub, una credencial de un proveedor de modelos o el token de un bot no deja de ser válido porque se haya borrado el VPS. Un reinicio limpio incluye revisar esos recursos y rotar las credenciales antiguas cuyo alcance ya no se necesite.',
+        ],
+        points: [
+          'Confirmar el nombre, plan, ubicación e IP de la instancia antes de cualquier acción destructiva.',
+          'Eliminar o conservar conscientemente Volumes, Backups y Snapshots; no asumir que forman parte del disco principal.',
+          'Rotar tokens de despliegue, claves de API y credenciales de bots que no deban sobrevivir al entorno anterior.',
+          'No publicar inventarios, direcciones, huellas SSH ni secretos en tickets, capturas o documentación pública.',
+        ],
+      },
+      {
+        heading: 'Cerrar la red y reconstruir desde Hetzner',
+        paragraphs: [
+          'Antes del rebuild conviene aplicar un Hetzner Cloud Firewall. Para una instalación controlada basta con permitir TCP 22 desde la IP pública del administrador expresada como una red de un único host, por ejemplo TU_IP_PUBLICA/32. Las reglas salientes pueden permanecer abiertas para que Ubuntu, Codex y Telegram alcancen sus servicios. Telegram usa una conexión iniciada desde el VPS, por lo que no necesita un puerto entrante propio.',
+          'Con el firewall asociado se selecciona Rebuild y una imagen oficial de Ubuntu 26.04 LTS. Esta operación reemplaza el sistema del disco principal y detiene los despliegues que vivían en él, conservando la identidad de la instancia en Hetzner. No hace falta añadir una Floating IP para este caso. Tampoco se abre el puerto 8642: si más adelante se necesita una API o un dashboard remoto, debe publicarse detrás de autenticación, TLS y una decisión de red explícita.',
+        ],
+        points: [
+          'Entrada inicial: TCP 22 limitado a TU_IP_PUBLICA/32.',
+          'Sin reglas entrantes para Telegram, Codex o el gateway de mensajería.',
+          'Imagen oficial: Ubuntu 26.04 LTS; confirmar el aviso de pérdida total del disco.',
+          'Un servidor con protección contra borrado necesita desactivarla antes de usar Rebuild.',
+        ],
+      },
+      {
+        heading: 'Reconocer la nueva identidad SSH',
+        paragraphs: [
+          'Tras reinstalar Ubuntu, la clave personal que autoriza al administrador sigue estando en su ordenador. Lo que cambia es la clave de host con la que el servidor demuestra su identidad. Son dos conceptos distintos: borrar una entrada antigua de known_hosts no regenera ni elimina la clave privada del usuario.',
+          'Lo más seguro es comparar la nueva huella ED25519 con la mostrada desde la consola del proveedor. Una vez confirmado que la IP y la huella pertenecen al rebuild recién terminado, se elimina la asociación antigua y se acepta la identidad nueva. StrictHostKeyChecking=accept-new acepta una clave que todavía no existe en known_hosts, pero seguirá rechazando cambios posteriores.',
+        ],
+        commands: [
+          `ssh-keygen -R VPS_IP
+ssh -o StrictHostKeyChecking=accept-new root@VPS_IP`,
+        ],
+      },
+      {
+        heading: 'Actualizar Ubuntu y crear un administrador',
+        paragraphs: [
+          'La primera sesión como root sirve para completar cloud-init, actualizar la imagen e instalar las utilidades mínimas. Después se crea una identidad administrativa cotidiana. En Ubuntu existe un grupo de sistema llamado operator, así que utilizar un nombre inequívoco como hermesadmin evita confundir un grupo preexistente con un usuario.',
+          'La clave pública inyectada por Hetzner se copia al nuevo usuario con propietario y permisos restrictivos. La sesión original de root permanece abierta mientras, desde otra terminal, se comprueba el acceso de hermesadmin y que sudo funciona. Solo después de esa prueba se modifica la política SSH.',
+        ],
+        commands: [
+          `cloud-init status --wait
+apt update
+apt full-upgrade -y
+apt install -y git curl xz-utils ca-certificates
+reboot`,
+          `adduser hermesadmin
+usermod -aG sudo hermesadmin
+install -d -m 700 -o hermesadmin -g hermesadmin /home/hermesadmin/.ssh
+install -m 600 -o hermesadmin -g hermesadmin \
+  /root/.ssh/authorized_keys \
+  /home/hermesadmin/.ssh/authorized_keys`,
+          `ssh hermesadmin@VPS_IP
+sudo whoami`,
+        ],
+        points: [
+          'Mantener abierta la sesión original hasta validar una segunda conexión administrativa.',
+          'Usar una contraseña local fuerte para sudo aunque el acceso SSH se realice mediante clave.',
+          'Esperar una respuesta root de sudo whoami antes de continuar.',
+        ],
+      },
+      {
+        heading: 'Endurecer SSH sin perder el acceso',
+        paragraphs: [
+          'La configuración se añade como un drop-in que se lee antes de otras reglas generadas por cloud-init. El prefijo 00 es deliberado: OpenSSH utiliza el primer valor encontrado para muchas opciones, así que un archivo tardío puede no sobrescribir una directiva anterior. Se desactivan el login directo de root, las contraseñas por SSH y la autenticación interactiva, manteniendo las claves públicas.',
+          'Antes de recargar el servicio se valida la sintaxis con sshd -t. Después se abre otra sesión como hermesadmin y se comprueba que root recibe Permission denied. Si cualquiera de esas pruebas falla, se conserva la sesión existente y se corrige la configuración en lugar de cerrar todas las puertas a la vez.',
+        ],
+        commands: [
+          `sudo nano /etc/ssh/sshd_config.d/00-hardening.conf`,
+          `PermitRootLogin no
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PubkeyAuthentication yes`,
+          `sudo sshd -t
+sudo systemctl reload ssh
+sudo sshd -T | grep -E 'permitrootlogin|passwordauthentication|kbdinteractiveauthentication|pubkeyauthentication'`,
+          `ssh hermesadmin@VPS_IP
+ssh root@VPS_IP`,
+        ],
+      },
+      {
+        heading: 'Dar a Hermes una identidad sin sudo',
+        paragraphs: [
+          'Hermes no necesita ejecutarse como root. Se crea un usuario con la contraseña bloqueada, sin clave SSH propia y sin pertenecer al grupo sudo. Su espacio de trabajo queda en /home/hermes/workspace, separado de la configuración administrativa. El gateway se instalará como servicio de usuario y linger permite que systemd lo mantenga vivo después de cerrar la sesión SSH.',
+          'Este aislamiento no convierte cualquier comando en inocuo, pero reduce el radio de daño: una tarea remota no puede modificar directamente /etc, las cuentas del sistema o el firewall. id hermes debe mostrar únicamente grupos no privilegiados. Si aparece sudo, la configuración se corrige antes de instalar el agente.',
+        ],
+        commands: [
+          `sudo adduser --disabled-password --gecos "" hermes
+sudo install -d -m 750 -o hermes -g hermes /home/hermes/workspace
+sudo loginctl enable-linger hermes
+id hermes
+sudo -iu hermes`,
+        ],
+      },
+      {
+        heading: 'Instalar y diagnosticar Hermes Agent',
+        paragraphs: [
+          'El instalador oficial se ejecuta dentro de la cuenta hermes. La opción --skip-setup separa la instalación del momento en que se introducen credenciales, lo que permite verificar primero el entorno. Como cualquier patrón curl pipe bash, descarga y ejecuta código remoto: antes de usarlo se comprueba que el dominio pertenece al proyecto oficial y se evita sustituirlo por mirrors o comandos copiados de fuentes desconocidas.',
+          'hermes doctor distingue errores reales de integraciones opcionales. Una configuración recién creada puede avisar de proveedores todavía no autenticados, Telegram, Discord, Docker o herramientas auxiliares; no hay que instalar cada aviso por reflejo. Se migra la configuración, se añade ripgrep desde la cuenta administrativa y se vuelve a comprobar el diagnóstico sin conceder sudo al agente.',
+        ],
+        commands: [
+          `curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash -s -- --skip-setup
+source ~/.bashrc
+hermes version
+hermes doctor
+hermes doctor --fix`,
+          `exit
+sudo apt install -y ripgrep
+sudo -iu hermes
+hermes doctor`,
+        ],
+      },
+      {
+        heading: 'Autenticar Codex sin copiar tokens',
+        paragraphs: [
+          'Hermes ofrece OpenAI Codex como proveedor mediante un flujo de código de dispositivo. Al ejecutar hermes model se selecciona OpenAI Codex, se abre en el ordenador la URL mostrada y se confirma el código con la cuenta correspondiente. El catálogo permite escoger uno de los modelos disponibles sin escribir una API key en el historial de la shell.',
+          'La integración y el almacén de autenticación pertenecen a Hermes: las credenciales se guardan en ~/.hermes/auth.json y deben quedar legibles únicamente por su propietario. Un código de dispositivo, token o contenido de auth.json nunca se pega en documentación o soporte. Si la autorización caduca o se revoca, se repite el flujo desde hermes model o hermes auth en lugar de copiar credenciales de otro equipo.',
+        ],
+        commands: [
+          `hermes model
+hermes auth status openai-codex
+chmod 600 ~/.hermes/auth.json
+hermes`,
+        ],
+        points: [
+          'Probar una conversación local antes de conectar canales externos.',
+          'Salir de la interfaz con /quit cuando la respuesta del modelo esté verificada.',
+          'No confundir la autenticación de la suscripción de Codex con una API key facturada por la plataforma.',
+        ],
+      },
+      {
+        heading: 'Reutilizar un bot de Telegram con lista permitida',
+        paragraphs: [
+          'El mismo bot puede conservar su nombre e identidad, pero conviene rotar el token anterior con /revoke en BotFather. El token nuevo invalida el acceso guardado por el despliegue eliminado. En el asistente de Hermes se elige la creación Manual, se pega el token directamente en la entrada interactiva y se introduce el ID numérico del propietario, no su nombre @usuario.',
+          'Una allowlist explícita evita que cualquier persona que encuentre el bot pueda enviar tareas al VPS. No se activa GATEWAY_ALLOW_ALL_USERS. El directorio de trabajo de las sesiones de mensajería se fija mediante terminal.cwd y los archivos con tokens reciben permisos 0600. Si el bot se usa en grupos, la privacidad, las menciones y los IDs de chat se revisan como una decisión aparte; no se abren de forma global para resolver un fallo de configuración.',
+        ],
+        commands: [
+          `hermes gateway setup`,
+          `hermes config set terminal.cwd /home/hermes/workspace`,
+          `chmod 600 ~/.hermes/.env ~/.hermes/auth.json`,
+        ],
+        points: [
+          'Elegir Manual para reutilizar un bot existente.',
+          'Rotar el token con BotFather sin eliminar el bot.',
+          'Autorizar únicamente IDs numéricos conocidos.',
+          'No pegar el token en comandos, chats, capturas o repositorios.',
+        ],
+      },
+      {
+        heading: 'Probar y persistir el gateway',
+        paragraphs: [
+          'La primera ejecución se hace en primer plano. Así se observan los errores de conexión y se confirma desde Telegram que Codex responde antes de crear un servicio persistente. Una vez validado, Ctrl+C detiene esa prueba y hermes gateway install registra la unidad de usuario; start la inicia y status confirma su estado.',
+          'La prueba final consiste en cerrar SSH y volver a escribir al bot. Si responde, el gateway sobrevive a la sesión gracias a linger. Reiniciar el VPS y repetir la comprobación valida también el arranque automático. Este flujo no necesita publicar una API HTTP ni modificar el firewall: el bot mantiene conexiones salientes hacia Telegram.',
+        ],
+        commands: [
+          `hermes gateway run`,
+          `hermes gateway install
+hermes gateway start
+hermes gateway status`,
+        ],
+      },
+      {
+        heading: 'Mantener límites después de la instalación',
+        paragraphs: [
+          'Una instalación limpia solo se mantiene limpia si sus permisos siguen siendo comprensibles. Añadir hermes al grupo docker equivale en la práctica a devolverle control sobre el host, porque un miembro puede montar el sistema de archivos o iniciar contenedores privilegiados. Si los futuros proyectos necesitan contenedores, se diseña una ruta rootless o un mecanismo de despliegue estrecho y auditable en vez de conceder el socket principal por comodidad.',
+          'Ubuntu, Hermes y sus integraciones requieren revisiones periódicas. Las actualizaciones se prueban, se observa el gateway y se rotan las credenciales que dejan de usarse. Los backups nuevos deben describir qué recuperan y cómo se restauran. El objetivo no es que el agente pueda hacerlo todo, sino que cada capacidad remota tenga un usuario, un directorio y un canal de autorización conocidos.',
+        ],
+        commands: [
+          `hermes doctor
+hermes security audit
+hermes update
+hermes gateway status`,
+        ],
+        points: [
+          'No añadir hermes a sudo ni al grupo docker sin revisar el cambio de amenaza.',
+          'Mantener el firewall con la superficie entrante mínima y revisar la IP permitida cuando cambie.',
+          'Actualizar y auditar dependencias, skills, plugins y servidores MCP antes de confiarles secretos.',
+          'Conservar un procedimiento probado para revocar Codex, Telegram, Git y cualquier proveedor conectado.',
+        ],
+      },
+    ],
+    takeaway: [
+      'El resultado útil no es solo un Hermes que contesta por Telegram. Es un servidor cuya identidad, red, usuarios, credenciales y persistencia pueden explicarse de extremo a extremo, y en el que una tarea remota empieza con el mínimo privilegio necesario.',
+    ],
+  },
   {
     id: 'arquitecturas-plataformas-iot',
     category: 'Arquitectura IoT',
