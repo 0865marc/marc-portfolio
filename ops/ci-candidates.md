@@ -4,12 +4,12 @@
 
 `.github/workflows/ci.yml` is the repository CI and candidate-build workflow. It has two distinct responsibilities:
 
-1. Every pull request targeting `main`, every push to `main`, and every manual run executes the repository gate plus the configured Chromium regression matrix.
-2. A successful push to `main` additionally builds, smoke-tests, and publishes a candidate image to GHCR. Pull requests and manual runs never publish packages.
+1. Every pull request targeting `main`, every push to `main`, and every manual run executes the repository gate, the configured Chromium responsive matrix, Firefox/WebKit coverage, and a smoke test of the production Nginx image.
+2. A successful push to `main` additionally publishes a candidate image to GHCR after both verification jobs pass. Pull requests and manual runs never publish packages.
 
-The candidate image is named `ghcr.io/0865marc/marc-portfolio`, tagged as `sha-<full-commit>`, and recorded by immutable digest in the workflow summary. Production promotion must select the digest, not a mutable tag. GitHub Actions receives only `contents: read` by default; the candidate job alone receives `packages: write`, `id-token: write`, and `attestations: write`.
+The candidate image is named `ghcr.io/0865marc/marc-portfolio`, tagged as `sha-<full-commit>`, smoke-tested by immutable digest before attestation, and recorded in the workflow summary. Production promotion must select the digest, not a mutable tag. GitHub Actions receives only `contents: read` by default; the candidate job alone receives `packages: write`, `id-token: write`, and `attestations: write`.
 
-The workflow does not deploy, connect to the VPS, or receive production secrets. The image serves the generated Astro site through the container-only Nginx configuration at `ops/nginx/container.conf` on port 8080. It includes a healthcheck and is tested with `scripts/verify-container-image.sh` before publication.
+The workflow does not deploy, connect to the VPS, or receive production secrets. The image serves the generated Astro site through the container-only Nginx configuration at `ops/nginx/container.conf` on port 8080. It includes a healthcheck; pull requests test a local production build, while successful `main` runs also test the exact published digest before provenance attestation.
 
 ## Required GitHub settings
 
@@ -32,10 +32,9 @@ Run the repository CI gate locally:
 
 ```sh
 npm ci --no-audit --no-fund
-npm run codegraph:init # only when .codegraph/ is absent
 npm run verify
-npx playwright install chromium
-npm run test:e2e -- --project=chromium --project=chromium-mobile-320 --project=chromium-mobile-375 --project=chromium-768 --project=chromium-1024 --project=chromium-1440 --project=chromium-js-off --project=chromium-reduced-motion
+npx playwright install chromium firefox webkit
+npm run test:e2e
 ```
 
 Build and smoke-test the candidate container:

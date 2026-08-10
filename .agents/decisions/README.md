@@ -4,7 +4,7 @@ This directory holds concise accepted ADRs for durable choices that are not obvi
 
 ## When an ADR is warranted
 
-Create an ADR only when an independently reviewed knowledge delta sets `adr_needed: true`, for example when changing a stable route/data contract, source-of-truth boundary, deployment architecture, index schema, or design-system rule with meaningful alternatives.
+Create an ADR only when an independently reviewed knowledge delta sets `adr_needed: true`, for example when changing a stable route/data contract, source-of-truth boundary, deployment architecture, or design-system rule with meaningful alternatives.
 
 Do not create ADRs for routine implementation details, temporary experiments, or restatements of source code.
 

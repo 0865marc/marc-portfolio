@@ -6,8 +6,8 @@ Completed implementation does not automatically change project knowledge. Every 
 
 1. Copy `knowledge-delta.template.yaml` to `tasks/reviews/<task-id>.yaml` only when a durable change is proposed. If nothing reusable changed, keep all arrays empty and state that in the implementation handoff instead of creating noise.
 2. Set `task_id`, a one-line `summary`, and only the affected fields under `knowledge_delta`.
-3. Reference project-relative paths, headings, and source symbol names. Do not persist machine-local CodeGraph node identifiers.
-4. Leave `review_status: pending`, `reviewed_by`, `reviewed_at`, and `reindex_approved` for the independent reviewer.
+3. Reference project-relative paths, headings, and source symbol names.
+4. Leave `review_status: pending`, `reviewed_by`, and `reviewed_at` for the independent reviewer.
 
 Each node entry should be a small object such as:
 
@@ -26,9 +26,9 @@ The reviewer must:
 
 1. Compare every proposed fact with current source, tests, policy, or observed behaviour.
 2. Reject duplicate, speculative, task-specific, sensitive, or already-obvious detail.
-3. Set `review_status` to `approved` or `rejected`, add reviewer identity/date, and set `reindex_approved` only when approved authored changes were actually applied.
+3. Set `review_status` to `approved` or `rejected`, and add reviewer identity/date.
 4. For approved changes, update only the smallest relevant context/domain/ADR/DESIGN section.
-5. Synchronize CodeGraph after source changes and run the authored-knowledge validation commands. The local index itself is not review evidence.
+5. Run the authored-knowledge validation commands after source changes. Validation output is evidence, but the current application source remains authoritative.
 
 ## Bounded storage rules
 
@@ -37,6 +37,5 @@ The reviewer must:
 - Use empty arrays instead of placeholder prose.
 - Do not copy application source into knowledge notes.
 - Deprecate or supersede stale knowledge; do not silently preserve contradictions.
-- CodeGraph never approves its own inputs, and its machine-local identifiers are not durable knowledge references.
 
 The template is intentionally simple YAML so humans and tools can inspect it without a new dependency.

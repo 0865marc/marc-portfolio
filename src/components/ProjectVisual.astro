@@ -1,0 +1,24 @@
+---
+import AinkiiModel from './AinkiiModel.astro'
+
+interface Props {
+  kind: 'ainkii' | 'hermes'
+}
+
+const { kind } = Astro.props
+---
+
+{kind === 'ainkii' ? (
+  <AinkiiModel compact />
+) : (
+  <div class="hermes-model">
+    <div class="hermes-flow">
+      <div><span>Interfaz</span><strong>Telegram</strong></div>
+      <span aria-hidden="true">↔</span>
+      <div class="hermes-core"><span>Agente</span><strong>Hermes · 24/7</strong></div>
+      <span aria-hidden="true">↔</span>
+      <div><span>Acción</span><strong>Herramientas de desarrollo</strong></div>
+    </div>
+    <div class="hermes-gate"><span aria-hidden="true">◇</span> Supervisión y aprobación humana</div>
+  </div>
+)}

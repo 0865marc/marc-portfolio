@@ -1,4 +1,53 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro'; import HeroSection from '../components/HeroSection.astro'; import MarqueeSection from '../components/MarqueeSection.astro'; import AboutSection from '../components/AboutSection.astro'; import ServicesSection from '../components/ServicesSection.astro'; import BlogSection from '../components/BlogSection.astro'; import ProjectsSection from '../components/ProjectsSection.astro'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import HeroSection from '../components/HeroSection.astro'
+import JourneyStrip from '../components/JourneyStrip.astro'
+import AboutSection from '../components/AboutSection.astro'
+import CapabilitiesSection from '../components/CapabilitiesSection.astro'
+import BlogSection from '../components/BlogSection.astro'
+import ProjectsSection from '../components/ProjectsSection.astro'
+import { professionalProfile } from '../data/portfolio'
+
+const { identity, education, technicalProfile, contacts } = professionalProfile
+const canonicalUrl = new URL('/', Astro.site).href
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: identity.fullName,
+  url: canonicalUrl,
+  jobTitle: identity.headline,
+  description: identity.summary,
+  homeLocation: { '@type': 'Place', name: identity.location },
+  alumniOf: {
+    '@type': 'CollegeOrUniversity',
+    name: education.institution,
+  },
+  knowsAbout: technicalProfile.flatMap(group => group.items),
+  sameAs: [contacts.linkedin],
+}
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: `Portfolio de ${identity.fullName}`,
+  url: canonicalUrl,
+  inLanguage: 'es',
+  author: { '@type': 'Person', name: identity.fullName },
+}
 ---
-<BaseLayout title="Marc — Director de proyectos y desarrollador fullstack" description="Portfolio de Marc Teixidó: desarrollo fullstack, plataformas IoT, infraestructura y dirección técnica."><main><HeroSection/><MarqueeSection/><AboutSection/><ServicesSection/><BlogSection/><ProjectsSection/></main></BaseLayout>
+
+<BaseLayout
+  title="Marc Teixidó Rosauro — Software Engineer · IT Project Lead · AI & Automation"
+  description="Portfolio de Marc Teixidó Rosauro: software, proyectos IT, datos, automatización e IA aplicada. Ainkii, Hermes y una trayectoria de la ingeniería a la coordinación técnica."
+  canonicalPath="/"
+  jsonLd={[personJsonLd, websiteJsonLd]}
+>
+  <main>
+    <HeroSection />
+    <JourneyStrip />
+    <AboutSection />
+    <CapabilitiesSection />
+    <ProjectsSection>
+      <BlogSection slot="notes" />
+    </ProjectsSection>
+  </main>
+</BaseLayout>

@@ -1,10 +1,33 @@
-# Gestión del blog
+# Fuentes de contenido público
 
-Los contenidos visibles de la sección `Blog` se administran en `src/data/blog.ts`. El índice y las páginas de detalle se generan desde el mismo array tipado: no hay un panel de administración, no se escriben archivos desde el navegador y un sitio ya desplegado no cambia hasta que el contenido sigue el flujo aprobado de publicación.
+El portfolio usa datos TypeScript estáticos y revisables. No hay CMS, API, base de datos ni contenido generado en tiempo de ejecución. Un cambio solo llega a producción después del flujo independiente de implementación y release del repositorio.
 
-## Modelo de una entrada
+## Perfil profesional
 
-Cada `BlogPost` contiene estos campos:
+`src/data/portfolio.ts` es la fuente pública de verdad sobre Marc. `professionalProfile` conserva:
+
+- identidad, ubicación y posicionamiento;
+- trayectoria y métricas con contexto;
+- empresas, puestos, fechas, responsabilidades, tecnologías e IA aplicada;
+- capacidades técnicas y profesionales;
+- formación e idiomas;
+- los proyectos Ainkii y Hermes;
+- contactos ya públicos;
+- reglas explícitas para no inferir información ausente.
+
+`professionalProfile.source.id` establece la procedencia del perfil completo. Las entidades que pueden consumirse de forma independiente (`Experience`, `Project` y `BlogPost`) repiten `sourceId`; los hechos, capacidades, habilidades, formación, idiomas y fortalezas anidados heredan la procedencia del perfil raíz. El contenido visible puede resumir esos datos para mantener una página legible, pero no debe crear una biografía paralela ni añadir una cifra, tecnología, empresa, resultado, certificación o nivel profesional que no exista en la fuente.
+
+Esta estructura está preparada para que un futuro chatbot pueda reutilizarla, pero el repositorio no implementa todavía recuperación, prompts, API ni interfaz conversacional. Un consumidor futuro debe:
+
+1. consultar únicamente información marcada como pública;
+2. respetar nombres canónicos y alias (`Ainkii` es el nombre público; `Ainki` solo un alias histórico);
+3. responder que el dato no consta cuando falte evidencia;
+4. no convertir textos editoriales en métricas o resultados;
+5. conservar los límites de posicionamiento e idiomas definidos en `knowledgePolicy`.
+
+## Notas publicadas
+
+`src/data/blog.ts` contiene el archivo público. Cada `BlogPost` tiene este contrato:
 
 ```ts
 {
@@ -13,84 +36,49 @@ Cada `BlogPost` contiene estos campos:
   tags: string[]
   title: string
   excerpt: string
-  isSample: boolean
+  publishedAt: string
+  sourceId: typeof PROFILE_SOURCE_ID
   introduction: string[]
   sections: {
     heading: string
     paragraphs: string[]
     points?: string[]
-    commands?: string[]
   }[]
   takeaway: string[]
 }
 ```
 
-- `id`: identificador único, estable y público. Debe cumplir `^[a-z0-9]+(?:-[a-z0-9]+)*$`. Es el slug de la ruta y no debe cambiar al editar el título o el contenido.
-- `category`: categoría visible en la tarjeta y en el detalle.
-- `tags`: etiquetas visibles para describir y filtrar la entrada. Debe contener valores estables, no vacíos y sin duplicados dentro de la misma entrada.
-- `title`: título visible de la entrada.
-- `excerpt`: resumen breve visible en la tarjeta y como introducción destacada del detalle.
-- `isSample`: indica si el detalle debe mostrar `Artículo de muestra`.
-- `introduction`: dos o más párrafos introductorios completos.
-- `sections`: secciones ordenadas con encabezados únicos dentro de la entrada. Cada sección renderiza sus párrafos y, opcionalmente, una lista semántica de `points` y grupos `commands` en bloques `<pre><code>`.
-- `takeaway`: uno o más párrafos de cierre. La interfaz muestra el encabezado fijo `Idea final`.
+- `id` es un slug único y estable con formato `^[a-z0-9]+(?:-[a-z0-9]+)*$`.
+- `publishedAt` usa `YYYY-MM-DD`.
+- `sourceId` identifica la procedencia factual del contenido.
+- `tags`, `title` y `excerpt` alimentan las tarjetas y el filtrado futuro.
+- `introduction`, `sections` y `takeaway` forman el artículo semántico.
 
-La posición de la entrada en `blogPosts` determina el orden del índice. La landing usa `blogPosts.slice(0, 3)`: una entrada añadida al principio se presenta como la más reciente, mientras que añadirla al final conserva los destacados actuales. Los identificadores existentes son:
+La landing y `/blog/` muestran únicamente `blogPosts`. Los filtros interactivos aparecen cuando el tamaño del archivo hace que aporten valor; con una colección pequeña se renderiza una lista directa y completamente usable sin JavaScript.
 
-- `hermes-agent-hetzner-instalacion-segura`
-- `arquitecturas-plataformas-iot`
-- `rabbitmq-celery-procesos-pesados`
-- `infraestructura-distribuida-latencia`
+`legacyBlogRoutes` conserva slugs históricos cuyos cuerpos de muestra se retiraron. Esas rutas generan documentos `noindex` con retorno explícito al archivo: no vuelven a publicar el contenido genérico y tampoco dejan un enlace histórico sin salida.
 
-## Rutas públicas
+## Rutas
 
-Astro genera rutas de directorio estáticas y canónicas:
+- `/#blog`: sección de notas en la landing.
+- `/blog/`: archivo público.
+- `/blog/<id>/`: detalle canónico generado en build.
+- `/blog/<id>/?from=landing|index`: conserva el origen del enlace de vuelta.
+- `/#/blog...`: compatibilidad progresiva con bookmarks antiguos.
 
-- `/#blog`: sección Blog de la landing.
-- `/blog/`: índice con todas las entradas.
-- `/blog/<id>/`: detalle generado en build con el `id` codificado mediante `encodeURIComponent`.
-- `/blog/<id>/?from=landing|index`: conserva un enlace explícito al origen.
+## Editar y verificar
 
-Un pequeño script progresivo conserva los antiguos `/#/blog...` bookmarks y los reemplaza por la ruta canónica. Un `id` eliminado o desconocido llega al 404 real del servidor; no existe fallback SPA. La publicación verifica el índice, cada documento generado, los assets y `404.html`.
-Un detalle abierto directamente sin `from`, con un valor desconocido o desde un enlace antiguo usa el índice del Blog como origen predeterminado. El origen forma parte del hash para que el enlace de vuelta también funcione al abrir el artículo en una pestaña nueva; no depende de `history.back()`.
+Al añadir una nota, usa un ID nuevo, conserva la procedencia factual y completa el contenido en español. Al editarla, no cambies el ID. Al retirar una ruta conocida, muévela a `legacyBlogRoutes` en lugar de reutilizar el slug para otro tema.
 
-## Crear una entrada
+La verificación mínima es:
 
-Añade a `blogPosts` un objeto completo con un identificador nuevo, único y estable. Completa todos los campos, escribe el contenido en español y elige su posición conscientemente según deba aparecer o no entre los tres destacados de la landing:
-
-```ts
-{
-  id: 'identificador-unico-estable',
-  category: 'Categoría',
-  tags: ['Etiqueta principal', 'Otra etiqueta'],
-  title: 'Título',
-  excerpt: 'Resumen breve en español',
-  isSample: false,
-  introduction: ['Primer párrafo.', 'Segundo párrafo.'],
-  sections: [
-    {
-      heading: 'Sección',
-      paragraphs: ['Primer párrafo de la sección.', 'Segundo párrafo de la sección.'],
-      points: ['Punto opcional.'],
-      commands: ['comando --con-opcion'],
-    },
-  ],
-  takeaway: ['Idea de cierre.'],
-},
+```sh
+npm run check
+npm run test:unit
+npm run build
+npm run test:static
+npm run test:e2e
+git diff --check
 ```
 
-Crear, editar y eliminar son operaciones de repositorio. No existe CRUD en tiempo de ejecución, backend, CMS, panel, autenticación, `localStorage` ni programación de publicaciones.
-
-## Editar una entrada
-
-Modifica `category`, `tags`, `title`, `excerpt`, `isSample` o los campos de contenido en el mismo objeto, pero conserva su `id` para no romper enlaces copiados. Mantén los encabezados de `sections` únicos y el orden que deba leer el usuario.
-
-## Eliminar una entrada
-
-Elimina el objeto completo de `blogPosts`. Las tarjetas desaparecen automáticamente del índice y de la landing cuando corresponda. Los enlaces antiguos a su `id` muestran la vista honesta de artículo no encontrado.
-
-## Verificar el contenido y publicar
-
-Desde la raíz del proyecto, ejecuta la comprobación de rutas, la comprobación de integridad de datos, `npm run build` y `git diff --check`. Revisa también los hashes directos, la navegación del navegador, el foco y el desbordamiento en las vistas requeridas.
-
-La publicación requiere el flujo de revisión, commit y despliegue aprobado por separado para el proyecto. Este archivo y `blog.ts` no ofrecen una interfaz de publicación ni mutan un sitio en producción por sí mismos.
+La publicación, el commit y el despliegue pertenecen a gates posteriores; los archivos de datos no conceden esa autoridad.

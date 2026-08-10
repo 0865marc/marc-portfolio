@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 ---
 
-<BaseLayout title="Página no encontrada — Marc Teixidó" description="La página solicitada no existe.">
+<BaseLayout title="Página no encontrada — Marc Teixidó" description="La página solicitada no existe." canonicalPath={null} robots="noindex,follow">
   <main class="flex min-h-[100svh] items-center px-5 py-16 sm:px-8">
     <div class="surface-light mx-auto w-full max-w-4xl overflow-hidden rounded-[40px] bg-white p-8 text-[#0C0C0C] sm:p-14">
       <div class="grid gap-10 md:grid-cols-[11rem_minmax(0,1fr)]">
@@ -10,10 +10,10 @@ import BaseLayout from '../layouts/BaseLayout.astro'
         <div class="min-w-0">
           <p class="section-kicker">Ruta sin salida</p>
           <h1 data-route-heading tabindex="-1" class="mt-5 break-words text-[clamp(2.25rem,6.5vw,5rem)] font-black uppercase leading-none tracking-[-.025em]">Página no encontrada</h1>
-          <p class="mt-8 max-w-2xl text-xl font-light leading-relaxed text-black/70">Esta dirección no existe o ha cambiado. Puedes volver al portfolio o seguir explorando las notas técnicas.</p>
+          <p class="mt-8 max-w-2xl text-xl font-light leading-relaxed text-black/70">Esta dirección no existe o ha cambiado. Puedes volver al portfolio, conocer Ainkii o seguir explorando el blog.</p>
           <div class="mt-9 flex flex-wrap gap-3">
             <a class="button-dark" href="/">Ir al portfolio <span aria-hidden="true">↗</span></a>
-            <a class="control" href="/blog/">Explorar el blog</a>
+            <a class="control" href="/proyectos/ainkii/">Conocer Ainkii</a>
           </div>
         </div>
       </div>

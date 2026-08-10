@@ -24,4 +24,3 @@ knowledge_delta:
       evidence: ".agents/domains/blog.md:7; src/data/blog.ts:19-224"
 reviewed_by: ""
 reviewed_at: null
-reindex_approved: false

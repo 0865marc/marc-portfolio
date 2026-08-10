@@ -14,9 +14,6 @@
 2. Application source and configuration define current behaviour.
 3. Accepted ADRs and [DESIGN.md](../DESIGN.md) define reviewed cross-cutting decisions.
 4. Curated context and domain notes in `.agents/` are navigation aids. If they disagree with source, treat them as stale and flag a knowledge delta.
-5. `.codegraph/` is a disposable, machine-local code projection, not a source of truth; application source wins over index results.
-
-`.workflow/` contains historical and in-flight work artifacts. CodeGraph excludes both `.workflow/` and `.agents/` deliberately; reusable facts enter `.agents/` only through independent review.
 
 ## Stack
 
@@ -36,6 +33,6 @@ Visible product copy is Spanish. The portfolio presents Marc as a project direct
 - Production promotion requires independent review and explicit approval of an immutable image digest.
 - Do not infer commit, push, merge, or deployment permission.
 - Do not edit environment/credential files or production data.
-- Preserve unrelated working-tree and workflow history.
+- Preserve unrelated working-tree changes and artifacts.
 - Normal repository verification is `npm run verify`; `npm run build` is the narrower application-build gate.
-- Knowledge-index verification is documented in [the `.agents` README](../README.md).
+- Authored-knowledge verification is documented in [the `.agents` README](../README.md).

@@ -45,4 +45,4 @@ The generated documents contain all portfolio and blog content. Images and decor
 
 ## Build boundary
 
-`npm run build` runs `astro check` and produces Astro directory-format static output in `dist/`. `npm run verify` adds TypeScript, unit, static-output, asset-budget, agent-knowledge, and workflow-contract checks. Generated `dist/`, `.astro/`, reports, and `*.tsbuildinfo` are not authored knowledge and are excluded from the project index.
+`npm run build` runs `astro check` and produces Astro directory-format static output in `dist/`. `npm run verify` adds TypeScript, unit, static-output, asset-budget, and authored-knowledge checks. Generated `dist/`, `.astro/`, reports, and `*.tsbuildinfo` are not authored knowledge and are excluded from source documentation.

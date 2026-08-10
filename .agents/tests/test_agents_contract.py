@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import importlib.util
-import json
 import sys
 import tempfile
 import unittest
@@ -9,7 +8,6 @@ from pathlib import Path
 
 
 AGENTS_ROOT = Path(__file__).parents[1]
-PROJECT_ROOT = AGENTS_ROOT.parent
 DESIGN_VALIDATOR_PATH = AGENTS_ROOT / "scripts" / "validate_design.py"
 
 DESIGN_SPEC = importlib.util.spec_from_file_location(
@@ -22,14 +20,7 @@ sys.modules[DESIGN_SPEC.name] = validate_design
 DESIGN_SPEC.loader.exec_module(validate_design)
 
 
-class CodeGraphContractTests(unittest.TestCase):
-    def test_local_index_is_ignored_and_non_code_history_is_excluded(self) -> None:
-        config = json.loads((PROJECT_ROOT / "codegraph.json").read_text(encoding="utf-8"))
-        gitignore = (PROJECT_ROOT / ".gitignore").read_text(encoding="utf-8").splitlines()
-
-        self.assertEqual(config["exclude"], [".agents/", ".workflow/"])
-        self.assertIn(".codegraph/", gitignore)
-
+class KnowledgeLayerContractTests(unittest.TestCase):
     def test_retired_manual_index_files_are_absent(self) -> None:
         retired_paths = (
             AGENTS_ROOT / "generated",
