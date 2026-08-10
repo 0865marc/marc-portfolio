@@ -2,7 +2,7 @@
 
 ## Source of truth
 
-Repository candidate policy is defined by [`.workflow/policy.yaml`](../../.workflow/policy.yaml) and [`ops/ci-candidates.md`](../../ops/ci-candidates.md). Private production policy and deployer configuration are deliberately outside the public repository. This note is a map, not deployment authorization.
+Repository candidate policy is defined by [`ops/ci-candidates.md`](../../ops/ci-candidates.md). Private production policy and deployer configuration are deliberately outside the public repository. This note is a map, not deployment authorization.
 
 ## Current contract
 
@@ -21,5 +21,3 @@ Repository candidate policy is defined by [`.workflow/policy.yaml`](../../.workf
 4. Record the image digest from the workflow summary.
 5. Use a separate private release process to approve and promote that exact digest.
 6. Verify production independently after promotion.
-
-CodeGraph indexing is local and has no deployment effect. `.codegraph/` is ignored, must not be published, and is not an application release artifact or deployment input.

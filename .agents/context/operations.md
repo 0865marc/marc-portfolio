@@ -14,9 +14,3 @@ This repository contains application source, verification, and a production-cand
 - CI never connects to or deploys production.
 
 Production promotion belongs to a private deployer. It must consume an explicitly approved digest and produce independent post-deploy evidence. Repository files and role labels do not grant that authority.
-
-## Knowledge-index operations
-
-CodeGraph stores its machine-local database under the ignored `.codegraph/` directory. `codegraph.json` excludes `.agents/` and `.workflow/` so code navigation concentrates on implemented source rather than curated notes or execution history. Run `npm run codegraph:init` once per checkout, `npm run codegraph:sync` after source changes, and `npm run codegraph:status` when diagnosing index health. Do not publish, deploy, or treat the local database as evidence or source authority.
-
-The project pins the CLI development dependency for repeatable indexing and shell queries. Codex MCP registration is a separate one-time user-level installation because Codex does not support project-local MCP registration; restarting Codex is required after that registration.

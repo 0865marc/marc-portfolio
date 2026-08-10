@@ -6,7 +6,6 @@ Portfolio profesional y blog técnico construido con Astro y TypeScript. La apli
 
 ```sh
 npm ci
-npm run codegraph:init
 npm run dev
 ```
 

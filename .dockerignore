@@ -1,9 +1,7 @@
 .astro
 .agents
-.codegraph
 .git
 .github
-.workflow
 dist
 lighthouse-results*
 node_modules

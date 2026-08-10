@@ -37,9 +37,6 @@ jobs:
       - name: Install locked dependencies
         run: npm ci --no-audit --no-fund
 
-      - name: Initialize the disposable CodeGraph index
-        run: npm run codegraph:init
-
       - name: Run the repository gate
         run: npm run verify
 

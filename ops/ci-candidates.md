@@ -32,7 +32,6 @@ Run the repository CI gate locally:
 
 ```sh
 npm ci --no-audit --no-fund
-npm run codegraph:init # only when .codegraph/ is absent
 npm run verify
 npx playwright install chromium
 npm run test:e2e -- --project=chromium --project=chromium-mobile-320 --project=chromium-mobile-375 --project=chromium-768 --project=chromium-1024 --project=chromium-1440 --project=chromium-js-off --project=chromium-reduced-motion

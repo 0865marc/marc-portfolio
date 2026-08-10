@@ -179,4 +179,3 @@ Color, position, motion, or hover must never be the only state indicator. New lo
 - Copy desktop spacing to mobile or force horizontal card/filter rows.
 - Hide content behind animation, hover, remote imagery, or precise pointer input.
 - Add a new radius, color, or typography role when an existing token expresses the same purpose.
-- Treat CodeGraph results as design authority; source plus reviewed `DESIGN.md` remain authoritative.
