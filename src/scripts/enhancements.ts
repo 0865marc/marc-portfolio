@@ -1,16 +1,5 @@
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
 
-const markBrokenImage = (image: HTMLImageElement) => {
-  image.style.opacity = '0'
-  image.dataset.failed = 'true'
-  image.closest<HTMLElement>('[data-image-frame]')?.classList.add('image-failed')
-}
-
-document.querySelectorAll<HTMLImageElement>('[data-image-fallback]').forEach(image => {
-  image.addEventListener('error', () => markBrokenImage(image), { once: true })
-  if (image.complete && !image.naturalWidth) markBrokenImage(image)
-})
-
 const reveal = (element: HTMLElement) => {
   if (element.classList.contains('revealed')) return
   element.classList.add('revealed')
@@ -50,7 +39,6 @@ const readingProgress = document.querySelector<HTMLElement>('[data-reading-progr
 const articleIndex = document.querySelector<HTMLElement>('[data-article-index]')
 const floatingIndex = document.querySelector<HTMLElement>('[data-floating-index]')
 if (readingRoot && readingProgress) {
-  const readingLayout = readingRoot.closest<HTMLElement>('.article-reading-layout')
   let scheduled = false
   const articleSections = [...readingRoot.querySelectorAll<HTMLElement>('[data-article-section]')]
   const floatingLinks = floatingIndex
@@ -67,7 +55,6 @@ if (readingRoot && readingProgress) {
       const indexBounds = articleIndex.getBoundingClientRect()
       const articleBounds = readingRoot.getBoundingClientRect()
       const showFloatingIndex = innerWidth >= 1280 && indexBounds.bottom < 24 && articleBounds.bottom > 160
-      readingLayout?.classList.toggle('has-floating-index', showFloatingIndex)
       floatingIndex.classList.toggle('is-visible', showFloatingIndex)
       floatingIndex.setAttribute('aria-hidden', String(!showFloatingIndex))
       floatingIndex.inert = !showFloatingIndex

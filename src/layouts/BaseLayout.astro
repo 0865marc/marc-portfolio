@@ -1,22 +1,73 @@
 ---
+import '@fontsource/kanit/300.css'
+import '@fontsource/kanit/400.css'
+import '@fontsource/kanit/500.css'
+import '@fontsource/kanit/900.css'
 import '../index.css'
-interface Props { title: string; description: string; routeHeading?: boolean }
-const { title, description } = Astro.props
-const canonical = new URL(Astro.url.pathname, Astro.site)
+
+type JsonLd = Record<string, unknown>
+
+interface Props {
+  title: string
+  description: string
+  canonicalPath?: string | null
+  type?: 'website' | 'article'
+  imagePath?: string
+  imageAlt?: string
+  robots?: string
+  jsonLd?: JsonLd | JsonLd[]
+  redirectTo?: string
+}
+
+const {
+  title,
+  description,
+  canonicalPath,
+  type = 'website',
+  imagePath = '/og-card.png',
+  imageAlt = 'Marc Teixidó Rosauro — Software Engineer, IT Project Lead, AI & Automation',
+  robots = 'index,follow,max-image-preview:large',
+  jsonLd = [],
+  redirectTo,
+} = Astro.props
+const canonical = canonicalPath === null ? null : new URL(canonicalPath ?? Astro.url.pathname, Astro.site)
+const socialImage = new URL(imagePath, Astro.site)
+const jsonLdEntries = Array.isArray(jsonLd) ? jsonLd : [jsonLd]
+const serializeJsonLd = (value: JsonLd) => JSON.stringify(value).replaceAll('<', '\\u003c')
 ---
+
 <!doctype html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0C0C0C" />
+    <meta name="author" content="Marc Teixidó Rosauro" />
     <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="canonical" href={canonical} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=optional" rel="stylesheet" />
+    {canonical && <link rel="canonical" href={canonical} />}
+
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content="Marc Teixidó Rosauro" />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <meta name="twitter:image:alt" content={imageAlt} />
+    {redirectTo && <meta http-equiv="refresh" content={`0;url=${redirectTo}`} />}
+
     <title>{title}</title>
+    {jsonLdEntries.map(entry => <script is:inline type="application/ld+json" set:html={serializeJsonLd(entry)} />)}
     <script is:inline>
       document.documentElement.classList.add('js')
       if (location.pathname === '/') {

@@ -1,0 +1,58 @@
+schema_version: 1
+task_id: "20260810T090658Z-complete-professional-portfolio"
+review_status: pending
+summary: "Record the factual profile source, Ainkii project route, curated notes inventory and local production metadata."
+knowledge_delta:
+  added_nodes:
+    - path: "src/data/portfolio.ts"
+      symbol: "professionalProfile"
+      fact: "One typed public source owns Marc's identity, experience, capabilities, education, languages, projects, provenance and no-inference rules."
+      evidence: "src/data/portfolio.ts; tests/unit/profile.test.ts"
+    - path: "src/pages/proyectos/ainkii.astro"
+      fact: "Ainkii has a canonical static case-study route explaining its educational hierarchy, editorial-copilot capabilities, human-validation boundary and in-development status."
+      evidence: "src/pages/proyectos/ainkii.astro; tests/static-output.test.ts"
+    - path: "src/pages/sitemap.xml.ts"
+      symbol: "GET"
+      fact: "The static build emits a sitemap containing only current canonical public routes, alongside an authored robots policy and local social artwork."
+      evidence: "src/pages/sitemap.xml.ts; public/robots.txt; src/layouts/BaseLayout.astro"
+  changed_nodes:
+    - path: "src/pages/index.astro"
+      fact: "Landing composition is Hero, journey strip, profile/experience, capabilities, projects, notes and contact."
+      evidence: "src/pages/index.astro; src/components/ProjectsSection.astro"
+    - path: "src/data/portfolio.ts"
+      symbol: "projects"
+      fact: "The selected personal projects are Ainkii as flagship and Hermes as the supervised-autonomy case."
+      evidence: "src/data/portfolio.ts; src/components/ProjectsSection.astro"
+    - path: "src/data/blog.ts"
+      symbol: "blogPosts"
+      fact: "The public notes collection contains one source-backed Hermes article; three previous sample IDs are retained only as noindex legacy routes."
+      evidence: "src/data/blog.ts; src/pages/blog/[id].astro"
+    - path: "ops/nginx/container.conf"
+      fact: "The production runtime serves known retired note paths as HTTP 308 redirects while the static documents remain noindex fallbacks for non-Nginx hosts."
+      evidence: "ops/nginx/container.conf; scripts/verify-container-image.sh"
+    - path: ".github/workflows/ci.yml"
+      fact: "Pull requests, main pushes and manual runs execute cross-browser regression coverage and a production-container smoke job; only successful main pushes publish a GHCR candidate."
+      evidence: ".github/workflows/ci.yml; ops/ci-candidates.md"
+  deprecated_nodes:
+    - path: "src/components/MarqueeSection.astro"
+      fact: "The third-party animated image marquee and remote project screenshots are no longer part of the landing experience."
+      evidence: "src/components/JourneyStrip.astro; src/components/ProjectVisual.astro"
+  adr_needed: false
+  adr_reason: "The implementation extends the existing typed-static-content and Astro SSG boundaries without introducing a new subsystem."
+  design_changed: false
+  design_notes: "The implementation preserves the reviewed palette, Kanit typography, rounded scale, editorial hierarchy and restrained motion while replacing remote media with code-native diagrams."
+  stale_knowledge:
+    - path: ".agents/context/architecture.md"
+      fact: "The landing order, profile data source and route inventory need to include the journey, reordered projects/notes and the Ainkii route."
+      evidence: "src/pages/index.astro; src/pages/proyectos/ainkii.astro; src/data/portfolio.ts"
+    - path: ".agents/domains/portfolio.md"
+      fact: "The source map, anchor labels, selected projects and capability component names no longer match the implemented landing."
+      evidence: "src/components/HeroSection.astro; src/components/CapabilitiesSection.astro; src/components/ProjectsSection.astro"
+    - path: ".agents/domains/blog.md"
+      fact: "The current-entry summary and sample-content contract no longer match the curated public note plus legacy-route model."
+      evidence: "src/data/blog.ts; src/pages/blog/[id].astro"
+    - path: ".agents/domains/release.md"
+      fact: "The pull-request gate now includes cross-browser coverage and an independent production-container smoke job."
+      evidence: ".github/workflows/ci.yml; ops/ci-candidates.md"
+reviewed_by: ""
+reviewed_at: null

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">Marc Teixidó Rosauro</title>
+  <desc id="description">Software Engineer, IT Project Lead, AI and Automation</desc>
+  <defs>
+    <linearGradient id="type" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#646973" />
+      <stop offset="1" stop-color="#BBCCD7" />
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1A1724" />
+      <stop offset="1" stop-color="#334554" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#0C0C0C" />
+  <rect x="50" y="50" width="1100" height="530" rx="42" fill="none" stroke="#D7E2EA" stroke-opacity=".24" />
+  <text x="88" y="103" fill="#D7E2EA" fill-opacity=".68" font-family="Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="4">PORTFOLIO · BALAGUER, LLEIDA</text>
+  <text x="86" y="290" fill="url(#type)" font-family="Arial Black, Arial, sans-serif" font-size="142" font-weight="900" letter-spacing="-7">MARC</text>
+  <text x="86" y="426" fill="url(#type)" font-family="Arial Black, Arial, sans-serif" font-size="142" font-weight="900" letter-spacing="-7">TEIXIDÓ</text>
+  <rect x="822" y="116" width="268" height="154" rx="28" fill="url(#panel)" stroke="#D7E2EA" stroke-opacity=".2" />
+  <text x="852" y="157" fill="#D7E2EA" fill-opacity=".62" font-family="Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="3">PROYECTO INSIGNIA</text>
+  <text x="852" y="211" fill="#D7E2EA" font-family="Arial Black, Arial, sans-serif" font-size="43" font-weight="900">AINKII</text>
+  <text x="852" y="236" fill="#D7E2EA" fill-opacity=".7" font-family="Arial, sans-serif" font-size="14">Educación · IA aplicada</text>
+  <text x="852" y="257" fill="#D7E2EA" fill-opacity=".7" font-family="Arial, sans-serif" font-size="14">Validación humana</text>
+  <line x1="88" y1="475" x2="1112" y2="475" stroke="#D7E2EA" stroke-opacity=".2" />
+  <text x="88" y="522" fill="#D7E2EA" font-family="Arial, sans-serif" font-size="23" font-weight="700" letter-spacing="2">SOFTWARE ENGINEER · IT PROJECT LEAD</text>
+  <text x="88" y="553" fill="#D7E2EA" fill-opacity=".7" font-family="Arial, sans-serif" font-size="19" letter-spacing="3">AI &amp; AUTOMATION</text>
+</svg>
