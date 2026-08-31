@@ -2,36 +2,26 @@
 
 ## Entry and route selection
 
-Astro pages under [`src/pages/`](../../src/pages/) emit directory-format static documents for `/`, `/blog/`, every known `/blog/<id>/`, and `/404.html`. [`src/layouts/BaseLayout.astro`](../../src/layouts/BaseLayout.astro) owns shared metadata, global CSS, canonical URLs, and the narrow inline redirect that translates legacy blog hashes before rendering.
+Astro pages under [`src/pages/`](../../src/pages/) emit directory-format static documents for `/`, `/roadmap/`, `/career-sprint-daily/`, every published `/career-sprint-daily/<YYYY-MM-DD>/`, `/blog/`, every published `/blog/<id>/`, `/proyectos/ainkii/`, the sitemap, and `/404.html`. [`src/layouts/BaseLayout.astro`](../../src/layouts/BaseLayout.astro) owns shared metadata, global CSS, canonical URLs and focus restoration.
 
-[`src/lib/blogRoutes.ts`](../../src/lib/blogRoutes.ts) is the URL contract:
+[`src/lib/blogRoutes.ts`](../../src/lib/blogRoutes.ts) preserves article URLs. [`src/lib/challengeRoutes.ts`](../../src/lib/challengeRoutes.ts) builds the roadmap and daily-progress URLs. Unknown server paths use the designed `404.html` response through container Nginx.
 
-- `/#blog` remains the landing-page anchor.
-- `/blog/` is the canonical blog index.
-- `/blog/<encoded-id>/?from=landing|index` is the canonical article route and preserves the return destination.
-- Legacy `/#/blog` and `/#/blog/<encoded-id>?from=...` addresses redirect to their canonical static equivalents.
-- Unknown server paths use the designed `404.html` response through the container Nginx configuration.
-
-[`src/scripts/navigation.ts`](../../src/scripts/navigation.ts) restores route-heading and hash-target focus without owning routing. Preserve canonical paths, legacy translations, source values, and focus semantics unless an accepted ADR supersedes them.
+[`src/scripts/navigation.ts`](../../src/scripts/navigation.ts) restores route-heading and hash-target focus without owning routing. Home navigation exposes `#about`, `#career-sprint` and `#contact`; `#progress` remains an active content anchor while the Home `#projects` and `#blog` sections remain temporarily hidden.
 
 ## Landing composition
 
-[`src/pages/index.astro`](../../src/pages/index.astro) composes the landing page in this order:
+`src/pages/index.astro` composes the Home surface in this order:
 
-1. `HeroSection`
-2. `MarqueeSection`
-3. `AboutSection`
-4. `ServicesSection`
-5. `BlogSection`
-6. `ProjectsSection`, including the contact footer
+1. `HeroSection` — visible profile, Career Sprint and contact navigation with profile framing.
+2. `AboutSection` — public profile and current location.
+3. `ProjectsSection` — owns the project/contact structure, rendering the named `career-sprint` slot before its hidden project block, hidden notes slot and Contacto.
+4. `CareerSprintSection` — supplied by `src/pages/index.astro` as `<CareerSprintSection slot="career-sprint" />`; its current block links to the roadmap and daily-progress routes.
 
-Astro components provide the structure, while most content comes from typed static data. [`src/data/portfolio.ts`](../../src/data/portfolio.ts) contains experience, service, project, and marquee records.
+## Knowledge and challenge flow
 
-## Blog flow
+[`src/data/blog.ts`](../../src/data/blog.ts) adapts managed knowledge JSON and exposes `blogPosts`. `BlogSection.astro` renders up to three articles on the landing; `BlogFilters.astro` renders the whole published collection at `/blog/`.
 
-[`src/data/blog.ts`](../../src/data/blog.ts) is the article source. `BlogSection.astro` renders the first three entries, `BlogFilters.astro` renders the complete collection with usable no-JavaScript content, and `[id].astro` statically emits one page per entry through `getStaticPaths`. `BlogCard.astro` is reused on landing and index routes.
-
-[`src/lib/blogFilters.ts`](../../src/lib/blogFilters.ts) normalizes Spanish diacritics, builds sorted unique tags, and requires every query term to match the combined title/excerpt/category/tag text. Filtering is client-side and has no remote loading state.
+[`src/data/challenge.ts`](../../src/data/challenge.ts) is the central adapter for `content/weeks/*.json`, `content/daily/*.json` and tag references. It validates the eight consecutive weeks, editorial states, dates, positions, totals, daily IDs and weekly/tag references before emitting published `challengeWeeks` and `dailyProgressEntries`. `roadmap/index.astro` renders all published weeks as a native-details ledger; `career-sprint-daily/index.astro` and `[date].astro` emit only published daily entries.
 
 ## Styling and interaction
 
@@ -41,8 +31,8 @@ Tailwind utility classes in Astro components carry most layout and visual values
 
 ## Data and service boundaries
 
-The generated documents contain all portfolio and blog content. Images and decorative media are remote URLs and hide failed decorative/project images without introducing a backend fallback. This repository has no API client, persistence layer, authentication, application server, or runtime server-side rendering.
+The generated documents contain all public portfolio, knowledge, roadmap and daily-progress content. The CMS edits JSON through GitHub branches and pull requests; it does not introduce a public application backend, database, API client or runtime server-side rendering. Draft and deleted content stays out of all public routes, JSON-LD and sitemap output.
 
 ## Build boundary
 
-`npm run build` runs `astro check` and produces Astro directory-format static output in `dist/`. `npm run verify` adds TypeScript, unit, static-output, asset-budget, and authored-knowledge checks. Generated `dist/`, `.astro/`, reports, and `*.tsbuildinfo` are not authored knowledge and are excluded from source documentation.
+`npm run build` runs `astro check` and produces Astro directory-format static output in `dist/`. `npm run verify` adds TypeScript, unit, static-output, asset-budget, CMS worker integrity and authored-knowledge checks. Generated `dist/`, `.astro/`, reports, and `*.tsbuildinfo` are not authored knowledge and are excluded from source documentation.

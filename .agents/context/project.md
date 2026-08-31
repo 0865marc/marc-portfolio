@@ -21,12 +21,12 @@
 - Tailwind CSS 3 utility classes plus global rules in [`src/index.css`](../../src/index.css).
 - Astro components render all primary content without a client framework runtime.
 - Small scripts under [`src/scripts/`](../../src/scripts/) progressively enhance navigation, filtering, reveal motion, and image fallbacks.
-- Kanit is loaded from Google Fonts in [`src/layouts/BaseLayout.astro`](../../src/layouts/BaseLayout.astro).
+- Kanit is loaded from local `@fontsource/kanit` imports in [`src/layouts/BaseLayout.astro`](../../src/layouts/BaseLayout.astro); runtime has no remote-font dependency.
 - Static typed content under [`src/data/`](../../src/data/).
 
 ## Product language and audience
 
-Visible product copy is Spanish. The portfolio presents Marc as a project director and full-stack developer focused on IoT platforms, web products, asynchronous systems, and distributed infrastructure. Keep technical statements grounded in the reviewed source content rather than adding unsupported claims.
+Visible product copy is Spanish. The portfolio presents Marc as an engineer of software and responsable de proyectos IT, with the public current experience authorized as `Taurus Research & Development`. Keep technical statements grounded in the reviewed source content; do not add unsupported private infrastructure or Hermes details.
 
 ## Safe working baseline
 
