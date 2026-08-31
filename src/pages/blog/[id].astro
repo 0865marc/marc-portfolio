@@ -1,23 +1,19 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import Article from '../../components/Article.astro'
-import { blogPosts, legacyBlogRoutes, type BlogPost, type LegacyBlogRoute } from '../../data/blog'
+import { blogPosts, type BlogPost } from '../../data/blog'
 import { professionalProfile } from '../../data/portfolio'
 
 export function getStaticPaths() {
-  return [
-    ...blogPosts.map(post => ({ params: { id: post.id }, props: { post } })),
-    ...legacyBlogRoutes.map(legacy => ({ params: { id: legacy.id }, props: { legacy } })),
-  ]
+  return blogPosts.map(post => ({ params: { id: post.id }, props: { post } }))
 }
 
 interface Props {
-  post?: BlogPost
-  legacy?: LegacyBlogRoute
+  post: BlogPost
 }
 
-const { post, legacy } = Astro.props
-const articleJsonLd = post ? {
+const { post } = Astro.props
+const articleJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
   headline: post.title,
@@ -31,7 +27,7 @@ const articleJsonLd = post ? {
     name: professionalProfile.identity.fullName,
     url: new URL('/', Astro.site).href,
   },
-} : null
+}
 ---
 
 {post && (
@@ -40,34 +36,15 @@ const articleJsonLd = post ? {
     description={post.excerpt}
     canonicalPath={`/blog/${post.id}/`}
     type="article"
-    jsonLd={articleJsonLd!}
+    jsonLd={articleJsonLd}
   >
     <main class="min-h-screen px-5 py-8 sm:px-8 md:px-10 md:py-10">
       <div class="article-back-layout mx-auto mb-8 max-w-6xl">
         <div class="mx-auto w-full max-w-3xl">
-          <a data-article-back class="control" href="/blog/">Volver al blog <span aria-hidden="true">↖</span></a>
+          <a data-article-back class="control" href="/blog/">Volver al Blog <span aria-hidden="true">↖</span></a>
         </div>
       </div>
       <Article post={post} />
-    </main>
-  </BaseLayout>
-)}
-
-{legacy && (
-  <BaseLayout
-    title="Artículo retirado — Marc Teixidó"
-    description="Este artículo de muestra se ha retirado del portfolio."
-    canonicalPath={null}
-    robots="noindex,follow"
-    redirectTo={legacy.destination}
-  >
-    <main class="flex min-h-[100svh] items-center px-5 py-16 sm:px-8">
-      <div class="surface-light mx-auto w-full max-w-3xl rounded-[40px] bg-white p-8 text-[#0C0C0C] sm:p-14">
-        <p class="section-kicker">Contenido retirado</p>
-        <h1 data-route-heading tabindex="-1" class="mt-5 text-[clamp(2.25rem,7vw,4.5rem)] font-black uppercase leading-none">Artículo no publicado</h1>
-        <p class="mt-8 text-xl font-light leading-relaxed text-black/70">“{legacy.formerTitle}” era contenido de muestra y ya no forma parte del portfolio público. Te llevamos al blog actual.</p>
-        <a class="button-dark mt-9" href={legacy.destination}>Ir al blog <span aria-hidden="true">↗</span></a>
-      </div>
     </main>
   </BaseLayout>
 )}

@@ -1,5 +1,9 @@
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
 
+if (import.meta.hot) {
+  import.meta.hot.on('career-content-updated', () => window.location.reload())
+}
+
 const reveal = (element: HTMLElement) => {
   if (element.classList.contains('revealed')) return
   element.classList.add('revealed')
@@ -32,6 +36,72 @@ if (!reducedMotion && 'IntersectionObserver' in window) {
   revealElements.forEach(element => observer.observe(element))
 } else {
   revealElements.forEach(reveal)
+}
+
+const disclosures = [...document.querySelectorAll<HTMLDetailsElement>('[data-disclosure]')]
+if (!reducedMotion) {
+  const disclosureDuration = 420
+
+  disclosures.forEach(disclosure => {
+    const summary = disclosure.querySelector<HTMLElement>('summary')
+    const panel = disclosure.querySelector<HTMLElement>('[data-disclosure-panel]')
+    if (!summary || !panel) return
+
+    let animating = false
+    let timeoutId: number | undefined
+    disclosure.classList.add('disclosure-enhanced')
+
+    const watchTransition = (opening: boolean) => {
+      let settled = false
+      const settle = () => {
+        if (settled) return
+        settled = true
+        panel.removeEventListener('transitionend', onTransitionEnd)
+        panel.removeEventListener('transitioncancel', onTransitionCancel)
+        if (timeoutId !== undefined) window.clearTimeout(timeoutId)
+        if (opening) panel.style.height = 'auto'
+        else {
+          disclosure.open = false
+          panel.style.removeProperty('height')
+        }
+        animating = false
+      }
+      const onTransitionEnd = (event: TransitionEvent) => {
+        if (event.target !== panel || event.propertyName !== 'height') return
+        settle()
+      }
+      const onTransitionCancel = (event: TransitionEvent) => {
+        if (event.target !== panel || event.propertyName !== 'height') return
+        settle()
+      }
+      panel.addEventListener('transitionend', onTransitionEnd)
+      panel.addEventListener('transitioncancel', onTransitionCancel)
+      timeoutId = window.setTimeout(settle, disclosureDuration + 80)
+    }
+
+    summary.addEventListener('click', event => {
+      event.preventDefault()
+      if (animating) return
+
+      const opening = !disclosure.open
+      animating = true
+      disclosure.open = true
+
+      if (opening) {
+        panel.style.height = '0px'
+        watchTransition(true)
+        requestAnimationFrame(() => {
+          panel.style.height = `${panel.scrollHeight}px`
+        })
+      } else {
+        panel.style.height = `${panel.getBoundingClientRect().height}px`
+        watchTransition(false)
+        requestAnimationFrame(() => {
+          panel.style.height = '0px'
+        })
+      }
+    })
+  })
 }
 
 const readingRoot = document.querySelector<HTMLElement>('[data-reading-root]')

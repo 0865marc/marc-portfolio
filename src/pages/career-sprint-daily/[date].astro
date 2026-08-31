@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Article from '../../components/Article.astro'
+import { dailyProgressEntries, type DailyProgressEntry } from '../../data/challenge'
+import { professionalProfile } from '../../data/portfolio'
+
+export function getStaticPaths() {
+  return dailyProgressEntries.map(entry => ({ params: { date: entry.activityDate }, props: { entry } }))
+}
+
+interface Props {
+  entry: DailyProgressEntry
+}
+
+const { entry } = Astro.props
+const entryJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: entry.title,
+  description: entry.excerpt,
+  datePublished: entry.activityDate,
+  dateModified: entry.activityDate,
+  inLanguage: 'es',
+  mainEntityOfPage: new URL(`/career-sprint-daily/${entry.activityDate}/`, Astro.site).href,
+  author: {
+    '@type': 'Person',
+    name: professionalProfile.identity.fullName,
+    url: new URL('/', Astro.site).href,
+  },
+}
+---
+
+<BaseLayout
+  title={`${entry.title} — Progreso del reto — Marc Teixidó`}
+  description={entry.excerpt}
+  canonicalPath={`/career-sprint-daily/${entry.activityDate}/`}
+  type="article"
+  jsonLd={entryJsonLd}
+>
+  <main class="min-h-screen px-5 py-8 sm:px-8 md:px-10 md:py-10">
+    <div class="article-back-layout mx-auto mb-8 max-w-6xl">
+      <div class="mx-auto w-full max-w-3xl">
+        <a data-article-back class="control" href="/career-sprint-daily/">Volver al progreso <span aria-hidden="true">↖</span></a>
+      </div>
+    </div>
+    <Article post={entry} />
+  </main>
+</BaseLayout>

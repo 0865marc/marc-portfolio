@@ -1,0 +1,44 @@
+{
+  "id": "entorno-reproducible",
+  "status": "published",
+  "position": 1,
+  "category": "Repositorio y verificación",
+  "tags": [
+    "repositorio",
+    "reproducibilidad",
+    "verificacion"
+  ],
+  "title": "Un entorno de trabajo reproducible",
+  "excerpt": "Cómo fijo versiones, dependencias y comprobaciones para que un proyecto sea reproducible y pueda validarse fuera de mi entorno local.",
+  "publishedAt": "2026-08-11",
+  "introduction": [
+    "Cuando vuelvo a este repositorio no quiero reconstruir de memoria cómo prepararlo. Aquí `.node-version` fija Node 24, `package.json` declara npm 11.16.0 y `package-lock.json` usa lockfileVersion 3.",
+    "Ese detalle evita que una instalación local parezca una regla del proyecto. Para partir de lo que está declarado, uso `npm ci`; después hago que el mismo repositorio ejecute su comprobación completa."
+  ],
+  "sections": [
+    {
+      "heading": "Qué queda fijado",
+      "paragraphs": [
+        "El lockfile no es un apunte auxiliar: enumera las dependencias de desarrollo que usa el proyecto. Entre ellas están Astro 7.1.3, TypeScript 5.9.3 y Vitest 4.1.10.",
+        "Con esas versiones visibles en el repositorio, la preparación no depende de recordar qué había instalado antes en mi equipo."
+      ]
+    },
+    {
+      "heading": "Qué compruebo al cambiar algo",
+      "paragraphs": [
+        "El script `npm run verify` encadena la validación de los documentos del proyecto, las comprobaciones de Astro y TypeScript, las pruebas unitarias, el build, las pruebas de salida estática y la medición de activos.",
+        "Así puedo comprobar el resultado generado, no solo la parte del código que acabo de tocar. Cuando una modificación afecta a una ruta o a sus metadatos, el gate deja una señal concreta."
+      ]
+    },
+    {
+      "heading": "Lo que aprendí al dejarlo escrito",
+      "paragraphs": [
+        "No necesito una guía extensa para volver a arrancar el proyecto. Necesito que las versiones, la instalación y la comprobación estén en archivos que se puedan leer y ejecutar.",
+        "La próxima vez partiré de ese estado declarado antes de cambiar nada; así puedo distinguir un requisito del repositorio de una costumbre local."
+      ]
+    }
+  ],
+  "takeaway": [
+    "En este repositorio, `npm ci` y `npm run verify` me sirven para comprobar una preparación definida por sus propios archivos."
+  ]
+}

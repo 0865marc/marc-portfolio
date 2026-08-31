@@ -1,0 +1,30 @@
+{
+  "id": "w1",
+  "status": "published",
+  "position": 1,
+  "startDate": "2026-08-24",
+  "endDate": "2026-08-30",
+  "title": "Semana 1",
+  "focus": "IBM Generative AI Engineering with LLMs — Coursera",
+  "objective": "Objetivo previsto: construir una base técnica sólida del funcionamiento de los modelos generativos mediante arquitectura LLM, transformers, PyTorch, Hugging Face, embeddings y NLP moderno.",
+  "resourceLabel": "Ver especialización",
+  "resourceHref": "https://www.coursera.org/specializations/generative-ai-engineering-with-llms",
+  "agenda": [
+    {
+      "day": "Plan semanal",
+      "blocks": [
+        { "time": "Arquitectura", "activity": "Arquitectura LLM y transformers" },
+        { "time": "Frameworks", "activity": "PyTorch y Hugging Face" },
+        { "time": "NLP", "activity": "Embeddings y NLP moderno" },
+        { "time": "Práctica", "activity": "Inicio de ejercicios prácticos" }
+      ]
+    }
+  ],
+  "topics": ["arquitectura LLM", "transformers", "PyTorch", "Hugging Face", "embeddings", "NLP moderno", "ejercicios prácticos"],
+  "milestones": [
+    "Hito previsto: documentar conceptos base de modelos generativos.",
+    "Hito previsto: iniciar ejercicios prácticos de la especialización."
+  ],
+  "criteria": ["Mantener cursos, prácticas y resultados como objetivos previstos, sin presentarlos como completados."],
+  "progressState": "planned"
+}

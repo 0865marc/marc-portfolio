@@ -8,24 +8,29 @@ const filtersAreUseful = blogPosts.length >= 4
 ---
 
 <section aria-labelledby="blog-list-title">
-  <h2 id="blog-list-title" class="sr-only">Artículos publicados</h2>
-  {filtersAreUseful ? (
+  <h2 id="blog-list-title" class="sr-only">Artículos del Blog publicados</h2>
+  {blogPosts.length === 0 ? (
+    <div class="mt-14 max-w-3xl rounded-[28px] border border-[#D7E2EA]/20 p-6 sm:p-8" role="status" aria-live="polite">
+      <p class="section-kicker">Sin publicaciones</p>
+      <p class="mt-3 text-xl font-light leading-relaxed opacity-80">Aún no hay artículos publicados. Vuelve pronto para leer nuevas notas.</p>
+    </div>
+  ) : filtersAreUseful ? (
     <div data-blog-filter-root>
       <div class="js-only mt-14 rounded-[28px] border border-[#D7E2EA]/20 p-5 sm:p-7">
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p class="section-kicker">Explorar el blog</p>
-            <h3 class="mt-3 text-2xl font-medium uppercase">Encuentra una idea</h3>
+            <p class="section-kicker">Buscar notas</p>
+            <h3 class="mt-3 text-2xl font-medium uppercase">Buscar un artículo</h3>
           </div>
-          <p class="max-w-sm text-sm font-light leading-relaxed opacity-60">Combina una búsqueda libre con una etiqueta para acotar los resultados.</p>
+          <p class="max-w-sm text-sm font-light leading-relaxed opacity-60">Busca por palabras o limita la lista a una etiqueta.</p>
         </div>
 
         <label for="blog-search" class="mt-7 block text-sm font-medium uppercase tracking-wider">Buscar por título, resumen, categoría o etiqueta</label>
-        <input id="blog-search" data-blog-search type="search" placeholder="Prueba con agentes o automatización" autocomplete="off" aria-describedby="blog-search-help" class="mt-3 min-h-12 w-full rounded-2xl border border-[#D7E2EA]/35 bg-transparent px-4 text-base placeholder:text-[#D7E2EA]/45" />
-        <p id="blog-search-help" class="mt-2 text-sm font-light opacity-60">La lista se actualiza mientras escribes.</p>
+        <input id="blog-search" data-blog-search type="search" placeholder="Agentes o automatización" autocomplete="off" aria-describedby="blog-search-help" class="mt-3 min-h-12 w-full rounded-2xl border border-[#D7E2EA]/35 bg-transparent px-4 text-base placeholder:text-[#D7E2EA]/45" />
+        <p id="blog-search-help" class="mt-2 text-sm font-light opacity-60">Los resultados cambian mientras escribes.</p>
 
         <fieldset class="mt-7">
-          <legend class="text-sm font-medium uppercase tracking-wider">Filtrar por etiqueta</legend>
+          <legend class="text-sm font-medium uppercase tracking-wider">Etiquetas</legend>
           <div class="mt-3 flex flex-wrap gap-2">
             <button type="button" data-blog-tag="" aria-pressed="true" aria-controls="blog-results" class="filter-pill active">Todas</button>
             {tags.map(tag => <button type="button" data-blog-tag={tag} aria-pressed="false" aria-controls="blog-results" class="filter-pill">{tag}</button>)}
@@ -34,7 +39,7 @@ const filtersAreUseful = blogPosts.length >= 4
 
         <div class="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-[#D7E2EA]/15 pt-5">
           <p data-blog-status role="status" aria-live="polite">{blogPosts.length} artículos disponibles.</p>
-          <button data-blog-clear type="button" disabled class="filter-pill">Limpiar filtros</button>
+          <button data-blog-clear type="button" disabled class="filter-pill">Borrar filtros</button>
         </div>
       </div>
 
@@ -44,9 +49,9 @@ const filtersAreUseful = blogPosts.length >= 4
 
       <div data-blog-empty hidden class="mt-10 rounded-[28px] border border-[#D7E2EA]/20 p-8">
         <p class="section-kicker">Sin resultados</p>
-        <h3 class="mt-3 text-2xl font-medium uppercase">No hay artículos que coincidan</h3>
-        <p class="mt-4 max-w-lg font-light opacity-80">Prueba con otra búsqueda o vuelve a mostrar el archivo completo.</p>
-        <button type="button" data-blog-empty-clear class="filter-pill mt-6">Mostrar todos</button>
+        <h3 class="mt-3 text-2xl font-medium uppercase">No encuentro artículos</h3>
+        <p class="mt-4 max-w-lg font-light opacity-80">Prueba otra búsqueda o vuelve a mostrar todas las notas.</p>
+        <button type="button" data-blog-empty-clear class="filter-pill mt-6">Mostrar todas</button>
       </div>
     </div>
   ) : (

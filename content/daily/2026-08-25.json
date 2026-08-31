@@ -1,0 +1,216 @@
+{
+  "id": "2026-08-25",
+  "status": "published",
+  "position": 2,
+  "activityDate": "2026-08-25",
+  "weekId": "w1",
+  "category": "Career Sprint",
+  "tags": [
+    "verificacion",
+    "reproducibilidad"
+  ],
+  "title": "De los índices a la predicción: embeddings, clasificación y modelos n-grama",
+  "excerpt": "Embeddings, clasificación y modelos n-grama: de los IDs discretos a las representaciones que una red puede aprender y reutilizar.",
+  "introduction": [
+    {
+      "type": "paragraph",
+      "text": "Hoy he dado el paso que conecta la preparación del texto con una tarea real de aprendizaje automático. Hasta ahora tenía claro cómo convertir una frase en tokens y después en IDs, pero todavía faltaba entender qué hace una red neuronal con esos números. La respuesta está en los embeddings: los índices solo identifican palabras; la matriz de embeddings transforma esas identidades arbitrarias en representaciones que el modelo puede aprender y reutilizar."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "Un índice identifica, pero no describe",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "El one-hot encoding representa cada token con un vector que tiene un único uno y tantos elementos como palabras existen en el vocabulario. Es una representación válida, pero grande y dispersa. Además, solo expresa identidad: no contiene ninguna pista que permita tratar de forma parecida palabras relacionadas como `cats` y `dogs`."
+        },
+        {
+          "type": "paragraph",
+          "text": "La matriz de embeddings introduce una representación más compacta. Tiene una fila por cada token del vocabulario y un número de columnas elegido mediante el hiperparámetro `embedding_dim`. Cada fila es el embedding de una palabra. Al comenzar el entrenamiento sus valores suelen ser aleatorios, pero se actualizan junto con el resto de los parámetros de la red mediante backpropagation."
+        },
+        {
+          "type": "paragraph",
+          "text": "La relación con el one-hot me ha ayudado a quitarle parte del misterio:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "one-hot del token × matriz de embeddings = embedding del token"
+        },
+        {
+          "type": "paragraph",
+          "text": "Como el vector one-hot contiene un solo uno, la multiplicación se limita a seleccionar la fila correspondiente. `nn.Embedding` evita construir y multiplicar ese enorme vector: recibe directamente el ID y consulta la fila. El ID no se utiliza como una cantidad numérica; funciona únicamente como una dirección dentro de la tabla."
+        },
+        {
+          "type": "paragraph",
+          "text": "Las dimensiones del embedding tampoco representan necesariamente características con nombres claros. Puedo imaginar columnas como “animal”, “sentimiento positivo” o “acción” para desarrollar la intuición, pero en una red real su significado suele estar distribuido y no ser directamente interpretable. Lo importante es que la representación se ajuste a lo que resulte útil para la tarea. Si dos palabras aparecen en contextos parecidos o ayudan a tomar decisiones similares, sus vectores pueden terminar ocupando zonas próximas."
+        }
+      ]
+    },
+    {
+      "heading": "`Embedding` y `EmbeddingBag` responden a necesidades diferentes",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "`Embedding` devuelve un vector por cada token. Si una frase contiene tres tokens y `embedding_dim` vale tres, el resultado tiene forma `(3, 3)`: las filas son los tokens y las columnas son las características aprendidas."
+        },
+        {
+          "type": "paragraph",
+          "text": "`EmbeddingBag`, en cambio, combina los embeddings de todos los tokens pertenecientes a un documento, normalmente mediante una media o una suma. El resultado es un único vector de tamaño fijo por documento, con independencia de cuántas palabras contenga. Si proceso tres documentos con embeddings de tamaño tres, también obtengo una matriz `(3, 3)`, pero ahora las filas representan documentos completos. Que ambas formas coincidan es accidental; las columnas siguen siendo dimensiones del embedding en los dos casos."
+        },
+        {
+          "type": "paragraph",
+          "text": "Para trabajar eficientemente con documentos de distinta longitud, PyTorch puede recibir todos sus IDs concatenados en un único tensor. El tensor `offsets` indica dónde empieza cada documento dentro de esa secuencia aplanada. De esta manera, `EmbeddingBag` sabe qué embeddings debe agrupar sin necesidad de rellenar todas las frases hasta una longitud común."
+        },
+        {
+          "type": "paragraph",
+          "text": "La ventaja es que obtenemos una representación sencilla y rápida para clasificación. La limitación es que al agregar los tokens perdemos su orden: dos frases con las mismas palabras en distinto orden pueden producir el mismo vector. No es una solución adecuada cuando la estructura de la oración resulta esencial, pero sí una base útil para comprender y construir clasificadores de texto."
+        }
+      ]
+    },
+    {
+      "heading": "De un texto a una categoría de noticias",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "El ejemplo con AG News reúne todo el recorrido en un único pipeline. El dataset contiene noticias clasificadas en cuatro categorías: mundo, deportes, negocios y ciencia o tecnología. Primero se construye el vocabulario únicamente a partir de los textos de entrenamiento y se reserva `<unk>` para las palabras desconocidas. También hay que transformar las etiquetas originales, numeradas del uno al cuatro, en índices del cero al tres, que es el formato esperado por la función de pérdida."
+        },
+        {
+          "type": "paragraph",
+          "text": "La función `collate_batch` prepara cada lote realizando varias operaciones:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "texto → tokens → IDs → tensor aplanado + offsets"
+        },
+        {
+          "type": "paragraph",
+          "text": "El modelo es sorprendentemente pequeño. `EmbeddingBag` convierte cada noticia en un vector de tamaño fijo y una capa lineal transforma ese vector en cuatro logits, uno por categoría:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "IDs y offsets → EmbeddingBag → vector del documento → Linear → 4 logits"
+        },
+        {
+          "type": "paragraph",
+          "text": "En este caso ni siquiera hace falta una hidden layer adicional. La embedding layer y la capa de salida contienen los parámetros que se entrenan. `argmax` selecciona después el índice del logit más alto para obtener la categoría predicha. Los logits no son probabilidades, pero `CrossEntropyLoss` puede trabajar directamente con ellos y compararlos con la etiqueta correcta."
+        }
+      ]
+    },
+    {
+      "heading": "Entrenar implica medir, corregir y comprobar",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "El entrenamiento sigue un ciclo que ahora resulta más fácil de leer: poner el modelo en modo de entrenamiento, limpiar los gradientes anteriores, ejecutar el forward pass, calcular la pérdida, propagar el error hacia atrás y actualizar los parámetros con SGD. El learning rate controla el tamaño de cada actualización, y el gradient clipping limita gradientes demasiado grandes para mantener el proceso estable."
+        },
+        {
+          "type": "paragraph",
+          "text": "También es importante separar los datos según su responsabilidad. El conjunto de entrenamiento sirve para ajustar los parámetros; el de validación permite comparar configuraciones y conservar el mejor estado del modelo; el de test debería reservarse para la evaluación final. Guardar `state_dict()` cuando mejora la precisión de validación evita terminar únicamente con los pesos de la última época."
+        },
+        {
+          "type": "paragraph",
+          "text": "Durante la evaluación se utiliza `model.eval()` y `torch.no_grad()`. El primero comunica al modelo que no está entrenando y el segundo evita construir el grafo de gradientes, reduciendo trabajo y memoria. Aunque esta red concreta no contiene dropout ni batch normalization, mantener esta distinción hace que el código sea correcto cuando el modelo crece."
+        }
+      ]
+    },
+    {
+      "heading": "De clasificar documentos a predecir la siguiente palabra",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Los modelos n-grama aplican muchas de las mismas piezas a una tarea diferente. En lugar de representar un documento completo para asignarle una categoría, intentan predecir una palabra a partir de las que aparecen inmediatamente antes. Un bigrama utiliza una palabra de contexto, un trigrama utiliza dos y un modelo n-grama generaliza la idea a una ventana de tamaño arbitrario."
+        },
+        {
+          "type": "paragraph",
+          "text": "Los ejemplos de entrenamiento se construyen desplazando esa ventana por el texto. Con un contexto de tamaño dos, una secuencia puede producir pares como estos:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "[never, gonna] → give\n[gonna, give]  → you\n[give, you]    → up"
+        },
+        {
+          "type": "paragraph",
+          "text": "Esto convierte el modelado del lenguaje en un problema de clasificación multiclase: dado el contexto, el modelo produce un logit por cada palabra del vocabulario y la clase correcta es la siguiente palabra observada."
+        }
+      ]
+    },
+    {
+      "heading": "Concatenar embeddings conserva el contexto",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Aquí aparece una diferencia importante respecto a `EmbeddingBag`. Para clasificar documentos, agregar los embeddings ofrece un único vector compacto, aunque se pierda el orden. En el modelo n-grama no conviene mezclarlos, porque cada posición del contexto aporta información distinta. Los embeddings se concatenan:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "contexto de T palabras × embedding de D dimensiones\n                         ↓\n             vector de T × D dimensiones"
+        },
+        {
+          "type": "paragraph",
+          "text": "En PyTorch, la embedding layer recibe inicialmente un tensor con forma `(batch_size, context_size)` y devuelve `(batch_size, context_size, embedding_dim)`. Después se reorganizan las dos últimas dimensiones para obtener `(batch_size, context_size × embedding_dim)`. Ese vector pasa por una hidden layer con activación ReLU y finalmente por una capa de salida de tamaño igual al vocabulario."
+        },
+        {
+          "type": "paragraph",
+          "text": "Esta arquitectura también ayuda a entender que un modelo de lenguaje neuronal sencillo no deja de ser una función que transforma un contexto en una distribución sobre posibles palabras siguientes. Los embeddings, la hidden layer y la salida se entrenan conjuntamente mediante cross-entropy y backpropagation."
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "IDs del contexto\n      ↓\nEmbedding\n      ↓\nconcatenación\n      ↓\nLinear + ReLU\n      ↓\nlogits para todo el vocabulario"
+        }
+      ]
+    },
+    {
+      "heading": "Generar texto repitiendo una predicción",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Una vez entrenado el modelo, la generación es un proceso iterativo. Se parte de unas palabras iniciales, se toman las últimas `context_size`, se predice el siguiente token y se añade al texto. La nueva palabra pasa a formar parte de la ventana utilizada en la siguiente iteración."
+        },
+        {
+          "type": "paragraph",
+          "text": "En los apuntes, la palabra se elige mediante `argmax`, por lo que siempre se selecciona el logit más alto. Esto permite ver claramente el mecanismo, aunque una estrategia determinista puede producir secuencias repetitivas. Los experimentos con contextos de tamaño dos, cuatro y ocho muestran además que ampliar la ventana proporciona más información al modelo, pero también aumenta el tamaño de su entrada y la cantidad de relaciones que debe aprender."
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "contexto → siguiente palabra → nuevo contexto → siguiente palabra → ..."
+        }
+      ]
+    },
+    {
+      "heading": "La perplexity como medida de incertidumbre",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Para evaluar un modelo de lenguaje resulta más informativa la pérdida que una accuracy convencional. La cross-entropy mide cuánto penalizamos al modelo por la probabilidad asignada a la palabra correcta, y la perplexity se obtiene exponenciando su valor medio:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "perplexity = exp(cross-entropy media)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Puede interpretarse aproximadamente como el número efectivo de opciones entre las que el modelo duda al predecir el siguiente token. Una perplexity más baja indica que concentra mejor la probabilidad en las continuaciones correctas; una más alta refleja mayor incertidumbre."
+        }
+      ]
+    }
+  ],
+  "takeaway": [
+    {
+      "type": "paragraph",
+      "text": "La idea central del día es que un embedding no es una propiedad externa que se añade a las palabras ni el propio índice del vocabulario. Es una fila dentro de una matriz de parámetros aprendidos. La embedding layer se encuentra al comienzo de la red porque actúa como puente entre los IDs discretos y las operaciones continuas de las capas posteriores."
+    },
+    {
+      "type": "paragraph",
+      "text": "También entiendo mejor que la forma de combinar embeddings depende del objetivo. `EmbeddingBag` transforma un número variable de tokens en un vector de tamaño fijo para clasificar un documento; un modelo n-grama conserva las posiciones concatenando los embeddings del contexto para predecir la palabra siguiente. En ambos casos, el modelo deja de parecer una caja negra y se convierte en una cadena concreta de transformaciones: tokenizar, buscar representaciones, producir logits, medir el error y ajustar los pesos. La complejidad aparece al combinar estas piezas, pero cada una cumple una responsabilidad bastante precisa."
+    }
+  ]
+}

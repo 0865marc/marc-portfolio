@@ -1,0 +1,94 @@
+---
+import { challenge } from '../data/challenge'
+import { progressHref, roadmapHref } from '../lib/challengeRoutes'
+
+const dateFormatter = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
+const formatDate = (date: string) => dateFormatter.format(new Date(`${date}T12:00:00Z`))
+const credentials = [
+  {
+    title: 'Generative AI Engineering with LLMs Specialization',
+    type: 'Especialización IBM',
+    description: 'Especialización práctica para diseñar aplicaciones con LLMs: modelos generativos, RAG, agentes, LangChain, fine-tuning y proyectos aplicados.',
+    resources: [
+      { label: 'Especialización', href: 'https://www.coursera.org/specializations/generative-ai-engineering-with-llms' },
+    ],
+  },
+  {
+    title: 'AWS Certified Solutions Architect – Associate',
+    type: 'Certificación AWS',
+    description: 'Certificación centrada en diseñar arquitecturas AWS seguras, resilientes y escalables con networking, compute, storage y bases de datos.',
+    resources: [
+      { label: 'Learning plan', href: 'https://skillbuilder.aws/learning-plan/X34U4HHQ76/aws-solutions-architect-advanced-learning-plan-includes-labs/88TUXWD6NV' },
+      { label: 'Exam prep', href: 'https://skillbuilder.aws/learning-plan/UYRXS2DF85/exam-prep-plan-aws-certified-solutions-architect--associate-saac03--english/U991QUF9C3' },
+      { label: 'Certificación oficial', href: 'https://aws.amazon.com/certification/certified-solutions-architect-associate/' },
+    ],
+  },
+  {
+    title: 'AWS Certified Generative AI Developer – Professional',
+    type: 'Certificación AWS',
+    description: 'Certificación enfocada en desarrollar soluciones GenAI sobre AWS con Amazon Bedrock, RAG, agentes, guardrails, observabilidad y eficiencia de costes.',
+    resources: [
+      { label: 'Learning plan', href: 'https://skillbuilder.aws/learning-plan/BGTH16YCTU/aws-generative-ai-developer-advanced-learning-plan-includes-labs/ZDN46CX881' },
+      { label: 'Exam prep', href: 'https://skillbuilder.aws/learning-plan/9VXVGYT38G/exam-prep-plan-aws-certified-generative-ai-developer--professional-aipc01--english/4SCMN2659K' },
+      { label: 'Certificación oficial', href: 'https://aws.amazon.com/certification/certified-generative-ai-developer-professional/' },
+    ],
+  },
+] as const
+---
+
+<section id="career-sprint" aria-labelledby="career-sprint-title" class="scroll-mt-6 px-5 py-12 sm:px-8 sm:py-16 md:px-10 md:py-20">
+  <div id="progress" class="mx-auto max-w-6xl scroll-mt-6">
+    <div class="rounded-[28px] border border-[#D7E2EA]/20 p-5 sm:p-6 md:p-8">
+      <div class="min-w-0">
+        <p class="section-kicker">{formatDate(challenge.startDate)} — {formatDate(challenge.endDate)}</p>
+        <h2 id="career-sprint-title" data-route-heading tabindex="-1" class="mt-3 text-3xl font-black uppercase leading-tight sm:text-4xl">RETO 8 SEMANAS</h2>
+      </div>
+
+      <p class="mt-6 max-w-4xl font-light leading-relaxed opacity-80">Este reto consiste en aprender, poner en práctica y certificar conocimientos de IA generativa, arquitectura cloud y sistemas de IA en producción, siguiendo un <a class="inline-flex min-h-11 items-center px-1 align-middle font-medium uppercase tracking-[.12em] underline decoration-[#D7E2EA]/60 underline-offset-4 focus-visible:rounded-sm" href={roadmapHref()}>ROADMAP</a> de ocho semanas y <a class="inline-flex min-h-11 items-center px-1 align-middle font-medium uppercase tracking-[.12em] underline decoration-[#D7E2EA]/60 underline-offset-4 focus-visible:rounded-sm" href={progressHref()}>DOCUMENTANDO DIARIAMENTE</a> el progreso, las decisiones y lo que voy aplicando.</p>
+
+      <section aria-labelledby="credential-goals-title" class="mt-6">
+        <details data-disclosure class="mt-4">
+          <summary id="credential-goals-title" class="disclosure-summary" aria-controls="career-sprint-objectives-panel">
+            <span class="disclosure-title">OBJETIVOS DEL RETO</span>
+            <span class="disclosure-label">
+              <span data-disclosure-label-closed>Mostrar</span>
+              <span data-disclosure-label-open>Ocultar</span>
+            </span>
+            <span data-disclosure-caret aria-hidden="true">↓</span>
+          </summary>
+          <div id="career-sprint-objectives-panel" data-disclosure-panel>
+            <div class="disclosure-panel-inner">
+              <ol class="disclosure-list divide-y divide-[#D7E2EA]/20 border-y border-[#D7E2EA]/20">
+              {credentials.map((credential, index) => (
+                <li class="min-w-0 py-5 sm:py-6">
+                  <article class="grid min-w-0 grid-cols-[2rem_minmax(0,1fr)] gap-x-3 gap-y-4 lg:grid-cols-[2.5rem_minmax(0,1fr)_minmax(15rem,20rem)] lg:items-start lg:gap-x-6">
+                    <span class="pt-1 text-xs font-medium uppercase tracking-[.18em] opacity-50" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+                    <div class="min-w-0">
+                      <p class="section-kicker">{credential.type}</p>
+                      <h4 class="mt-3 break-words text-xl font-medium uppercase leading-tight sm:text-2xl">{credential.title}</h4>
+                      <p class="mt-3 max-w-2xl break-words font-light leading-relaxed opacity-80">{credential.description}</p>
+                    </div>
+                    <nav aria-label={`Recursos para ${credential.title}`} class="col-start-2 flex min-w-0 flex-wrap gap-2 lg:col-start-3 lg:flex-col lg:items-stretch">
+                      {credential.resources.map(resource => (
+                        <a
+                          class="control min-h-11 max-w-full justify-between gap-3 break-words"
+                          href={resource.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`${resource.label} para ${credential.title}. Abre en una nueva pestaña`}
+                        >
+                          {resource.label} <span aria-hidden="true">↗</span>
+                        </a>
+                      ))}
+                    </nav>
+                  </article>
+                </li>
+              ))}
+              </ol>
+            </div>
+          </div>
+        </details>
+      </section>
+    </div>
+  </div>
+</section>

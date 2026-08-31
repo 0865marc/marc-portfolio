@@ -1,0 +1,301 @@
+{
+  "id": "2026-08-29",
+  "status": "published",
+  "position": 3,
+  "activityDate": "2026-08-29",
+  "weekId": "w1",
+  "category": "Career Sprint",
+  "tags": [
+    "verificacion",
+    "reproducibilidad"
+  ],
+  "title": "De aprender el contexto a medir una secuencia generada",
+  "excerpt": "Hoy he recorrido una parte bastante amplia del camino que sigue un modelo de lenguaje: aprender representaciones de palabras, reutilizar conocimiento preentrenado, conservar el orden de una secuencia, transformar una frase en otra y decidir después si el resultado es bueno.",
+  "introduction": [
+    {
+      "type": "paragraph",
+      "text": "Hoy he recorrido una parte bastante amplia del camino que sigue un modelo de lenguaje: aprender representaciones de palabras, reutilizar conocimiento preentrenado, conservar el orden de una secuencia, transformar una frase en otra y decidir después si el resultado es bueno. Al principio Word2Vec, GloVe, las RNN y métricas como BLEU parecían temas separados. Al conectarlos, he empezado a verlos como etapas de un mismo problema."
+    },
+    {
+      "type": "code",
+      "language": "text",
+      "code": "corpus → embeddings → modelo secuencial → texto generado → evaluación"
+    },
+    {
+      "type": "paragraph",
+      "text": "La dificultad principal ha estado en identificar qué información conserva cada representación. Un embedding describe una palabra dentro de un espacio aprendido; el hidden state de una RNN resume lo que ha sucedido hasta un instante; el contexto del encoder intenta representar una secuencia completa; y una métrica reduce el resultado final a una medida concreta. Todos son vectores o números, pero no cumplen la misma responsabilidad."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "Word2Vec convierte el contexto en una tarea de aprendizaje",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hasta ahora entendía una embedding layer como una tabla de parámetros que se ajusta junto con el resto de una red. Word2Vec añade una idea importante: se pueden aprender representaciones útiles creando una tarea de predicción a partir del propio corpus."
+        },
+        {
+          "type": "paragraph",
+          "text": "CBOW y Skip-gram utilizan las mismas palabras, pero invierten la pregunta. CBOW recibe las palabras que rodean una posición e intenta recuperar la palabra central:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "contexto → palabra objetivo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Skip-gram recibe la palabra central e intenta predecir las palabras que aparecen a su alrededor:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "palabra objetivo → palabras de contexto"
+        },
+        {
+          "type": "paragraph",
+          "text": "Esta diferencia cambia cómo se construyen los ejemplos de entrenamiento. En CBOW, varias palabras de contexto se agrupan para producir una predicción. `EmbeddingBag` encaja bien porque puede combinar sus embeddings en un único vector. En Skip-gram, una ventana se transforma en varios pares independientes entre la palabra central y cada palabra del contexto. Una sola posición del corpus genera así varios ejemplos."
+        },
+        {
+          "type": "paragraph",
+          "text": "En ambos casos, la predicción sobre el vocabulario no es realmente el objetivo final. Es el mecanismo que proporciona una señal de error. Al minimizar la cross-entropy, el modelo modifica la matriz de embeddings hasta que las palabras útiles en contextos parecidos terminan con representaciones relacionadas."
+        }
+      ]
+    },
+    {
+      "heading": "GloVe aprende desde una perspectiva diferente",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "GloVe persigue un resultado parecido, pero no parte de una tarea local de predicción. Primero reúne estadísticas globales del corpus en una matriz de coocurrencias. Cada entrada expresa con qué frecuencia aparece una palabra junto a un contexto. Después intenta aproximar esa gran matriz mediante representaciones de menor dimensión."
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "Word2Vec → aprender prediciendo palabras desde contextos locales\nGloVe    → aprender comprimiendo coocurrencias globales"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lo que comparten es la hipótesis distribucional: si dos palabras participan en contextos semejantes, sus vectores deberían reflejar alguna relación. Esa proximidad puede medirse mediante similitud coseno, que compara la dirección de los embeddings y no solo su magnitud."
+        },
+        {
+          "type": "paragraph",
+          "text": "La utilidad práctica de GloVe aparece al cargar embeddings preentrenados. En lugar de comenzar con pesos aleatorios y necesitar un corpus enorme, una tarea de clasificación puede reutilizar relaciones aprendidas previamente. Los pesos pueden congelarse para conservar ese conocimiento o continuar entrenándose para adaptarlos al dominio actual."
+        },
+        {
+          "type": "paragraph",
+          "text": "Esta reutilización depende de un contrato estricto entre vocabulario e índices. Cada token tiene que seguir apuntando a la fila correcta de la matriz. Añadir `<unk>` o `<pad>`, desplazar índices o reinicializar accidentalmente `embedding.weight` después de cargar GloVe destruye la correspondencia que se quería aprovechar."
+        }
+      ]
+    },
+    {
+      "heading": "Una bolsa de palabras sabe qué aparece, pero no qué sucede",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Promediar embeddings preentrenados ofrece una representación sencilla de un documento. Puede ser suficiente para clasificar noticias: se recupera un vector por palabra, se calcula su media y una capa lineal genera los logits de las categorías."
+        },
+        {
+          "type": "paragraph",
+          "text": "El problema es que la media elimina el orden. “El hombre muerde al perro” y “el perro muerde al hombre” contienen las mismas palabras y producen la misma bolsa, aunque describen situaciones opuestas. Esta limitación marca la transición desde representar un conjunto de tokens hasta modelar una secuencia."
+        },
+        {
+          "type": "paragraph",
+          "text": "En datos IID, cada muestra puede tratarse como independiente. En el lenguaje, la probabilidad de una palabra depende normalmente de las anteriores:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "P(w_t | w_1, ..., w_(t-1))"
+        },
+        {
+          "type": "paragraph",
+          "text": "Hace falta, por tanto, una forma de transportar información del pasado mientras se procesa el presente."
+        }
+      ]
+    },
+    {
+      "heading": "El hidden state es la memoria de una RNN",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Una RNN procesa la secuencia paso a paso. En el instante `t` combina el token actual `x_t` con el hidden state anterior `h_(t-1)` y produce un nuevo estado `h_t`. Los mismos parámetros se reutilizan en todos los pasos."
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "x_1 + h_0 → h_1\nx_2 + h_1 → h_2\nx_3 + h_2 → h_3"
+        },
+        {
+          "type": "paragraph",
+          "text": "Esto me ha ayudado a entender el hidden state como una memoria de trabajo. No contiene una copia literal de todos los tokens anteriores; es una representación aprendida de la información que la red considera útil para continuar."
+        },
+        {
+          "type": "paragraph",
+          "text": "Las RNN básicas tienen dificultades para conservar dependencias lejanas y para propagar gradientes a través de muchos pasos. Las GRU y las LSTM añaden puertas que regulan el flujo de información. Una GRU utiliza puertas de reset y update. Una LSTM mantiene, además del hidden state, un cell state que funciona como una ruta de memoria más duradera, controlada por las puertas de entrada, olvido y salida."
+        },
+        {
+          "type": "paragraph",
+          "text": "La distinción que quiero recordar es que `h_t` contiene la información relevante para el paso y la salida actuales, mientras que `c_t` permite transportar memoria a más largo plazo. Una GRU reúne ambas funciones en un único estado; una LSTM las separa."
+        }
+      ]
+    },
+    {
+      "heading": "Encoder y decoder reparten el trabajo",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Una arquitectura encoder-decoder utiliza dos redes recurrentes. El encoder lee la secuencia de origen y produce los estados que resumen su contexto. El decoder recibe esos estados y genera la secuencia de destino token a token."
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "secuencia origen → encoder → hidden/cell → decoder → secuencia destino"
+        },
+        {
+          "type": "paragraph",
+          "text": "Esta separación permite traducir entre secuencias de distinta longitud. El encoder no necesita producir el texto final; su responsabilidad es convertir la entrada en un contexto que pueda inicializar al decoder. El decoder comienza con `<bos>`, genera un token y utiliza ese resultado como entrada para producir el siguiente. El proceso termina cuando aparece `<eos>` o se alcanza una longitud máxima."
+        },
+        {
+          "type": "paragraph",
+          "text": "El decoder es, por tanto, autoregresivo:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "<bos> → token_1 → token_2 → ... → <eos>"
+        },
+        {
+          "type": "paragraph",
+          "text": "Durante el entrenamiento se conoce la traducción correcta. Teacher forcing aprovecha esa información y, con una probabilidad determinada, entrega al decoder el token real anterior en lugar de su propia predicción. Esto facilita el aprendizaje, pero también crea una diferencia importante: durante la inferencia no existe una respuesta correcta que pueda rescatar al modelo después de un error."
+        }
+      ]
+    },
+    {
+      "heading": "Entrenar secuencias obliga a prestar atención a las formas",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "La preparación de datos incorpora `<bos>`, `<eos>` y `<pad>`. El padding permite construir tensores rectangulares, pero no representa contenido real y debe ignorarse al calcular la pérdida."
+        },
+        {
+          "type": "paragraph",
+          "text": "El modelo produce logits con tres dimensiones:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "[longitud objetivo, batch, tamaño del vocabulario objetivo]"
+        },
+        {
+          "type": "paragraph",
+          "text": "`CrossEntropyLoss` espera una colección plana de predicciones y sus clases correctas. Por eso se combinan las dimensiones de longitud y batch. También se elimina la primera posición: `<bos>` se proporciona al decoder como punto de partida, no es un token que tenga que predecir."
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "output[1:] → [tokens evaluados, vocabulario]\ntarget[1:] → [tokens correctos]"
+        },
+        {
+          "type": "paragraph",
+          "text": "El `ignore_index` de la pérdida excluye `<pad>`. `model.train()` activa el comportamiento de entrenamiento, como dropout; `model.eval()` y `torch.no_grad()` evitan ese comportamiento y el grafo de gradientes durante validación e inferencia. El gradient clipping resulta especialmente útil en redes recurrentes porque limita gradientes que podrían crecer demasiado."
+        }
+      ]
+    },
+    {
+      "heading": "Inferir no es lo mismo que entrenar",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Para traducir una frase nueva, primero se tokeniza y se numericaliza la entrada. El encoder produce los estados iniciales y el decoder comienza con `<bos>`. Después repite una decisión: calcula los logits, selecciona el siguiente token, lo añade a la traducción y lo vuelve a utilizar como entrada."
+        },
+        {
+          "type": "paragraph",
+          "text": "Elegir siempre `argmax` es greedy decoding. Es sencillo y determinista, pero una decisión local aparentemente buena puede impedir una secuencia global mejor. Métodos como beam search o distintas estrategias de muestreo amplían las posibilidades, aunque también añaden decisiones y coste."
+        },
+        {
+          "type": "paragraph",
+          "text": "Aquí he entendido con más claridad la diferencia entre entrenamiento e inferencia. En entrenamiento se procesan secuencias objetivo completas y puede utilizarse teacher forcing. En inferencia solo existe la entrada original y todo lo que el decoder haya generado hasta el momento."
+        }
+      ]
+    },
+    {
+      "heading": "Perplexity mide incertidumbre, no calidad completa",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Una vez que el modelo genera o asigna probabilidades, hace falta evaluarlo. Para un modelo de lenguaje, la cross-entropy media mide cuánto penaliza no haber asignado suficiente probabilidad a los tokens correctos. La perplexity es su exponencial:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "perplexity = exp(cross-entropy media por token)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Puede interpretarse aproximadamente como el número efectivo de opciones entre las que el modelo duda en cada paso. Una perplexity menor indica menos incertidumbre. El valor mínimo es uno, correspondiente a predecir todos los tokens correctos con probabilidad uno."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sin embargo, la perplexity no indica por sí sola si un texto es factual, coherente o útil. Además, solo se pueden comparar valores obtenidos con el mismo dataset, vocabulario, tokenización y definición de pérdida. Cambiar la forma de dividir el texto cambia también la cantidad y dificultad de las predicciones."
+        },
+        {
+          "type": "paragraph",
+          "text": "Al acumular perplexity sobre varios lotes, no conviene promediar simplemente sus pérdidas si contienen cantidades diferentes de padding. Es más preciso sumar la negative log-likelihood de todos los tokens reales, dividir por el número total de tokens no padding y exponenciar el resultado."
+        }
+      ]
+    },
+    {
+      "heading": "Comparar con referencias responde a otra pregunta",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "BLEU, ROUGE y METEOR no evalúan directamente la distribución de probabilidades del modelo. Comparan una hipótesis generada con una o varias referencias mediante diferentes formas de solapamiento."
+        },
+        {
+          "type": "paragraph",
+          "text": "La precisión pregunta qué proporción de lo generado aparece en la referencia. El recall pregunta qué proporción de la referencia ha sido cubierta. F1 combina ambas para evitar que una salida muy corta parezca buena solo por ser precisa o que una salida demasiado larga parezca buena solo por cubrir muchos elementos."
+        },
+        {
+          "type": "paragraph",
+          "text": "BLEU se utiliza principalmente en traducción. Calcula modified n-gram precision y limita los matches mediante clipped counts, evitando que repetir una palabra aumente artificialmente el resultado. Después combina las precisiones de varios órdenes con una media geométrica y aplica una brevity penalty a las traducciones excesivamente cortas."
+        },
+        {
+          "type": "paragraph",
+          "text": "ROUGE se utiliza con frecuencia en resumen:"
+        },
+        {
+          "type": "list",
+          "style": "unordered",
+          "items": [
+            "ROUGE-N compara n-gramas.",
+            "ROUGE-L utiliza la longest common subsequence y conserva el orden sin exigir adyacencia.",
+            "ROUGE-S compara pares ordenados de palabras permitiendo saltos entre ellas."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "METEOR construye una alineación de unigramas y puede tener en cuenta coincidencias exactas, raíces, sinónimos o paráfrasis. También agrupa los matches en chunks: si aparecen fragmentados o en un orden muy diferente, aplica una penalización."
+        },
+        {
+          "type": "paragraph",
+          "text": "Todas estas métricas simplifican la calidad a una propiedad concreta. Una paráfrasis válida puede tener poco solapamiento; una frase casi idéntica puede contener un error factual crucial. Por eso la elección depende de la tarea y las métricas automáticas deben complementarse con inspección cualitativa cuando importan el significado, la seguridad o la utilidad."
+        }
+      ]
+    }
+  ],
+  "takeaway": [
+    {
+      "type": "paragraph",
+      "text": "La idea que conecta todo el día es el contexto. Word2Vec lo utiliza para aprender embeddings; GloVe lo recoge en estadísticas de coocurrencia; una RNN lo transporta en sus estados; el encoder intenta condensarlo; el decoder lo utiliza para producir la siguiente palabra; y las métricas comprueban propiedades diferentes del resultado."
+    },
+    {
+      "type": "paragraph",
+      "text": "También me quedo con que no existe una única representación ni una única métrica que resuelva todo el problema. Promediar embeddings puede bastar para clasificación, pero no conserva el orden. El hidden state conserva una historia aprendida, pero puede perder dependencias largas. Perplexity mide incertidumbre, pero no significado. BLEU, ROUGE y METEOR miden solapamiento, pero no garantizan verdad."
+    },
+    {
+      "type": "paragraph",
+      "text": "Entender estas fronteras me resulta más útil que memorizar las fórmulas de cada arquitectura. Cada pieza responde a una pregunta concreta, y buena parte del diseño consiste en no pedirle que responda una pregunta distinta."
+    }
+  ]
+}

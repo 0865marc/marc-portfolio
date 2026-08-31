@@ -1,0 +1,451 @@
+locale: es-CO
+media_folder: public/media
+public_folder: /media
+
+backend:
+  name: github
+  repo: 0865marc/marc-portfolio
+  branch: main
+  base_url: https://cms-auth.portfolio.mybrawl.io
+  auth_methods: [oauth]
+  auth_scope: public_repo
+
+publish_mode: editorial_workflow
+
+collections:
+  - name: posts
+    label: Conocimiento
+    label_singular: Artículo de conocimiento
+    description: >-
+      Guarda cambios en una rama y pull request. El estado controla la salida pública tras el merge.
+    folder: content/posts
+    format: json
+    identifier_field: id
+    delete: false
+    publish: false
+    reorder:
+      key: position
+    sortable_fields:
+      fields: [position, title, publishedAt, status]
+      default:
+        field: position
+        direction: ascending
+    summary: '{{position}} · {{title}}'
+    preview_path: '/blog/{{slug}}/'
+    fields:
+      - label: ID permanente
+        name: id
+        widget: string
+        hint: No cambiar ni reutilizar después de crear el artículo.
+        pattern: ['^[a-z0-9]+(?:-[a-z0-9]+)*$', 'Usa minúsculas, números y guiones simples.']
+      - label: Estado público
+        name: status
+        widget: select
+        options:
+          - { label: Borrador, value: draft }
+          - { label: Publicado, value: published }
+          - { label: Retirado, value: deleted }
+      - label: Posición
+        name: position
+        widget: number
+        value_type: int
+        min: 1
+        hint: Orden ascendente en la landing y el índice. También se puede reordenar desde la lista.
+      - label: Categoría
+        name: category
+        widget: string
+      - label: Etiquetas
+        name: tags
+        widget: relation
+        collection: tags
+        search_fields: [label, id]
+        value_field: id
+        display_fields: [label]
+        multiple: true
+        min: 1
+      - label: Título
+        name: title
+        widget: string
+      - label: Extracto
+        name: excerpt
+        widget: text
+      - label: Fecha de publicación
+        name: publishedAt
+        widget: datetime
+        type: date
+      - label: Introducción
+        name: introduction
+        widget: list
+        min: 1
+        field: { label: Párrafo, name: paragraph, widget: text }
+      - label: Secciones
+        name: sections
+        widget: list
+        min: 1
+        fields:
+          - { label: Encabezado, name: heading, widget: string }
+          - label: Párrafos
+            name: paragraphs
+            widget: list
+            min: 1
+            field: { label: Párrafo, name: paragraph, widget: text }
+          - label: Puntos
+            name: points
+            widget: list
+            required: false
+            field: { label: Punto, name: point, widget: text }
+          - label: Bloques de código
+            name: codeBlocks
+            widget: list
+            required: false
+            fields:
+              - { label: Título contextual, name: title, widget: string }
+              - label: Lenguaje
+                name: language
+                widget: select
+                options: [bash, json, markdown, typescript, text]
+              - label: Código
+                name: code
+                widget: code
+                output_code_only: true
+      - label: Conclusión
+        name: takeaway
+        widget: list
+        min: 1
+        field: { label: Párrafo, name: paragraph, widget: text }
+
+  - name: tags
+    label: Etiquetas
+    label_singular: Etiqueta
+    description: Los IDs son referencias estables; renombra solo la etiqueta visible.
+    folder: content/tags
+    format: json
+    identifier_field: id
+    delete: false
+    publish: false
+    sortable_fields:
+      fields: [label, id]
+      default:
+        field: label
+        direction: ascending
+    summary: '{{label}}'
+    fields:
+      - label: ID permanente
+        name: id
+        widget: string
+        hint: No cambiar ni reutilizar después de crear la etiqueta.
+        pattern: ['^[a-z0-9]+(?:-[a-z0-9]+)*$', 'Usa minúsculas, números y guiones simples.']
+      - label: Etiqueta visible
+        name: label
+        widget: string
+
+  - name: weeks
+    label: Semanas
+    label_singular: Semana
+    description: La ruta de ocho semanas usa objetivos y reservas; el estado no certifica progreso realizado.
+    folder: content/weeks
+    format: json
+    identifier_field: id
+    create: false
+    delete: false
+    publish: false
+    sortable_fields:
+      fields: [position, startDate, focus, progressState, status]
+      default:
+        field: position
+        direction: ascending
+    summary: 'Semana {{position}} · {{focus}}'
+    preview_path: '/roadmap/#{{slug}}'
+    fields:
+      - label: ID permanente
+        name: id
+        widget: string
+        hint: Usa w1 a w8 y no lo cambies después de crear la semana.
+        pattern: ['^w[1-8]$', 'Usa un ID entre w1 y w8.']
+        readonly: true
+      - label: Estado editorial
+        name: status
+        widget: select
+        options:
+          - { label: Borrador, value: draft }
+          - { label: Publicada, value: published }
+          - { label: Retirada, value: deleted }
+      - label: Posición
+        name: position
+        widget: number
+        value_type: int
+        min: 1
+        readonly: true
+      - label: Inicio
+        name: startDate
+        widget: datetime
+        type: date
+        readonly: true
+      - label: Fin
+        name: endDate
+        widget: datetime
+        type: date
+        readonly: true
+      - label: Título
+        name: title
+        widget: string
+      - label: Foco
+        name: focus
+        widget: string
+      - label: Objetivo
+        name: objective
+        widget: text
+      - label: Recurso relacionado
+        name: resourceLabel
+        widget: string
+        required: false
+        hint: Etiqueta corta del enlace; completa también el campo de URL.
+      - label: URL del recurso
+        name: resourceHref
+        widget: string
+        required: false
+        pattern: ['^https://', 'Usa una URL HTTPS.']
+      - label: Agenda
+        name: agenda
+        widget: list
+        min: 1
+        fields:
+          - { label: Día o bloque, name: day, widget: string }
+          - label: Tramos
+            name: blocks
+            widget: list
+            min: 1
+            fields:
+              - { label: Hora, name: time, widget: string }
+              - { label: Actividad, name: activity, widget: text }
+      - label: Reparto de horas
+        name: hoursBreakdown
+        widget: list
+        required: false
+        fields:
+          - { label: Área, name: label, widget: string }
+          - { label: Horas, name: hours, widget: number, min: 0 }
+      - label: Total de horas explícito
+        name: hoursPlanned
+        widget: number
+        required: false
+        min: 0
+        hint: Déjalo vacío cuando el plan no proporcione un total semanal.
+      - label: Temas
+        name: topics
+        widget: list
+        min: 1
+        field: { label: Tema, name: topic, widget: string }
+      - label: Hitos previstos
+        name: milestones
+        widget: list
+        required: false
+        field: { label: Hito, name: milestone, widget: text }
+      - label: Reservas
+        name: reservations
+        widget: list
+        required: false
+        field: { label: Reserva, name: reservation, widget: text }
+      - label: Criterios
+        name: criteria
+        widget: list
+        required: false
+        field: { label: Criterio, name: criterion, widget: text }
+      - label: Estado de progreso
+        name: progressState
+        widget: select
+        options:
+          - { label: Planificada, value: planned }
+          - { label: Activa, value: active }
+          - { label: Completada, value: complete }
+          - { label: En pausa, value: paused }
+
+  - name: daily
+    label: Progreso diario
+    label_singular: Jornada
+    description: Publica solo jornadas realizadas con evidencia factual. No crees progreso futuro ni vacío.
+    folder: content/daily
+    format: json
+    identifier_field: id
+    create: true
+    delete: false
+    publish: false
+    sortable_fields:
+      fields: [activityDate, position, title, status]
+      default:
+        field: activityDate
+        direction: ascending
+    summary: '{{activityDate}} · {{title}}'
+    preview_path: '/career-sprint-daily/{{slug}}/'
+    fields:
+      - label: ID y fecha permanente
+        name: id
+        widget: string
+        hint: Debe coincidir exactamente con la fecha YYYY-MM-DD y el nombre del archivo.
+        pattern: ['^[0-9]{4}-[0-9]{2}-[0-9]{2}$', 'Usa una fecha YYYY-MM-DD.']
+      - label: Estado editorial
+        name: status
+        widget: select
+        options:
+          - { label: Borrador, value: draft }
+          - { label: Publicada, value: published }
+          - { label: Retirada, value: deleted }
+      - label: Posición
+        name: position
+        widget: number
+        value_type: int
+        min: 1
+      - label: Fecha de actividad
+        name: activityDate
+        widget: datetime
+        type: date
+      - label: Semana
+        name: weekId
+        widget: relation
+        collection: weeks
+        search_fields: [id, focus]
+        value_field: id
+        display_fields: [id, focus]
+      - label: Horas reales
+        name: hoursActual
+        widget: number
+        required: false
+        min: 0
+      - label: Categoría
+        name: category
+        widget: string
+      - label: Etiquetas
+        name: tags
+        widget: relation
+        collection: tags
+        search_fields: [label, id]
+        value_field: id
+        display_fields: [label]
+        multiple: true
+        min: 1
+      - label: Título
+        name: title
+        widget: string
+      - label: Extracto
+        name: excerpt
+        widget: text
+      - label: Introducción
+        name: introduction
+        widget: list
+        min: 1
+        types:
+          - label: Párrafo
+            name: paragraph
+            widget: object
+            fields:
+              - { label: Texto, name: text, widget: text }
+          - label: Bloque de código
+            name: code
+            widget: object
+            fields:
+              - { label: Título contextual, name: title, widget: string, required: false }
+              - label: Lenguaje
+                name: language
+                widget: select
+                options: [bash, json, markdown, typescript, text]
+              - label: Código
+                name: code
+                widget: code
+                output_code_only: true
+          - label: Lista
+            name: list
+            widget: object
+            fields:
+              - label: Estilo
+                name: style
+                widget: select
+                options:
+                  - { label: Sin orden, value: unordered }
+                  - { label: Ordenada, value: ordered }
+              - label: Elementos
+                name: items
+                widget: list
+                min: 1
+                field: { label: Elemento, name: item, widget: text }
+      - label: Secciones
+        name: sections
+        widget: list
+        min: 1
+        fields:
+          - { label: Encabezado, name: heading, widget: string }
+          - label: Bloques en orden de lectura
+            name: blocks
+            widget: list
+            min: 1
+            types:
+              - label: Párrafo
+                name: paragraph
+                widget: object
+                fields:
+                  - { label: Texto, name: text, widget: text }
+              - label: Bloque de código
+                name: code
+                widget: object
+                fields:
+                  - { label: Título contextual, name: title, widget: string, required: false }
+                  - label: Lenguaje
+                    name: language
+                    widget: select
+                    options: [bash, json, markdown, typescript, text]
+                  - label: Código
+                    name: code
+                    widget: code
+                    output_code_only: true
+              - label: Lista
+                name: list
+                widget: object
+                fields:
+                  - label: Estilo
+                    name: style
+                    widget: select
+                    options:
+                      - { label: Sin orden, value: unordered }
+                      - { label: Ordenada, value: ordered }
+                  - label: Elementos
+                    name: items
+                    widget: list
+                    min: 1
+                    field: { label: Elemento, name: item, widget: text }
+      - label: Conclusión
+        name: takeaway
+        widget: list
+        min: 1
+        types:
+          - label: Párrafo
+            name: paragraph
+            widget: object
+            fields:
+              - { label: Texto, name: text, widget: text }
+          - label: Bloque de código
+            name: code
+            widget: object
+            fields:
+              - { label: Título contextual, name: title, widget: string, required: false }
+              - label: Lenguaje
+                name: language
+                widget: select
+                options: [bash, json, markdown, typescript, text]
+              - label: Código
+                name: code
+                widget: code
+                output_code_only: true
+          - label: Lista
+            name: list
+            widget: object
+            fields:
+              - label: Estilo
+                name: style
+                widget: select
+                options:
+                  - { label: Sin orden, value: unordered }
+                  - { label: Ordenada, value: ordered }
+              - label: Elementos
+                name: items
+                widget: list
+                min: 1
+                field: { label: Elemento, name: item, widget: text }

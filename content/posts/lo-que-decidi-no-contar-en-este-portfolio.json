@@ -1,0 +1,44 @@
+{
+  "id": "lo-que-decidi-no-contar-en-este-portfolio",
+  "status": "published",
+  "position": 2,
+  "category": "Portfolio",
+  "tags": [
+    "portfolio",
+    "privacidad",
+    "edicion"
+  ],
+  "title": "Lo que decidí no contar en este portfolio",
+  "excerpt": "Qué información aporta contexto en un portfolio técnico y qué detalles decidí omitir por privacidad, claridad o falta de valor.",
+  "publishedAt": "2026-08-17",
+  "introduction": [
+    "En una versión anterior de este portfolio había detalles que explicaban demasiado de mi trabajo. Al leerlos de nuevo entendí que no necesitaba convertir el contexto interno en una carta de presentación.",
+    "Quiero contar a qué me dedico, qué problemas me interesa resolver y qué he aprendido al hacerlo. No necesito publicar el entorno concreto en el que ocurre cada cosa para que ese relato sea útil."
+  ],
+  "sections": [
+    {
+      "heading": "Qué ocupaba demasiado espacio",
+      "paragraphs": [
+        "El texto anterior daba protagonismo a información que pertenece al trabajo compartido, no a mi perfil personal. En vez de aclarar mi papel, podía hacer que una página sobre mí pareciera un inventario ajeno.",
+        "Decidí retirarla porque explicar bien una responsabilidad no exige acompañarla de todos sus detalles."
+      ]
+    },
+    {
+      "heading": "Qué prefiero contar ahora",
+      "paragraphs": [
+        "Ahora describo mi responsabilidad general, el tipo de problemas con los que trabajo y el aprendizaje que me llevo. Eso permite entender mi enfoque sin presentar como propio el contexto que queda fuera de una conversación pública.",
+        "El recorte también me obligó a elegir mejor las palabras: si una frase no aportaba una explicación honesta de mi trabajo, preferí no dejarla."
+      ]
+    },
+    {
+      "heading": "Cómo comprobé que el recorte era real",
+      "paragraphs": [
+        "No me limité a los párrafos visibles. Revisé el HTML generado, los metadatos de las páginas, la tarjeta para compartir, el mapa del sitio y los demás archivos públicos.",
+        "Busqué que lo retirado no reapareciera en otro formato. Esa comprobación forma parte de la edición: una omisión solo sirve si también deja de circular fuera del texto principal."
+      ]
+    }
+  ],
+  "takeaway": [
+    "Prefiero que este portfolio sirva para entender mi trabajo, no para exponer el de otras personas."
+  ]
+}

@@ -1,57 +1,52 @@
 ---
-import ProjectVisual from './ProjectVisual.astro'
+import AinkiiModel from './AinkiiModel.astro'
 import { professionalProfile } from '../data/portfolio'
 
-const { projects, contacts } = professionalProfile
+const { contacts } = professionalProfile
+const ainkii = professionalProfile.projects.find(project => project.id === 'ainkii')!
 const currentYear = new Date().getFullYear()
 ---
 
-<section id="projects" aria-labelledby="projects-title" class="scroll-mt-6 px-5 py-24 sm:px-8 md:px-10 md:py-32">
+<slot name="career-sprint" />
+<section id="projects" aria-labelledby="projects-title" class="scroll-mt-6 px-5 py-16 sm:px-8 md:px-10 md:py-24" hidden>
   <div class="mx-auto max-w-6xl">
-    <div class="grid items-end gap-8 lg:grid-cols-[1fr_25rem]">
-      <div>
-        <p class="section-kicker">Productos propios</p>
-        <h2 id="projects-title" data-route-heading tabindex="-1" class="hero-heading mt-5 text-[clamp(3rem,12vw,9rem)] font-black uppercase leading-none">Proyectos</h2>
+    <div data-section-intro class="grid items-end gap-8 xl:grid-cols-[minmax(0,1fr)_minmax(0,25rem)]">
+      <div class="min-w-0">
+        <p class="section-kicker">Evidencia separada</p>
+        <h2 id="projects-title" data-route-heading tabindex="-1" class="hero-heading mt-4 text-3xl font-black uppercase leading-tight sm:text-4xl">Ainkii</h2>
       </div>
-      <p class="text-xl font-light leading-relaxed opacity-80">Dos laboratorios reales para explorar producto educativo, IA aplicada y agentes capaces de actuar con supervisión.</p>
+      <p data-section-intro-copy class="min-w-0 text-lg font-light leading-relaxed opacity-80">Proyecto educativo personal en desarrollo, presentado de forma independiente dentro del portfolio.</p>
     </div>
 
-    <div class="mt-16 space-y-6">
-      {projects.map((project, projectIndex) => (
-        <article data-project-card data-reveal data-reveal-delay={String(projectIndex * 80)} class:list={['project-card rounded-[40px] border border-[#D7E2EA]/25 p-6 md:p-10', project.flagship && 'project-card--flagship']}>
-          <div class="grid gap-8 lg:grid-cols-[minmax(16rem,.75fr)_1.25fr] lg:gap-12">
-            <div>
-              <div class="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[.18em] opacity-60">
-                <p>{project.number} · {project.category}</p>
-                <span aria-hidden="true">·</span>
-                <p>{project.status}</p>
-              </div>
-              <h3 class="mt-5 text-4xl font-medium uppercase leading-tight sm:text-5xl">{project.canonicalName}</h3>
-              <p class="mt-6 text-lg font-light leading-relaxed opacity-80">{project.description}</p>
-              <p class="mt-5 text-xs uppercase tracking-[.18em] opacity-60">Enfoque · {project.focus}</p>
-              <ul aria-label={`Áreas de ${project.canonicalName}`} class="mt-5 flex flex-wrap gap-2">
-                {project.tags.map(item => <li class="tag-dark">{item}</li>)}
-              </ul>
-              <a class="button-light mt-8" href={project.href}>{project.id === 'ainkii' ? 'Ver el proyecto' : 'Leer el caso'} <span aria-hidden="true">↗</span></a>
-            </div>
-            <ProjectVisual kind={project.id} />
+    <article data-project-card class="mt-8 rounded-[28px] border border-[#D7E2EA]/25 p-5 sm:p-8 md:p-10">
+      <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(16rem,.65fr)] lg:items-center lg:gap-8">
+        <div class="min-w-0">
+          <div class="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[.18em] opacity-60">
+            <p>{ainkii.category}</p>
+            <span aria-hidden="true">·</span>
+            <p>{ainkii.status}</p>
           </div>
-        </article>
-      ))}
-    </div>
+          <h3 class="mt-4 text-2xl font-medium uppercase leading-tight sm:text-3xl">{ainkii.canonicalName}</h3>
+          <p class="mt-4 text-lg font-light leading-relaxed opacity-80">{ainkii.teaser}</p>
+          <p class="mt-4 text-xs uppercase tracking-[.18em] opacity-60">Enfoque · {ainkii.focus}</p>
+          <a class="button-light mt-6" href={ainkii.href}>Ver el proyecto <span aria-hidden="true">↗</span></a>
+        </div>
+        <AinkiiModel compact showDecision={false} />
+      </div>
+    </article>
   </div>
 </section>
 
 <slot name="notes" />
 
-<footer id="contact" class="scroll-mt-6 px-5 pt-24 sm:px-8 md:px-10 md:pt-32">
+<footer id="contact" aria-labelledby="contact-title" class="scroll-mt-6 px-5 pt-16 sm:px-8 sm:pt-20 md:px-10 md:pt-24">
   <div class="mx-auto max-w-6xl">
-    <div data-contact-panel class="rounded-[40px] border border-[#D7E2EA]/25 p-6 sm:p-10 md:p-14">
+    <div data-contact-panel class="rounded-[28px] border border-[#D7E2EA]/25 p-5 sm:p-8 md:p-10">
       <p class="section-kicker">Contacto</p>
-      <div class="mt-5 grid min-w-0 gap-8 xl:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] xl:items-end">
+      <div class="mt-4 grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] xl:items-end">
         <div class="contact-copy min-w-0">
-          <h2 data-route-heading tabindex="-1" class="contact-heading hero-heading font-black uppercase leading-none tracking-[-.02em]">¿Hablamos?</h2>
-          <p class="mt-7 max-w-2xl text-xl font-light leading-relaxed opacity-80">Si quieres hablar de software, producto, automatización o IA aplicada, aquí tienes dos formas directas de encontrarme.</p>
+          <h2 id="contact-title" data-route-heading tabindex="-1" class="hero-heading text-3xl font-black uppercase leading-tight sm:text-4xl">¿Hablamos?</h2>
+          <p class="mt-4 max-w-2xl text-lg font-light leading-relaxed opacity-80">Si quieres hablar de ingeniería de software, proyectos IT, automatización o IA aplicada, aquí tienes dos formas directas de encontrarme.</p>
         </div>
         <address class="flex min-w-0 w-full flex-col items-stretch gap-3 not-italic">
           <a class="contact-action button-light w-full max-w-full justify-between gap-4" href={`mailto:${contacts.email}`}>Escríbeme <span aria-hidden="true">↗</span></a>
@@ -61,7 +56,7 @@ const currentYear = new Date().getFullYear()
     </div>
     <div class="flex flex-col gap-2 py-8 text-xs uppercase tracking-[.16em] opacity-60 sm:flex-row sm:items-center sm:justify-between">
       <p>Marc Teixidó Rosauro · {currentYear}</p>
-      <p>Software · Proyectos IT · Datos · Automatización</p>
+      <p>Software · Proyectos IT · Aprendizaje aplicado</p>
     </div>
   </div>
 </footer>

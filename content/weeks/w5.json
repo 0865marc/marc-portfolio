@@ -1,0 +1,31 @@
+{
+  "id": "w5",
+  "status": "published",
+  "position": 5,
+  "startDate": "2026-09-21",
+  "endDate": "2026-09-27",
+  "title": "Semana 5",
+  "focus": "AWS Generative AI Developer — Learning Plan",
+  "objective": "Objetivo previsto: diseñar e implementar aplicaciones GenAI sobre AWS mediante foundation models, RAG, agentes, seguridad y arquitecturas GenAI empresariales.",
+  "resourceLabel": "Ver plan GenAI",
+  "resourceHref": "https://skillbuilder.aws/learning-plan/BGTH16YCTU/aws-generative-ai-developer-advanced-learning-plan-includes-labs/ZDN46CX881",
+  "agenda": [
+    {
+      "day": "Plan semanal",
+      "blocks": [
+        { "time": "Modelos", "activity": "Amazon Bedrock y foundation models" },
+        { "time": "RAG", "activity": "RAG y Knowledge Bases" },
+        { "time": "Agentes", "activity": "Agents y tool use" },
+        { "time": "Seguridad", "activity": "Guardrails y seguridad" },
+        { "time": "Laboratorios", "activity": "Builder Labs previstos" }
+      ]
+    }
+  ],
+  "topics": ["Amazon Bedrock", "foundation models", "RAG", "Knowledge Bases", "agents", "tool use", "guardrails", "seguridad", "Builder Labs"],
+  "milestones": [
+    "Hito previsto: diseñar una aplicación GenAI sobre AWS.",
+    "Hito previsto: practicar RAG y agents en Builder Labs."
+  ],
+  "criteria": ["Mantener aplicaciones y laboratorios como objetivos previstos, sin afirmar implementación completada."],
+  "progressState": "planned"
+}

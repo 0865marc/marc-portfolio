@@ -3,18 +3,19 @@ import { professionalProfile } from '../data/portfolio'
 
 interface Props {
   compact?: boolean
+  showDecision?: boolean
 }
 
-const { compact = false } = Astro.props
+const { compact = false, showDecision = true } = Astro.props
 const ainkii = professionalProfile.projects.find(project => project.id === 'ainkii')!
 ---
 
 <div class:list={['ainkii-model', compact && 'ainkii-model--compact']}>
   <div class="ainkii-copilot">
-    <span aria-hidden="true">AI</span>
+    <span aria-hidden="true">IA</span>
     <div>
-      <strong>Copiloto editorial</strong>
-      <p>Analiza, propone y revisa</p>
+      <strong>IA para revisar</strong>
+      <p>Ordena y propone</p>
     </div>
   </div>
   <ol>
@@ -26,8 +27,10 @@ const ainkii = professionalProfile.projects.find(project => project.id === 'aink
       </li>
     ))}
   </ol>
-  <div class="ainkii-human-gate">
-    <span aria-hidden="true">✓</span>
-    <p><strong>Validación humana</strong><br />El usuario aprueba los cambios importantes</p>
-  </div>
+  {showDecision && (
+    <div class="ainkii-human-gate">
+      <span aria-hidden="true">✓</span>
+      <p><strong>Revisión humana</strong><br />{ainkii.principle}</p>
+    </div>
+  )}
 </div>

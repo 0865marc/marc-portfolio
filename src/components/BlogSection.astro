@@ -1,27 +1,37 @@
 ---
 import { blogPosts } from '../data/blog'
+import { getLandingBlogPosts } from '../lib/blogPresentation'
 import BlogCard from './BlogCard.astro'
+
+const landingPosts = getLandingBlogPosts(blogPosts)
 ---
 
-<section id="blog" aria-labelledby="blog-title" class="surface-light scroll-mt-6 rounded-t-[40px] bg-white px-5 py-24 text-[#0C0C0C] sm:px-8 md:px-10 md:py-32">
+<section id="blog" aria-labelledby="blog-title" class="surface-light scroll-mt-6 rounded-t-[28px] bg-white px-5 py-16 text-[#0C0C0C] sm:px-8 sm:py-20 md:px-10 md:py-24">
   <div class="mx-auto max-w-6xl">
-    <div class="grid items-end gap-8 lg:grid-cols-[1fr_25rem]">
-      <div>
-        <p class="section-kicker">Blog de construcción</p>
-        <h2 id="blog-title" data-route-heading tabindex="-1" class="mt-5 text-[clamp(3rem,12vw,9rem)] font-black uppercase leading-none">Blog</h2>
+    <div data-section-intro class="grid items-end gap-8 xl:grid-cols-[minmax(0,1fr)_minmax(0,25rem)]">
+      <div class="min-w-0">
+        <p class="section-kicker">Blog</p>
+        <h2 id="blog-title" data-route-heading tabindex="-1" class="mt-4 text-3xl font-black uppercase leading-tight sm:text-4xl">Blog</h2>
       </div>
-      <div>
-        <p class="text-xl font-light leading-relaxed text-black/70">Contenido público solo cuando existe un sistema real detrás y puedo explicar sus límites sin rellenar huecos.</p>
-        <a href="/blog/" class="button-dark mt-6">Abrir blog <span aria-hidden="true">↗</span></a>
+      <div data-section-intro-copy class="min-w-0">
+        <p class="text-lg font-light leading-relaxed text-black/70">Notas sobre software, verificación y decisiones técnicas.</p>
+        <a href="/blog/" class="button-dark mt-4">Abrir Blog <span aria-hidden="true">↗</span></a>
       </div>
     </div>
 
-    <div class="mt-14 grid max-w-3xl gap-4">
-      {blogPosts.map((post, index) => (
-        <div data-reveal data-reveal-delay={String(index * 80)}>
-          <BlogCard post={post} source="landing" headingLevel={3} />
-        </div>
-      ))}
-    </div>
+    {landingPosts.length ? (
+      <div class="mt-8 grid max-w-3xl gap-4">
+        {landingPosts.map((post, index) => (
+          <div data-reveal data-reveal-delay={String(index * 80)}>
+            <BlogCard post={post} source="landing" headingLevel={3} />
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div class="mt-8 max-w-3xl rounded-[28px] border border-black/15 p-6 sm:p-8" role="status" aria-live="polite">
+        <p class="section-kicker">Sin publicaciones</p>
+        <p class="mt-3 text-xl font-light leading-relaxed text-black/70">Aún no hay artículos publicados. Vuelve pronto para leer nuevas notas.</p>
+      </div>
+    )}
   </div>
 </section>

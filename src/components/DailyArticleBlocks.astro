@@ -1,0 +1,35 @@
+---
+import type { DailyArticleBlock } from '../data/challenge'
+import ArticleInlineText from './ArticleInlineText.astro'
+
+interface Props {
+  blocks: DailyArticleBlock[]
+  captionScope: string
+}
+
+const { blocks, captionScope } = Astro.props
+const codeCaption = (language: string, title?: string) => title?.trim() || `Código · ${language}`
+let codeIndex = 0
+const blocksWithCodeIndexes = blocks.map(block => ({
+  block,
+  codeIndex: block.type === 'code' ? codeIndex++ : -1,
+}))
+---
+
+{blocksWithCodeIndexes.map(({ block, codeIndex }) => {
+  if (block.type === 'paragraph') return <p><ArticleInlineText text={block.text} /></p>
+
+  if (block.type === 'code') {
+    const captionId = `article-code-caption-${captionScope}-${codeIndex + 1}`
+    return (
+      <figure class="article-code" aria-labelledby={captionId}>
+        <figcaption id={captionId}>{codeCaption(block.language, block.title)}</figcaption>
+        <pre tabindex="0"><code class={`language-${block.language}`}>{block.code}</code></pre>
+      </figure>
+    )
+  }
+
+  return block.style === 'ordered'
+    ? <ol>{block.items.map(item => <li><ArticleInlineText text={item} /></li>)}</ol>
+    : <ul>{block.items.map(item => <li><ArticleInlineText text={item} /></li>)}</ul>
+})}

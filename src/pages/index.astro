@@ -1,14 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import HeroSection from '../components/HeroSection.astro'
-import JourneyStrip from '../components/JourneyStrip.astro'
 import AboutSection from '../components/AboutSection.astro'
-import CapabilitiesSection from '../components/CapabilitiesSection.astro'
 import BlogSection from '../components/BlogSection.astro'
+import CareerSprintSection from '../components/CareerSprintSection.astro'
+import HeroSection from '../components/HeroSection.astro'
 import ProjectsSection from '../components/ProjectsSection.astro'
 import { professionalProfile } from '../data/portfolio'
 
-const { identity, education, technicalProfile, contacts } = professionalProfile
+const { identity, education, contacts } = professionalProfile
 const canonicalUrl = new URL('/', Astro.site).href
 const personJsonLd = {
   '@context': 'https://schema.org',
@@ -22,13 +21,12 @@ const personJsonLd = {
     '@type': 'CollegeOrUniversity',
     name: education.institution,
   },
-  knowsAbout: technicalProfile.flatMap(group => group.items),
   sameAs: [contacts.linkedin],
 }
 const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: `Portfolio de ${identity.fullName}`,
+  name: `Portfolio profesional de ${identity.fullName}`,
   url: canonicalUrl,
   inLanguage: 'es',
   author: { '@type': 'Person', name: identity.fullName },
@@ -36,18 +34,18 @@ const websiteJsonLd = {
 ---
 
 <BaseLayout
-  title="Marc Teixidó Rosauro — Software Engineer · IT Project Lead · AI & Automation"
-  description="Portfolio de Marc Teixidó Rosauro: software, proyectos IT, datos, automatización e IA aplicada. Ainkii, Hermes y una trayectoria de la ingeniería a la coordinación técnica."
+  title={identity.seo.title}
+  description={identity.seo.description}
   canonicalPath="/"
+  imageAlt={identity.seo.imageAlt}
   jsonLd={[personJsonLd, websiteJsonLd]}
 >
   <main>
     <HeroSection />
-    <JourneyStrip />
     <AboutSection />
-    <CapabilitiesSection />
     <ProjectsSection>
-      <BlogSection slot="notes" />
+      <CareerSprintSection slot="career-sprint" />
+      <div slot="notes" hidden><BlogSection /></div>
     </ProjectsSection>
   </main>
 </BaseLayout>

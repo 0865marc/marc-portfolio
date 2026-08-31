@@ -6,16 +6,6 @@ export type ProfileFact = {
   context: string
 }
 
-export type ExperienceSection = {
-  title: string
-  items: string[]
-}
-
-export type AppliedAIUse = {
-  title: string
-  description: string
-}
-
 export type Experience = {
   id: string
   company: string
@@ -24,46 +14,26 @@ export type Experience = {
   endDate: string | null
   period: string
   location: string
-  workMode: string | null
   summary: string
-  responsibilities: string[]
-  publicSections: ExperienceSection[]
-  technologies: string[]
-  appliedAI: AppliedAIUse[]
   sourceId: typeof PROFILE_SOURCE_ID
 }
 
-export type Capability = {
-  number: string
-  name: string
-  description: string
-  tools: string[]
-}
-
 export type Project = {
-  id: 'ainkii' | 'hermes'
-  number: string
+  id: 'ainkii'
   canonicalName: string
   aliases: string[]
   category: string
   status: string
-  flagship: boolean
   href: string
+  teaser: string
   description: string
   focus: string
   tags: string[]
-  audience: string | null
+  audience: string
   model: string[]
   capabilities: string[]
   principle: string
   sourceId: typeof PROFILE_SOURCE_ID
-}
-
-export type SkillGroup = {
-  id: string
-  name: string
-  levelNote: string | null
-  items: string[]
 }
 
 export type ProfessionalProfile = {
@@ -78,16 +48,16 @@ export type ProfessionalProfile = {
     displayName: string
     location: string
     headline: string
-    shortPositioning: string
     summary: string
-    narrative: string
+    aboutIntro: string
+    seo: {
+      title: string
+      description: string
+      imageAlt: string
+    }
   }
-  journey: string[]
   facts: ProfileFact[]
   experience: Experience[]
-  capabilities: Capability[]
-  technicalProfile: SkillGroup[]
-  professionalStrengths: string[]
   education: {
     qualification: string
     institution: string
@@ -122,293 +92,93 @@ export const professionalProfile: ProfessionalProfile = {
     fullName: 'Marc Teixidó Rosauro',
     displayName: 'Marc Teixidó',
     location: 'Balaguer, Lleida',
-    headline: 'Software Engineer · IT Project Lead · AI & Automation',
-    shortPositioning: 'Ingeniero especializado en software, proyectos IT, datos y automatización.',
-    summary:
-      'Combino una base técnica en desarrollo full-stack, backend, infraestructura y datos con experiencia coordinando producto, roadmap y equipos tecnológicos internacionales.',
-    narrative:
-      'Empecé construyendo plataformas web, procesos asíncronos y modelos sobre datos de sensores. Hoy conecto necesidades de negocio con especificaciones, arquitectura, ejecución, infraestructura y automatización, manteniendo criterio técnico en cada capa.',
+    headline: 'Ingeniero de software y responsable de proyectos IT',
+    summary: 'Construyo y coordino productos digitales, desde el backend y la infraestructura hasta los datos y la automatización.',
+    aboutIntro: 'Soy graduado en Ingeniería Electrónica Industrial y Automática. Desde 2022 trabajo desarrollando software y he ido asumiendo cada vez más responsabilidad sobre arquitectura, proveedores y decisiones técnicas. Me interesa entender los problemas de principio a fin y usar la automatización —incluida la IA— cuando aporta una mejora real.',
+    seo: {
+      title: 'Marc Teixidó — Ingeniero de software y responsable de proyectos IT',
+      description: 'Portfolio de Marc Teixidó: desarrollo de software, coordinación de proyectos IT, datos, infraestructura y automatización.',
+      imageAlt: 'Marc Teixidó — Ingeniero de software y responsable de proyectos IT',
+    },
   },
-  journey: ['Negocio y producto', 'Especificación', 'Arquitectura', 'Desarrollo', 'Infraestructura', 'Datos', 'Automatización e IA'],
   facts: [
     {
       label: 'Trayectoria',
-      value: 'Casi 4 años',
-      context: 'Software, datos, automatización y gestión de proyectos IT desde septiembre de 2022.',
+      value: 'Desde 2022',
+      context: 'Del desarrollo full-stack a la coordinación de proyectos y productos digitales.',
     },
     {
-      label: 'Ecosistema actual',
-      value: '3 distribuidores',
-      context: 'Entornos cloud y servicios propios coordinados en un contexto internacional.',
+      label: 'Producto integral',
+      value: 'De principio a fin',
+      context: 'Entiendo el problema, aterrizo la solución y acompaño su implementación.',
     },
     {
-      label: 'Coordinación actual',
-      value: '20–25 servicios',
-      context: 'Web, APIs, bases de datos, móvil, Android embebido e infraestructura asociada.',
+      label: 'Base técnica',
+      value: 'Ingeniería y software',
+      context: 'Una visión técnica para conectar producto, negocio y desarrollo.',
     },
   ],
   experience: [
     {
-      id: 'taurus-rd',
+      id: 'current-it-projects',
       company: 'Taurus Research & Development',
-      role: 'Responsable de proyectos IT / IT Project Lead',
-      startDate: '2025-06',
+      role: 'Responsable de proyectos IT',
+      startDate: '2025',
       endDate: null,
-      period: 'Jun 2025 — Actualidad',
-      location: 'Oliana',
-      workMode: 'Híbrido',
-      summary:
-        'Coordino el ecosistema tecnológico asociado a un producto de cocina conectado. Reporto al Director de R+D y participo en prioridades, roadmap técnico, validación de entregas y coordinación internacional.',
-      responsibilities: [
-        'Coordinar el desarrollo de productos y servicios.',
-        'Definir y seguir el roadmap técnico.',
-        'Convertir necesidades de producto y negocio en especificaciones técnicas.',
-        'Priorizar desarrollos y validar implementaciones y entregas.',
-        'Coordinar dirección, distribuidores y desarrolladores externos.',
-        'Gestionar infraestructura, entornos cloud, despliegues y funcionamiento de servicios.',
-        'Presentar proyectos, decisiones técnicas, costes y fechas a dirección.',
-        'Elaborar documentación técnica y demostrar herramientas internas.',
-        'Explicar sistemas complejos a dirección y distribuidores.',
-      ],
-      publicSections: [
-        {
-          title: 'Ecosistema internacional',
-          items: [
-            '3 distribuidores, cada uno con su propio entorno cloud y servicios asociados.',
-            'Aproximadamente 20–25 servicios entre web, APIs, bases de datos, iOS, Android y Android embebido.',
-            'Coordinación de 4 desarrolladores externos especializados, principalmente en India y con comunicación técnica en inglés.',
-          ],
-        },
-        {
-          title: 'Producto y ejecución',
-          items: [
-            'Roadmap, prioridades y traducción de necesidades de negocio a especificaciones técnicas.',
-            'Validación de implementaciones, supervisión de despliegues y operación de los distintos entornos.',
-            'Presentación de decisiones, costes, fechas y sistemas complejos a dirección y distribuidores.',
-          ],
-        },
-      ],
-      technologies: ['Docker', 'Terraform', 'Grafana', 'Prometheus', 'APIs', 'Bases de datos', 'Cloud', 'Web y móvil', 'Android embebido'],
-      appliedAI: [
-        {
-          title: 'Especificaciones asistidas',
-          description:
-            'Uso de IA para estructurar requisitos y cambios, reducir trabajo manual y mejorar la comunicación entre producto, coordinación y desarrollo.',
-        },
-        {
-          title: 'Contenido de usuarios',
-          description:
-            'Procesos basados en IA para analizar, clasificar, revisar o gestionar contenido subido por los usuarios.',
-        },
-        {
-          title: 'Detección de anomalías',
-          description:
-            'Experimentación con información de Grafana y monitorización para detectar comportamientos anómalos y facilitar la identificación preventiva de problemas.',
-        },
-      ],
+      period: '2025 — Actualidad',
+      location: 'Cataluña',
+      summary: 'Coordino el roadmap y el desarrollo de un ecosistema internacional de servicios web, móviles y cloud para un producto de cocina conectado. Trabajo con dirección, distribuidores y desarrolladores externos, traduciendo necesidades de producto en especificaciones, prioridades y entregas. También introduzco automatizaciones con IA en procesos de documentación, contenido y monitorización.',
       sourceId: PROFILE_SOURCE_ID,
     },
     {
       id: 'mcsystems',
       company: 'MCSystems',
-      role: 'Django Full-stack Developer / Software Engineer',
+      role: 'Desarrollador full-stack con Django',
       startDate: '2022-09',
       endDate: '2025-06',
-      period: 'Sep 2022 — Jun 2025',
-      location: 'Tàrrega',
-      workMode: null,
-      summary:
-        'Fui responsable de migrar la aplicación web anterior hacia una plataforma más moderna, mantenible y escalable, trabajando en desarrollo full-stack, backend, bases de datos, procesamiento, infraestructura y mantenimiento.',
-      responsibilities: [
-        'Migrar la aplicación web anterior a una nueva plataforma Django.',
-        'Desarrollar funcionalidades de CRM, ERP, operación, visualización, dashboards y herramientas internas.',
-        'Procesar datos procedentes de sensores distribuidos globalmente.',
-        'Desarrollar tareas pesadas en segundo plano con RabbitMQ y Celery.',
-        'Gestionar producción, test, despliegues, migraciones, actualizaciones, mantenimiento e incidencias.',
-        'Desarrollar e integrar modelos estadísticos predictivos para patrones de consumo.',
-        'Construir dashboards y herramientas de visualización para apoyar decisiones.',
-      ],
-      publicSections: [
-        {
-          title: 'Plataforma central',
-          items: [
-            'CRM, ERP, gestión operativa, herramientas internas y visualización de información.',
-            'Procesamiento de datos procedentes de sensores distribuidos globalmente.',
-            'Trabajo de extremo a extremo entre aplicación, datos, infraestructura y mantenimiento.',
-          ],
-        },
-        {
-          title: 'Datos y asincronía',
-          items: [
-            'RabbitMQ y Celery para ejecutar procesamiento pesado sin bloquear la aplicación principal.',
-            'Regresiones, series temporales y análisis histórico para predecir patrones de consumo.',
-            'Dashboards que convertían grandes volúmenes de datos en información útil.',
-          ],
-        },
-        {
-          title: 'Operación',
-          items: [
-            'Entornos de producción y test, despliegues, migraciones y actualizaciones.',
-            'Mantenimiento técnico y resolución de incidencias.',
-          ],
-        },
-      ],
-      technologies: ['Python', 'Django', 'PostgreSQL', 'SQLite', 'RabbitMQ', 'Celery', 'JavaScript', 'Bootstrap', 'HTML', 'CSS / SCSS', 'Linux', 'Git'],
-      appliedAI: [],
+      period: '2022 — 2025',
+      location: 'Cataluña',
+      summary: 'Fui responsable de migrar la plataforma interna de la empresa a una arquitectura más moderna y escalable. Desarrollé funcionalidades de CRM y ERP, procesos asíncronos con Celery y RabbitMQ, dashboards y modelos predictivos sobre datos de sensores. También gestioné despliegues, migraciones y entornos de test y producción.',
       sourceId: PROFILE_SOURCE_ID,
     },
-  ],
-  capabilities: [
-    {
-      number: '01',
-      name: 'Producto y proyectos IT',
-      description:
-        'Convierto necesidades de negocio en prioridades, especificaciones y un roadmap que equipos técnicos y stakeholders pueden compartir.',
-      tools: ['Roadmap', 'Priorización', 'Especificaciones', 'Validación', 'Comunicación internacional'],
-    },
-    {
-      number: '02',
-      name: 'Backend y arquitectura',
-      description:
-        'Construyo y razono sistemas backend, APIs y procesos asíncronos, con especial profundidad en el ecosistema Python y Django.',
-      tools: ['Python', 'Django', 'FastAPI', 'Celery', 'RabbitMQ', 'Redis', 'REST'],
-    },
-    {
-      number: '03',
-      name: 'Datos y modelos',
-      description:
-        'Trabajo con datos de sensores, series temporales, regresiones, modelos predictivos, métricas y visualización orientada a decisiones.',
-      tools: ['PostgreSQL', 'SQLite', 'Series temporales', 'Regresiones', 'Dashboards', 'Métricas'],
-    },
-    {
-      number: '04',
-      name: 'Infraestructura y operación',
-      description:
-        'Gestiono entornos cloud y VPS de forma directa, desde despliegues y CI/CD hasta observabilidad, mantenimiento e incidencias.',
-      tools: ['Linux', 'Docker', 'Terraform', 'CI/CD', 'VPS', 'Grafana', 'Prometheus'],
-    },
-    {
-      number: '05',
-      name: 'IA y automatización aplicada',
-      description:
-        'Integro modelos y agentes en procesos reales con límites explícitos: contenido, especificaciones, desarrollo, supervisión y detección de anomalías.',
-      tools: ['ChatGPT', 'Codex', 'Claude Code', 'APIs de modelos', 'Agentes', 'Automatización'],
-    },
-  ],
-  technicalProfile: [
-    {
-      id: 'backend',
-      name: 'Backend y programación',
-      levelNote: 'Python y Django avanzado/experto; FastAPI y Celery avanzados.',
-      items: ['Python', 'Django', 'FastAPI', 'Celery', 'RabbitMQ', 'Redis', 'APIs REST', 'Procesamiento asíncrono', 'Arquitectura backend'],
-    },
-    {
-      id: 'databases',
-      name: 'Bases de datos',
-      levelNote: null,
-      items: ['PostgreSQL', 'SQLite', 'Diseño de bases de datos', 'Procesamiento y análisis de datos'],
-    },
-    {
-      id: 'frontend',
-      name: 'Frontend',
-      levelNote: 'Orientado a construir productos completos e integrar todas sus capas.',
-      items: ['JavaScript', 'React', 'Astro', 'Tailwind CSS', 'HTML', 'CSS / SCSS', 'Bootstrap'],
-    },
-    {
-      id: 'infrastructure',
-      name: 'Infraestructura y DevOps',
-      levelNote: 'Experiencia centrada en VPS y cloud gestionada directamente.',
-      items: ['Linux', 'Docker', 'Terraform', 'Git', 'GitLab / GitHub', 'CI/CD', 'VPS', 'Producción y test', 'Grafana', 'Prometheus'],
-    },
-    {
-      id: 'data',
-      name: 'Datos',
-      levelNote: null,
-      items: ['Sensores', 'Series temporales', 'Regresiones', 'Modelos estadísticos', 'Modelos predictivos', 'Dashboards', 'Métricas', 'Monitorización', 'Detección de anomalías'],
-    },
-  ],
-  professionalStrengths: [
-    'Gestión y coordinación de proyectos IT.',
-    'Definición de roadmap y priorización de tareas.',
-    'Coordinación de desarrolladores externos y validación de entregas.',
-    'Comunicación entre negocio, dirección, distribuidores y tecnología.',
-    'Preparación de estimaciones, costes, fechas y documentación técnica.',
-    'Presentaciones y demostraciones de herramientas internas.',
-    'Traducción de problemas de negocio a soluciones técnicas.',
-    'Análisis de nuevas tecnologías y automatización de procesos.',
   ],
   education: {
     qualification: 'Grado en Ingeniería Electrónica Industrial y Automática',
     institution: 'Universitat de Lleida',
     startYear: 2018,
     endYear: 2022,
-    context:
-      'Una base de ingeniería, automatización, electrónica y programación que después orienté hacia software, datos y sistemas tecnológicos.',
+    context: 'El grado me dio una base transversal en electrónica, automatización y programación. Durante esos años orienté cada vez más mi trabajo hacia el desarrollo de software, los datos y los sistemas conectados.',
   },
   languages: [
-    { language: 'Catalán', level: 'Nativo', context: 'Uso cotidiano y profesional.' },
-    { language: 'Español', level: 'Nativo', context: 'Uso cotidiano y profesional.' },
-    {
-      language: 'Inglés',
-      level: 'Profesional funcional',
-      context: 'Reuniones, documentación y comunicación técnica con distribuidores y desarrolladores internacionales; sin certificación oficial.',
-    },
+    { language: 'Catalán', level: 'Nativo', context: 'Uso habitual en entornos personales y profesionales.' },
+    { language: 'Español', level: 'Nativo', context: 'Uso habitual en entornos personales y profesionales.' },
+    { language: 'Inglés', level: 'Uso profesional', context: 'Reuniones, documentación y comunicación técnica con equipos y distribuidores internacionales. Sin certificación oficial.' },
   ],
   projects: [
     {
       id: 'ainkii',
-      number: '01',
       canonicalName: 'Ainkii',
       aliases: ['Ainki'],
-      category: 'Producto personal · AI-first',
+      category: 'Producto educativo personal',
       status: 'En desarrollo',
-      flagship: true,
       href: '/proyectos/ainkii/',
-      description:
-        'Una plataforma educativa que ayuda a profesores y creadores a estructurar, revisar y mejorar materiales de aprendizaje con IA.',
-      focus: 'Producto educativo, estructura del conocimiento e IA con validación humana',
-      tags: ['Producto educativo', 'IA aplicada', 'Copiloto editorial', 'Human-in-the-loop'],
-      audience: 'Profesores y creadores de contenido educativo.',
+      teaser: 'Proyecto educativo en desarrollo.',
+      description: 'Ainkii está en desarrollo para ordenar materiales de aprendizaje con IA.',
+      focus: 'Recorrido de un temario a materiales de estudio',
+      tags: ['Producto educativo', 'IA aplicada', 'Materiales de aprendizaje'],
+      audience: 'Profesores y creadores de materiales educativos.',
       model: ['Temarios', 'Temas', 'Conocimientos', 'Tarjetas de aprendizaje'],
       capabilities: [
-        'Analizar la estructura de un curso.',
-        'Detectar posibles huecos de conocimiento.',
-        'Proponer nuevos temas o conocimientos.',
-        'Revisar contenidos existentes y detectar relaciones.',
-        'Generar o mejorar materiales educativos.',
+        'Revisar la estructura de un curso.',
+        'Señalar posibles huecos de conocimiento.',
+        'Proponer temas o conocimientos para revisar.',
+        'Relacionar contenidos existentes.',
+        'Ayudar a redactar o revisar materiales educativos.',
         'Crear tarjetas de aprendizaje.',
-        'Transformar contenido existente en material estructurado para estudiar.',
-        'Asistir durante la creación y revisión del temario.',
+        'Convertir contenido existente en material estructurado para estudiar.',
+        'Acompañar la creación y revisión de un temario.',
       ],
-      principle:
-        'La IA actúa como copiloto editorial: no sustituye al profesor y los cambios importantes requieren validación y aprobación del usuario.',
-      sourceId: PROFILE_SOURCE_ID,
-    },
-    {
-      id: 'hermes',
-      number: '02',
-      canonicalName: 'Hermes',
-      aliases: [],
-      category: 'Agente autónomo personal',
-      status: 'Operativo · 24/7',
-      flagship: false,
-      href: '/blog/hermes-agent-hetzner-instalacion-segura/',
-      description:
-        'Un agente desplegado permanentemente en un VPS de Hetzner, con Telegram como interfaz de interacción y supervisión y herramientas conectadas al desarrollo.',
-      focus: 'Autonomía útil con permisos, supervisión y aprobaciones explícitas',
-      tags: ['Agentes', 'Hetzner', 'Telegram', 'Codex', 'Automatización'],
-      audience: null,
-      model: ['Telegram', 'Hermes 24/7', 'Herramientas de desarrollo', 'Supervisión humana'],
-      capabilities: [
-        'Ejecutar tareas de desarrollo.',
-        'Coordinar trabajo mediante agentes.',
-        'Revisar Pull Requests y supervisar cambios.',
-        'Desplegar cambios automáticamente.',
-        'Ejecutar procesos periódicos.',
-        'Interactuar conmigo mediante Telegram.',
-      ],
-      principle:
-        'El objetivo es decidir qué puede hacer el agente por sí mismo, qué necesita aprobación y cómo estructurar workflows que eviten comportamientos no deseados.',
+      principle: 'El profesor decide los cambios.',
       sourceId: PROFILE_SOURCE_ID,
     },
   ],
@@ -429,5 +199,4 @@ export const professionalProfile: ProfessionalProfile = {
 }
 
 export const experience = professionalProfile.experience
-export const capabilities = professionalProfile.capabilities
 export const projects = professionalProfile.projects
