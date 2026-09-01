@@ -156,10 +156,11 @@ describe('challenge content adapter', () => {
   })
 
   it('publishes the factual daily entries in chronological order', () => {
-    expect(dailyProgressEntries.map(entry => entry.id)).toEqual(['2026-08-24', '2026-08-25', '2026-08-29'])
-    expect(dailyProgressEntries.map(entry => entry.position)).toEqual([1, 2, 3])
+    expect(dailyProgressEntries.map(entry => entry.id)).toEqual(['2026-08-24', '2026-08-25', '2026-08-29', '2026-08-31'])
+    expect(dailyProgressEntries.map(entry => entry.position)).toEqual([1, 2, 3, 4])
     expect(dailyProgressEntries.every(entry => entry.status === 'published')).toBe(true)
     expect(dailyProgressEntries[1].title).toBe('De los índices a la predicción: embeddings, clasificación y modelos n-grama')
+    expect(dailyProgressEntries[3].title).toBe('De situar cada token a clasificar documentos con contexto')
   })
 
   it('orders and filters daily entries while resolving existing tags', () => {

@@ -57,7 +57,6 @@ const privacyTerms = [
   'Telegram',
   '24/7',
   'Codex',
-  'GPT',
   '~/.pi',
   'openai-codex',
   'deep-workflow',
@@ -205,9 +204,10 @@ describe('static output', () => {
       expect(roadmap).toContain(week.focus)
       expect(roadmap).toContain(week.objective)
     }
-    expect(dailyProgressEntries.map(entry => entry.activityDate)).toEqual(['2026-08-24', '2026-08-25', '2026-08-29'])
+    expect(dailyProgressEntries.map(entry => entry.activityDate)).toEqual(['2026-08-24', '2026-08-25', '2026-08-29', '2026-08-31'])
     expect(progress).toContain('Lo que aprendí hoy sobre tokenización y carga de datos')
     expect(progress).toContain('De los índices a la predicción: embeddings, clasificación y modelos n-grama')
+    expect(progress).toContain('De situar cada token a clasificar documentos con contexto')
     expect(emittedDailyIds).toEqual(dailyProgressEntries.map(entry => entry.activityDate).sort())
     expect(existsSync(join(dist, 'progreso'))).toBe(false)
     expect(sitemap).toContain('<loc>https://portfolio.mybrawl.io/roadmap/</loc>')

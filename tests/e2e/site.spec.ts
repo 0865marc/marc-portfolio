@@ -167,6 +167,21 @@ test('daily reading time includes introduction and takeaway blocks', async ({ pa
   await expect(page.locator('article header').getByText(`${expectedMinutes} min de lectura`, { exact: true })).toBeVisible()
 })
 
+test('daily 2026-08-31 reading time covers all published blocks', async ({ page }, info) => {
+  test.skip(!['chromium', 'chromium-js-off', 'chromium-mobile-320'].includes(info.project.name))
+  const entry = dailyProgressEntries.find(candidate => candidate.activityDate === '2026-08-31')
+  if (!entry) throw new Error('Expected 2026-08-31 daily reading-time entry is missing')
+  const publishedBlocks = [
+    ...dailyBlockText(entry.introduction),
+    ...entry.sections.flatMap(section => [section.heading, ...dailyBlockText(section.blocks)]),
+    ...dailyBlockText(entry.takeaway),
+  ]
+  const expectedMinutes = readingMinutes(publishedBlocks)
+  await page.goto(`/career-sprint-daily/${entry.activityDate}/`)
+  for (const block of publishedBlocks) await expect(page.locator('article')).toContainText(block.replaceAll('`', ''))
+  await expect(page.locator('article header').getByText(`${expectedMinutes} min de lectura`, { exact: true })).toBeVisible()
+})
+
 test('404 exposes current fallback metadata and Career Sprint CTA', async ({ page }, info) => {
   test.skip(!['chromium', 'chromium-js-off', 'chromium-mobile-320'].includes(info.project.name))
   const response = await page.goto('/missing/')

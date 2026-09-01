@@ -1,0 +1,307 @@
+{
+  "id": "2026-08-31",
+  "status": "published",
+  "position": 4,
+  "activityDate": "2026-08-31",
+  "weekId": "w2",
+  "category": "Career Sprint",
+  "tags": [
+    "verificacion",
+    "reproducibilidad"
+  ],
+  "title": "De situar cada token a clasificar documentos con contexto",
+  "excerpt": "Hoy he recorrido el camino desde los IDs de una secuencia hasta una predicción y he entendido cómo los componentes del transformer aportan contexto antes de clasificar documentos.",
+  "introduction": [
+    {
+      "type": "paragraph",
+      "text": "Hoy el transformer ha dejado de parecerme un diagrama formado por cajas con nombres abstractos. He recorrido el camino completo desde los IDs de una secuencia hasta una predicción y, sobre todo, he entendido qué información añade cada componente y en qué momento empiezan realmente a relacionarse los tokens."
+    },
+    {
+      "type": "paragraph",
+      "text": "El mapa que ahora tengo en la cabeza es este:"
+    },
+    {
+      "type": "code",
+      "language": "text",
+      "code": "IDs\n  → embeddings de token + posición\n  → Queries, Keys y Values\n  → attention\n  → bloques transformer\n  → representaciones contextuales\n  → pooling o vocabulary head\n  → predicción"
+    },
+    {
+      "type": "paragraph",
+      "text": "La parte más difícil no ha sido memorizar la fórmula de attention. Ha sido aprender a leer las dimensiones, separar operaciones que antes confundía y distinguir conceptos que suelen aparecer juntos, pero responden a preguntas diferentes."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "La forma del tensor me dice qué representa cada eje",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "He empezado fijando el significado de la forma `[B, S, d_model]`:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "B       → número de secuencias del batch\nS       → número de posiciones por secuencia\nd_model → números utilizados para representar cada token"
+        },
+        {
+          "type": "paragraph",
+          "text": "Los token IDs tienen forma `[B, S]` porque cada posición contiene un único índice. La embedding layer sustituye ese índice por un vector y añade la tercera dimensión:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "[B, S] → [B, S, d_model]"
+        },
+        {
+          "type": "paragraph",
+          "text": "También he aclarado que el orden de los ejes es una convención. En los primeros ejemplos he utilizado batch-first, `[B, S, d_model]`, mientras que los módulos del vídeo de clasificación utilizan por defecto sequence-first, `[S, B, d_model]`. La información es la misma; cambia cómo se indexa y, por tanto, qué dimensión hay que reducir o transponer."
+        },
+        {
+          "type": "paragraph",
+          "text": "Esta lectura me ha resultado esencial porque evita interpretar una forma como una lista de números sin significado. Por ejemplo, en sequence-first:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "[67, 64, 100]"
+        },
+        {
+          "type": "paragraph",
+          "text": "significa 67 posiciones, 64 documentos y 100 características por token. No son 67 muestras ni un tensor de solo dos dimensiones."
+        }
+      ]
+    },
+    {
+      "heading": "La posición es una segunda identidad que acompaña al token",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Ya entendía que un transformer necesita información sobre el orden porque no recorre la secuencia como una RNN. Lo que me costaba visualizar era cómo se introduce esa información."
+        },
+        {
+          "type": "paragraph",
+          "text": "La idea que lo ha desbloqueado ha sido pensar que cada token lleva dos acreditaciones:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "token embedding      → quién soy\nposition embedding   → dónde estoy"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ambas tienen `d_model` dimensiones porque se suman elemento a elemento. Si las posiciones se comparten entre todas las secuencias del batch, basta una tabla con forma `[1, S, d_model]`; broadcasting aplica la misma posición `0`, `1`, `2`, etc. a cada documento y el resultado conserva `[B, S, d_model]`."
+        },
+        {
+          "type": "paragraph",
+          "text": "La codificación sinusoidal ha dejado de parecerme una fórmula arbitraria al imaginarla como una colección de relojes. Cada pareja de dimensiones contiene el seno y el coseno de un reloj, y cada reloj avanza con una frecuencia diferente:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "d_model = 8 → 4 parejas seno/coseno → 4 relojes"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un reloj rápido distingue cambios cercanos; uno lento conserva una referencia a mayor escala. Un reloj termina repitiéndose, pero la combinación de muchos ciclos produce una firma posicional útil. Además, las identidades trigonométricas hacen que al comparar dos parejas aparezca información sobre la diferencia entre sus posiciones, algo especialmente compatible con los productos escalares de attention."
+        },
+        {
+          "type": "paragraph",
+          "text": "La versión learned realiza la misma función sin imponer esa estructura matemática. Es otra tabla de embeddings, pero se consulta con el índice de posición en lugar del token ID. Sus filas empiezan siendo arbitrarias y backpropagation aprende cómo deberían representar las posiciones útiles para la tarea. La distinción importante es que `d_model` decide la anchura de cada vector, mientras que `max_length` decide cuántas filas posicionales existen. No necesito una dimensión por cada posición posible."
+        }
+      ]
+    },
+    {
+      "heading": "Q, K y V son transformaciones, no etiquetas misteriosas",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "El siguiente desbloqueo ha sido comprender `W_Q`, `W_K` y `W_V` como tres fábricas. Cada una recibe la representación combinada `X` de un token y produce una versión especializada:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "Q = XW_Q → qué información busca cada posición\nK = XW_K → con qué consultas puede encajar cada posición\nV = XW_V → qué información entrega si resulta relevante"
+        },
+        {
+          "type": "paragraph",
+          "text": "He tenido que separar dos objetos con nombres parecidos. `W_K` es la matriz de parámetros aprendidos que fabrica Keys; `K` es el tensor que contiene las Keys ya fabricadas para todos los tokens. Lo mismo sucede con Queries y Values."
+        },
+        {
+          "type": "paragraph",
+          "text": "También he corregido el lenguaje que utilizaba para las operaciones. `X @ W_Q` es una proyección matricial aplicada a cada token. Los productos escalares entre tokens aparecen después, cuando cada Query se compara con todas las Keys de su propia secuencia:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "scores = QKᵀ"
+        },
+        {
+          "type": "paragraph",
+          "text": "Computacionalmente se proyectan todos los tokens de todo el batch a la vez. Contextualmente, las secuencias permanecen separadas: una Query del documento `0` no se compara con Keys del documento `1`. La dimensión de batch permite paralelizar ejemplos, no mezclarlos."
+        }
+      ]
+    },
+    {
+      "heading": "Attention selecciona información de forma blanda",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "La fórmula completa ya tiene para mí una lectura concreta:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "$$\nAttention(Q, K, V) = softmax(QKᵀ / sqrt(d_k)) V\n$$"
+        },
+        {
+          "type": "paragraph",
+          "text": "`QKᵀ` produce una matriz `[S, S]` por secuencia: cada fila corresponde a una Query y cada columna a una Key disponible. La división por `sqrt(d_k)` controla el tamaño de los scores. Softmax normaliza cada fila y la multiplicación por `V` mezcla la información ofrecida por los tokens según esos pesos."
+        },
+        {
+          "type": "paragraph",
+          "text": "La analogía del diccionario del laboratorio me ha ayudado a verlo. Una Query one-hot podía identificar exactamente una fila de `K` y recuperar la fila alineada de `V`. Al introducir softmax, la selección deja de ser dura y se convierte en una mezcla. Sin embargo, también he visto el límite de la analogía: aquel diccionario está alineado manualmente, no aprende traducción, no conserva gramática y sus scores diminutos pueden producir distribuciones demasiado suaves."
+        },
+        {
+          "type": "paragraph",
+          "text": "El laboratorio también ha servido para descubrir que el eje de softmax forma parte de la definición. Para una matriz de scores `[queries, keys]`, necesito normalizar las Keys disponibles para cada Query:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "weights = torch.softmax(scores, dim=-1)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Normalizar `dim=0` mezcla Queries diferentes. En el ejemplo del notebook el error quedaba escondido porque la matriz era simétrica, pero la operación conceptual seguía siendo incorrecta."
+        }
+      ]
+    },
+    {
+      "heading": "Self, multi-head y cross-attention responden a preguntas distintas",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Antes trataba self-attention y multi-head attention como si fueran alternativas. Ahora entiendo que describen aspectos ortogonales:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "self-attention → de dónde salen Q, K y V\nmulti-head     → cuántas attentions independientes se calculan"
+        },
+        {
+          "type": "paragraph",
+          "text": "En self-attention, Q, K y V proceden de la misma secuencia. En multi-head attention, varias proyecciones aprendidas crean distintos subespacios y cada head obtiene su propia distribución de pesos. Con `d_model = 6` y dos heads, cada una trabaja normalmente con tres características proyectadas. Sus resultados se concatenan y `W_O` los vuelve a mezclar en un vector de seis dimensiones."
+        },
+        {
+          "type": "paragraph",
+          "text": "La finalidad de las heads no es simplemente trocear una matriz para acelerar el cálculo. Permiten que una misma posición recupere varias mezclas contextuales en paralelo. Una head puede acabar enfatizando una relación cercana y otra una dependencia lejana, aunque esa especialización no se asigna manualmente ni siempre resulta interpretable."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cross-attention introduce otro origen para los datos:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "self-attention:\n    Q, K y V ← la misma secuencia\n\ncross-attention:\n    Q       ← estados del decoder\n    K y V   ← salidas del encoder"
+        },
+        {
+          "type": "paragraph",
+          "text": "En una traducción, el decoder utiliza su estado actual para consultar la memoria producida por el encoder. La salida conserva una representación por Query del decoder, aunque la cantidad de Keys y Values dependa de la longitud de la fuente. Un GPT decoder-only normal no necesita esta ruta: prompt y respuesta forman una sola secuencia y se relacionan mediante causal self-attention."
+        }
+      ]
+    },
+    {
+      "heading": "Un bloque transformer alterna comunicación y transformación",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Multi-head attention es solo una parte del bloque. La atención permite que las posiciones intercambien información; la feed-forward network transforma cada posición por separado. Las residual connections preservan una ruta directa para la información y los gradientes, y layer normalization ayuda a mantener representaciones estables a través de muchas capas."
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "X\n  → multi-head attention\n  → residual + normalization\n  → position-wise FFN\n  → residual + normalization\n  → nueva X con la misma forma"
+        },
+        {
+          "type": "paragraph",
+          "text": "Esta conservación de `[B, S, d_model]` permite apilar muchos bloques. Lo que cambia no es la forma exterior, sino lo que codifica cada vector después de haber pasado repetidamente por comunicación contextual y transformación no lineal."
+        },
+        {
+          "type": "paragraph",
+          "text": "También he ordenado las tres familias principales. Un encoder utiliza contexto bidireccional para comprender una entrada completa. Un decoder-only aplica una máscara causal para generar sin mirar al futuro. Un encoder-decoder combina un encoder bidireccional, un decoder causal y cross-attention entre ambos. La arquitectura no se determina por el nombre del contenedor de PyTorch, sino por el flujo de información y sus máscaras."
+        }
+      ]
+    },
+    {
+      "heading": "El laboratorio ha convertido las fórmulas en tensores observables",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "El laboratorio ha sido útil porque ha construido attention desde un mecanismo que podía inspeccionar fila por fila. He pasado de un diccionario literal a matrices one-hot, de una selección exacta a pesos softmax y de esas matrices manuales a proyecciones `nn.Linear` entrenables."
+        },
+        {
+          "type": "paragraph",
+          "text": "También me ha obligado a distinguir una demostración de un modelo aprendido. Crear `nn.Embedding` y las capas para Q, K y V no significa que hayan aprendido relaciones: sin loss, `backward()` y optimizer, sus parámetros siguen siendo aleatorios. El notebook muestra el forward pass y las formas, no una traducción entrenada."
+        },
+        {
+          "type": "paragraph",
+          "text": "Los experimentos posicionales han dejado varios avisos prácticos. `vocab_size` y `max_length` no son intercambiables; una posición lineal como `[n, n, n]` crece sin límite; una sola onda sinusoidal puede repetir su código; y una clase que siempre construye tres columnas no se convierte en genérica por recibir un argumento llamado `n_embd`."
+        },
+        {
+          "type": "paragraph",
+          "text": "Finalmente he comprobado que `nn.MultiheadAttention` solo ejecuta self-attention si recibe la misma representación como Query, Key y Value. Tres tensores aleatorios distintos prueban attention genérica. Del mismo modo, `nn.Transformer` y `TransformerEncoder` esperan representaciones continuas: no crean el vocabulario, token embeddings ni posiciones por mí."
+        }
+      ]
+    },
+    {
+      "heading": "Clasificar exige condensar sin perder el contexto",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "El último paso ha sido utilizar un transformer encoder para clasificar noticias de AG_NEWS. El encoder produce una representación contextual por token, pero el clasificador necesita una por documento. Mean pooling resuelve esa transición si se aplica sobre la dimensión de secuencia:"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "encoder output [S, B, d_model]\n      ↓ media sobre S\ndocuments      [B, d_model]\n      ↓ Linear\nlogits         [B, classes]"
+        },
+        {
+          "type": "paragraph",
+          "text": "Esto ha corregido otra confusión importante: con 64 documentos y embeddings de 100 dimensiones, la media produce `[64, 100]`, no un único vector `[100]`. Cada documento conserva su propia fila y la capa lineal produce cuatro logits para cada uno."
+        },
+        {
+          "type": "paragraph",
+          "text": "El padding complica esta media. No basta con utilizar `<pad>` para formar un tensor rectangular. Primero debo impedir que los tokens reales atiendan a Keys de padding mediante `src_key_padding_mask`. Después debo excluir también las posiciones padded del pooling, porque sus salidas no tienen por qué ser cero. Un documento de diez tokens no debería promediar 57 posiciones artificiales solo porque otro documento del batch mide 67."
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "code": "padding mask en attention → no recuperar información de <pad>\nmasked mean pooling       → no resumir posiciones de <pad>"
+        },
+        {
+          "type": "paragraph",
+          "text": "La preparación de AG_NEWS completa el contrato: tokenizar, construir el vocabulario solo con entrenamiento, reservar `<unk>` y `<pad>`, convertir las etiquetas `1..4` en `0..3`, truncar si hace falta y crear batches `[S, B]`. Después del encoder y el pooling, entrenar vuelve a ser clasificación multiclase convencional: logits `[B, 4]`, labels `[B]`, cross-entropy y un optimizer."
+        },
+        {
+          "type": "paragraph",
+          "text": "También me quedo con que un transformer es una red neuronal, no lo contrario de una red neuronal. Su ventaja frente a un promedio de embeddings está en contextualizar antes de agregar, pero eso no garantiza que siempre venza a un baseline sencillo. Attention cuesta memoria cuadrática con la longitud, necesita suficientes datos y exige que máscaras, formas y pooling estén bien implementados."
+        }
+      ]
+    }
+  ],
+  "takeaway": [
+    {
+      "type": "paragraph",
+      "text": "Hoy he entendido que el transformer no recibe palabras y descubre mágicamente sus relaciones. Recibe un tensor cuyo contrato tengo que construir con cuidado. La embedding expresa identidad, la posición sitúa cada token, las proyecciones fabrican las preguntas, direcciones y contenidos que utiliza attention, y las máscaras deciden qué información está permitida."
+    },
+    {
+      "type": "paragraph",
+      "text": "La distinción que más claridad me ha dado es separar origen, multiplicidad y finalidad. Self o cross indica de dónde vienen Q, K y V; single o multi-head indica cuántas distribuciones se aprenden; encoder o decoder indica qué contexto está disponible; pooling o vocabulary projection indica qué tipo de salida necesito."
+    },
+    {
+      "type": "paragraph",
+      "text": "También me quedo con que las formas son una herramienta de razonamiento. Si sé por qué `QKᵀ` termina en `[B, S, S]`, por qué los Values devuelven `[B, S, d_model]` y por qué un clasificador debe acabar en `[B, classes]`, puedo seguir el flujo sin memorizar código. Los detalles que parecían pequeños —el eje de softmax, la orientación `[S, B, D]`, el valor de padding o la dimensión sobre la que calculo la media— son precisamente los que determinan si el modelo implementa la idea que creo estar implementando."
+    }
+  ]
+}
