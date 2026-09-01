@@ -1,33 +1,27 @@
-# Blog domain
+# Knowledge domain
 
 ## Content model
 
-[`src/data/blog.ts`](../../src/data/blog.ts) defines `BlogPost` and `BlogArticleSection`. A post has a stable `id`, category, tags, title, excerpt, `isSample`, introduction paragraphs, structured sections, and takeaway paragraphs. IDs are route identifiers and must remain backward-compatible.
+[`content/posts/`](../../content/posts/) and [`content/tags/`](../../content/tags/) are the Git-backed authoring sources. [`src/data/blog.ts`](../../src/data/blog.ts) validates them and exposes the stable `BlogPost`/`blogPosts` API. IDs remain public route identifiers; only `published` entries are emitted, while `draft` and `deleted` stay out of every public output.
 
-The current entries cover IoT platform architecture, RabbitMQ/Celery heavy processing, and distributed infrastructure/latency. They are static bundle content, not API responses.
+The existing notes remain routable. They are knowledge material, not the primary landing narrative; the eight-week challenge and its factual progress own that priority.
 
 ## Routes
 
-[`src/lib/blogRoutes.ts`](../../src/lib/blogRoutes.ts) defines canonical static routes, legacy-hash translation, and the return-source contract. Preserve:
+[`src/lib/blogRoutes.ts`](../../src/lib/blogRoutes.ts) builds canonical article links:
 
-- `BLOG_INDEX_HREF = '/blog/'`
-- `LANDING_BLOG_HREF = '/#blog'`
-- `MISSING_POST_HREF = '/blog/articulo-no-encontrado/'`
-- `BlogSource = 'landing' | 'index'`
-- URL-encoded article IDs
-- safe legacy fallback for malformed or missing IDs
+- `/#blog` is retained only as a hidden Home slot during the temporary Home suppression; it is not in active navigation.
+- `/blog/` is the canonical knowledge index.
+- `/blog/<encoded-id>/?from=landing|index` is the canonical article route.
+- Retired `/blog/<id>/` paths are not emitted and use the designed 404 response.
 
 ## Views and states
 
-- `BlogSection.astro` shows up to three posts and an empty state on the landing page.
-- `BlogFilters.astro` renders every post before JavaScript runs; `src/scripts/blogFilters.ts` progressively adds text search, tag filtering, polite result counts, clear actions, and the no-match state.
-- `src/pages/blog/[id].astro` emits one article per stable ID and preserves the source-aware back link.
-- `BlogCard.astro` uses the requested heading level and includes tags in the accessible link name.
+- `BlogSection.astro` is preserved in a hidden Home slot and renders up to three published articles when restored.
+- `BlogFilters.astro` renders every published entry before JavaScript runs; search and tag controls appear only when there are at least four posts, so the current two-post site renders a direct list without filters.
+- `[id].astro` emits only `blogPosts`.
+- `BlogCard.astro` uses the supplied heading level and includes tags in the accessible link name.
 
-## Search semantics
+## Search and reading
 
-[`src/lib/blogFilters.ts`](../../src/lib/blogFilters.ts) strips diacritics, lowercases using the Spanish locale, trims whitespace, and matches every query term against title, excerpt, category, and tags. Tag selection is exact. Do not silently change these semantics when adjusting the UI.
-
-## Reading design
-
-Index routes use the dark canvas. Article content uses a white rounded surface with dark text, a constrained reading width, generous line height, and explicit heading hierarchy. Long titles, tags, and links must wrap without horizontal overflow. Canonical page navigation and legacy hash translation move focus to the route heading without turning the site back into a client router.
+[`src/lib/blogFilters.ts`](../../src/lib/blogFilters.ts) strips Spanish diacritics, lowercases, trims whitespace and requires every query term to match title, excerpt, category or tags. Article pages retain a white reading surface on the dark canvas, semantic heading hierarchy, wrapping and route focus restoration.

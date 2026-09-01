@@ -1,0 +1,11 @@
+---
+interface Props {
+  text: string
+}
+
+const { text } = Astro.props
+const parts = text.split(/(`[^`\n]+`)/g)
+---
+{parts.map(part => part.startsWith('`') && part.endsWith('`')
+  ? <code class="article-inline-code">{part.slice(1, -1)}</code>
+  : part)}

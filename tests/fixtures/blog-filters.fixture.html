@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es">
+  <body>
+    <section data-blog-filter-root>
+      <label for="blog-search">Buscar por título, resumen, categoría o etiqueta</label>
+      <input id="blog-search" data-blog-search type="search" />
+      <fieldset>
+        <legend>Etiquetas</legend>
+        <button type="button" data-blog-tag="" aria-pressed="true">Todas</button>
+        <button type="button" data-blog-tag="AWS" aria-pressed="false">AWS</button>
+        <button type="button" data-blog-tag="ML" aria-pressed="false">ML</button>
+      </fieldset>
+      <p data-blog-status role="status" aria-live="polite">4 artículos disponibles.</p>
+      <button data-blog-clear type="button" disabled>Borrar filtros</button>
+      <div id="blog-results">
+        <article data-blog-card data-search='{"id":"aws-fundamentos","title":"Fundamentos AWS","excerpt":"EC2 e IAM.","category":"Cloud","tags":["AWS"]}'>AWS fundamentos</article>
+        <article data-blog-card data-search='{"id":"aws-rag","title":"RAG en AWS","excerpt":"Vector stores.","category":"Cloud","tags":["AWS"]}'>AWS RAG</article>
+        <article data-blog-card data-search='{"id":"ml-baseline","title":"Baseline ML","excerpt":"Validación.","category":"ML","tags":["ML"]}'>ML baseline</article>
+        <article data-blog-card data-search='{"id":"ml-pytorch","title":"PyTorch","excerpt":"Training loop.","category":"ML","tags":["ML"]}'>PyTorch</article>
+      </div>
+      <div data-blog-empty hidden>
+        <p>Sin resultados</p>
+        <button type="button" data-blog-empty-clear>Mostrar todas</button>
+      </div>
+    </section>
+  </body>
+</html>

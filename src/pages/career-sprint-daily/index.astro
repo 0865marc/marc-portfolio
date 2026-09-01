@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { dailyProgressEntries } from '../../data/challenge'
+import { dailyProgressHref } from '../../lib/challengeRoutes'
+
+const dateFormatter = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
+const formatDate = (date: string) => dateFormatter.format(new Date(`${date}T12:00:00Z`))
+---
+
+<BaseLayout
+  title="Progreso diario del reto — Marc Teixidó"
+  description="Cronología de jornadas publicadas del reto profesional de ocho semanas."
+  canonicalPath="/career-sprint-daily/"
+>
+  <main class="min-h-screen px-5 py-8 sm:px-8 md:px-10 md:py-10">
+    <div class="mx-auto max-w-6xl">
+      <a class="control" href="/#progress">Volver al portfolio <span aria-hidden="true">↗</span></a>
+      <header class="mt-16 grid items-end gap-8 lg:grid-cols-[1fr_26rem]">
+        <div>
+          <p class="section-kicker">Bitácora profesional</p>
+          <h1 data-route-heading tabindex="-1" class="mt-5 text-[clamp(3.2rem,9vw,6.5rem)] font-black uppercase leading-[.9]">Progreso diario</h1>
+        </div>
+        <p class="text-xl font-light leading-relaxed opacity-70">Solo se publican jornadas realizadas y revisadas. La agenda de la ruta no se convierte en evidencia automática.</p>
+      </header>
+
+      {dailyProgressEntries.length ? (
+        <ol class="mt-16 divide-y divide-[#D7E2EA]/20 border-y border-[#D7E2EA]/20">
+          {dailyProgressEntries.map(entry => (
+            <li>
+              <a href={dailyProgressHref(entry.activityDate)} class="grid gap-5 py-7 transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[#D7E2EA] focus-visible:ring-offset-4 focus-visible:ring-offset-[#0C0C0C] md:grid-cols-[12rem_minmax(0,1fr)_10rem] md:items-start md:gap-8">
+                <p class="text-xs uppercase tracking-[.18em] opacity-60">{formatDate(entry.activityDate)}</p>
+                <div class="min-w-0"><h2 class="text-2xl font-medium uppercase leading-tight sm:text-3xl">{entry.title}</h2><p class="mt-3 font-light leading-relaxed opacity-80">{entry.excerpt}</p></div>
+                {entry.hoursActual !== undefined && <p class="text-sm uppercase tracking-[.16em] opacity-60">{entry.hoursActual} h reales</p>}
+              </a>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <div class="mt-16 max-w-3xl rounded-[28px] border border-[#D7E2EA]/20 p-6 sm:p-8" role="status" aria-live="polite">
+          <p class="section-kicker">Sin jornadas publicadas</p>
+          <p class="mt-3 text-xl font-light leading-relaxed opacity-80">Todavía no existe progreso real para publicar. Cuando una jornada tenga evidencia factual, aparecerá aquí con su fecha.</p>
+        </div>
+      )}
+    </div>
+  </main>
+</BaseLayout>

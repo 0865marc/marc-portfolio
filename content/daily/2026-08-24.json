@@ -1,0 +1,113 @@
+{
+  "id": "2026-08-24",
+  "status": "published",
+  "position": 1,
+  "activityDate": "2026-08-24",
+  "weekId": "w1",
+  "category": "Career Sprint",
+  "tags": [
+    "verificacion",
+    "reproducibilidad"
+  ],
+  "title": "Lo que aprendí hoy sobre tokenización y carga de datos",
+  "excerpt": "Lo Hoy conecté arquitecturas generativas, tokenización, vocabularios y DataLoader: transformar texto comprensible en representaciones que una red neuronal pueda procesar.",
+  "introduction": [
+    {
+      "type": "paragraph",
+      "text": "Hoy he empezado a conectar varias piezas que, vistas por separado, parecían conceptos independientes: las arquitecturas generativas, la tokenización, los vocabularios y los DataLoader de PyTorch. Todos forman parte del mismo recorrido: transformar algo comprensible para una persona en una representación que una red neuronal pueda procesar."
+    },
+    {
+      "type": "paragraph",
+      "text": "La preparación de datos tiene pasos distintos. Tokenizar divide el texto en unidades, mientras que numericalizar consulta un vocabulario y sustituye cada token por su identificador; después intervienen los embeddings, el Dataset, collate_fn y el DataLoader."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "Arquitecturas generativas y el paso al lenguaje",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "El recorrido empezó situando varios tipos de arquitecturas generativas. Las RNN trabajan de forma secuencial; los transformers usan mecanismos de atención para relacionar partes de una entrada; las GAN enfrentan a un generador y un discriminador; las VAE aprenden un espacio latente; y los modelos de difusión reconstruyen datos eliminando ruido progresivamente."
+        },
+        {
+          "type": "paragraph",
+          "text": "En lenguaje, los transformers son la pieza central de muchos modelos actuales. Un modelo como FLAN-T5 puede cargarse con Hugging Face para construir un chatbot sencillo, pero antes de generar una respuesta el texto debe convertirse en números."
+        }
+      ]
+    },
+    {
+      "heading": "Tokenizar frente a numericalizar",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "NLTK, spaCy o el tokenizer basic_english de torchtext pueden dividir una frase en palabras y signos de puntuación. En ese punto todavía tenemos strings, no una entrada válida para una red neuronal."
+        },
+        {
+          "type": "paragraph",
+          "text": "La numericalización consulta un vocabulario y sustituye cada token por su identificador. Los IDs son posiciones dentro de un vocabulario y no contienen significado por sí mismos; el significado se aprende en la fila correspondiente de la matriz de embeddings. Por eso tokenizer y modelo deben compartir exactamente la correspondencia entre tokens, índices y embeddings."
+        },
+        {
+          "type": "code",
+          "title": "Recorrido de la representación",
+          "language": "text",
+          "code": "Texto → tokens → IDs → embeddings → modelo"
+        }
+      ]
+    },
+    {
+      "heading": "Vocabularios por modelo",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Los tokenizers de BERT y XLNet recuperan el vocabulario con el que fueron entrenados: BERT utiliza WordPiece y XLNet un tokenizer basado en SentencePiece. Ambos trabajan con subtokens, pero aplican reglas y vocabularios diferentes; una misma palabra puede producir tokens e índices distintos."
+        },
+        {
+          "type": "paragraph",
+          "text": "spaCy también dispone de un objeto Vocab, pero sus identificadores internos no son los input_ids de BERT. Podrían utilizarse para gestionar strings y lexemas dentro de spaCy, pero no apuntan a las filas de la matriz de embeddings de una LLM externa."
+        }
+      ]
+    },
+    {
+      "heading": "Construir vocabulario desde un corpus",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "build_vocab_from_iterator recorre las listas de tokens generadas para cada frase, cuenta los tokens diferentes y construye la tabla que relaciona cada uno con un índice. El tokenizer basic_english aporta reglas de normalización y separación, pero el vocabulario se crea a partir del corpus proporcionado."
+        },
+        {
+          "type": "paragraph",
+          "text": "En un proyecto real, el vocabulario debería construirse solo con el conjunto de entrenamiento y congelarse después. Para palabras desconocidas conviene reservar <unk>, y para lotes de secuencias con la misma longitud hacen falta <pad>; también pueden utilizarse <bos> y <eos>."
+        },
+        {
+          "type": "code",
+          "title": "Construcción del vocabulario",
+          "language": "text",
+          "code": "vocab = build_vocab_from_iterator(map(tokenizer, sentences))"
+        }
+      ]
+    },
+    {
+      "heading": "Dataset, DataLoader y collate_fn",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "PyTorch separa el acceso a cada ejemplo de la construcción de los lotes. Un Dataset sabe cuántos elementos contiene y cómo recuperar uno; el DataLoader agrupa, baraja y entrega los ejemplos al modelo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cuando las frases tienen longitudes diferentes no se pueden apilar directamente en un tensor rectangular. collate_fn tokeniza los elementos de un lote, convierte sus tokens en índices y utiliza pad_sequence para rellenar las secuencias más cortas. El valor de padding debe ser realmente el ID de <pad>, no necesariamente 0; ordenar las frases por longitud también puede reducir el padding."
+        }
+      ]
+    }
+  ],
+  "takeaway": [
+    {
+      "type": "paragraph",
+      "text": "La tokenización no consiste solamente en separar palabras: es un contrato entre los datos y el modelo que define cómo se divide el texto, qué vocabulario existe, qué ID corresponde a cada token y qué embedding debe consultar el modelo."
+    },
+    {
+      "type": "paragraph",
+      "text": "El tokenizer segmenta, el vocabulario numericaliza, el Dataset representa ejemplos individuales, collate_fn prepara lotes compatibles y el DataLoader organiza su entrega durante el entrenamiento."
+    }
+  ]
+}

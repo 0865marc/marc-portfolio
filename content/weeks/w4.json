@@ -1,0 +1,31 @@
+{
+  "id": "w4",
+  "status": "published",
+  "position": 4,
+  "startDate": "2026-09-14",
+  "endDate": "2026-09-20",
+  "title": "Semana 4",
+  "focus": "AWS Solutions Architect — Exam Prep + Exam",
+  "objective": "Objetivo previsto: validar formalmente conocimientos de arquitectura AWS mediante repaso por dominios, práctica guiada y un examen previsto AWS Certified Solutions Architect – Associate.",
+  "resourceLabel": "Ver plan de preparación",
+  "resourceHref": "https://skillbuilder.aws/learning-plan/UYRXS2DF85/exam-prep-plan-aws-certified-solutions-architect--associate-saac03--english/U991QUF9C3",
+  "agenda": [
+    {
+      "day": "Plan semanal",
+      "blocks": [
+        { "time": "Repaso", "activity": "Repaso previsto por dominios" },
+        { "time": "Laboratorios", "activity": "SimuLearn y Builder Labs" },
+        { "time": "Práctica", "activity": "Preguntas y simulacros oficiales" },
+        { "time": "Ajuste", "activity": "Revisión de puntos débiles" },
+        { "time": "Examen", "activity": "Examen previsto AWS Certified Solutions Architect – Associate" }
+      ]
+    }
+  ],
+  "topics": ["dominios de arquitectura", "SimuLearn", "Builder Labs", "preguntas oficiales", "simulacros", "AWS Certified Solutions Architect – Associate"],
+  "milestones": [
+    "Hito previsto: identificar puntos débiles a partir de la práctica.",
+    "Hito previsto: mantener el examen como objetivo previsto de la semana."
+  ],
+  "criteria": ["No presentar el examen como reservado, realizado, aprobado ni como certificación obtenida."],
+  "progressState": "planned"
+}

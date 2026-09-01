@@ -6,44 +6,41 @@ const { identity } = professionalProfile
 
 <section aria-labelledby="hero-title" class="flex min-h-[100svh] items-center px-5 py-8 sm:px-8 md:px-10 md:py-10">
   <div class="mx-auto flex min-h-[calc(100svh-4rem)] w-full max-w-[1440px] flex-col md:min-h-[calc(100svh-5rem)]">
-    <nav data-intro style="--intro-delay: 40ms" aria-label="Principal" class="landing-nav">
-      <p class="landing-nav-mark">Portfolio · {new Date().getFullYear()}</p>
+    <nav data-intro style="--intro-delay: 40ms" aria-label="Navegación principal" class="landing-nav">
+      <p class="landing-nav-mark">{identity.displayName} · Portfolio</p>
       <ul class="landing-nav-list">
         <li><a class="landing-nav-link" href="#about"><span aria-hidden="true">01</span> Perfil</a></li>
-        <li><a class="landing-nav-link" href="#projects"><span aria-hidden="true">02</span> Proyectos</a></li>
-        <li><a class="landing-nav-link" href="#blog"><span aria-hidden="true">03</span> Blog</a></li>
-        <li><a class="landing-nav-link" href="#contact"><span aria-hidden="true">04</span> Contacto</a></li>
+        <li><a class="landing-nav-link" href="#career-sprint"><span aria-hidden="true">02</span> Career Sprint</a></li>
+        <li><a class="landing-nav-link" href="#contact"><span aria-hidden="true">03</span> Contacto</a></li>
       </ul>
     </nav>
 
+
     <div class="my-auto grid items-end gap-12 py-16 lg:grid-cols-[minmax(0,1fr)_22rem]">
-      <div>
-        <p data-intro style="--intro-delay: 110ms" class="text-sm uppercase tracking-[.2em] opacity-65">{identity.headline}</p>
-        <h1 id="hero-title" data-route-heading tabindex="-1" data-intro style="--intro-delay: 180ms" class="hero-heading mt-6 text-[clamp(3.7rem,10vw,9rem)] font-black uppercase leading-[.86]">
-          Marc<br />Teixidó
+      <div class="min-w-0">
+        <p data-intro style="--intro-delay: 140ms" class="text-sm uppercase tracking-[.2em] opacity-65">Software y producto digital</p>
+        <h1 id="hero-title" data-route-heading tabindex="-1" data-intro style="--intro-delay: 210ms" class="hero-heading mt-6 break-words text-[clamp(3.5rem,11vw,9rem)] font-black uppercase leading-[.86]">
+          {identity.displayName}
         </h1>
-        <p data-intro style="--intro-delay: 250ms" class="mt-8 max-w-3xl text-xl font-light leading-relaxed sm:text-2xl">
-          Conecto producto, software, datos e infraestructura para convertir problemas complejos en sistemas que se pueden construir, operar y mejorar.
-        </p>
-        <div data-intro style="--intro-delay: 320ms" class="mt-9 flex flex-wrap gap-3">
-          <a class="button-light" href="/proyectos/ainkii/">Explorar Ainkii <span aria-hidden="true">↗</span></a>
-          <a class="control" href="#about">Ver trayectoria <span aria-hidden="true">↓</span></a>
+        <p data-intro style="--intro-delay: 280ms" class="mt-8 max-w-3xl text-2xl font-medium leading-tight sm:text-3xl">{identity.headline}</p>
+        <p data-intro style="--intro-delay: 340ms" class="mt-5 max-w-2xl text-xl font-light leading-relaxed sm:text-2xl">{identity.summary}</p>
+        <div data-intro style="--intro-delay: 400ms" class="mt-9 flex flex-wrap gap-3">
+          <a class="button-light" href="#about">Conocer mi trayectoria <span aria-hidden="true">↓</span></a>
         </div>
       </div>
 
-      <aside data-intro style="--intro-delay: 300ms" aria-label="Posicionamiento profesional" class="border-l border-[#D7E2EA]/25 pl-6 lg:mb-2">
-        <p class="text-xs uppercase tracking-[.22em] opacity-60">Del contexto a la ejecución</p>
-        <ul class="mt-5 space-y-3 text-lg font-light">
-          <li>Negocio y producto</li>
-          <li>Arquitectura y desarrollo</li>
-          <li>Datos, operación e IA aplicada</li>
-        </ul>
-        <p class="mt-7 text-xs uppercase tracking-[.18em] opacity-55">{identity.location}</p>
+      <aside data-intro style="--intro-delay: 360ms" aria-label="Datos del perfil" class="border-l border-[#D7E2EA]/25 pl-6 lg:mb-2">
+        <dl class="grid gap-6">
+          <div>
+            <dt class="text-xs uppercase tracking-[.22em] opacity-60">Ubicación</dt>
+            <dd class="mt-2 text-lg font-light leading-relaxed">{identity.location}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[.22em] opacity-60">Rol</dt>
+            <dd class="mt-2 text-lg font-light leading-relaxed">{identity.headline}</dd>
+          </div>
+        </dl>
       </aside>
     </div>
-
-    <p data-intro style="--intro-delay: 380ms" class="flex items-center gap-3 text-xs uppercase tracking-[.2em] opacity-60">
-      <span aria-hidden="true">↓</span> De una base técnica a la dirección de proyectos IT
-    </p>
   </div>
 </section>

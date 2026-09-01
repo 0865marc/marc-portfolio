@@ -1,0 +1,31 @@
+{
+  "id": "w3",
+  "status": "published",
+  "position": 3,
+  "startDate": "2026-09-07",
+  "endDate": "2026-09-13",
+  "title": "Semana 3",
+  "focus": "AWS Solutions Architect — Learning Plan",
+  "objective": "Objetivo previsto: diseñar arquitecturas cloud robustas y escalables en AWS mediante servicios fundamentales, patrones distribuidos y Builder Labs.",
+  "resourceLabel": "Ver plan AWS",
+  "resourceHref": "https://skillbuilder.aws/learning-plan/X34U4HHQ76/aws-solutions-architect-advanced-learning-plan-includes-labs/88TUXWD6NV",
+  "agenda": [
+    {
+      "day": "Plan semanal",
+      "blocks": [
+        { "time": "Identidad", "activity": "IAM, networking y VPC" },
+        { "time": "Servicios", "activity": "Compute, storage y databases" },
+        { "time": "Diseño", "activity": "Serverless y arquitecturas event-driven" },
+        { "time": "Resiliencia", "activity": "Alta disponibilidad, resiliencia y seguridad" },
+        { "time": "Laboratorios", "activity": "Builder Labs previstos" }
+      ]
+    }
+  ],
+  "topics": ["IAM", "networking", "VPC", "compute", "storage", "databases", "serverless", "event-driven", "alta disponibilidad", "resiliencia", "seguridad", "Builder Labs"],
+  "milestones": [
+    "Hito previsto: documentar una arquitectura cloud robusta y escalable.",
+    "Hito previsto: practicar patrones de diseño en Builder Labs."
+  ],
+  "criteria": ["Mantener arquitecturas y laboratorios como práctica prevista, sin afirmar despliegues completados."],
+  "progressState": "planned"
+}

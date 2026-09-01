@@ -11,8 +11,8 @@ addEventListener('pagereveal', focusRoute, { once: true })
 
 const back = document.querySelector<HTMLAnchorElement>('[data-article-back]')
 if (back && new URLSearchParams(location.search).get('from') === 'landing') {
-  back.href = '/#blog'
-  back.firstChild!.textContent = 'Volver al blog del portfolio '
+  back.href = '/'
+  back.firstChild!.textContent = 'Volver al portfolio '
 }
 
 const focusHash = () => {

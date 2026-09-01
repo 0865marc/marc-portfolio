@@ -1,0 +1,174 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { challenge, challengeWeeks, type ChallengeWeek } from '../../data/challenge'
+
+const dateFormatter = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
+const formatDate = (date: string) => dateFormatter.format(new Date(`${date}T12:00:00Z`))
+const progressLabels = {
+  planned: 'Planificada',
+  active: 'Activa',
+  complete: 'Completada',
+  paused: 'En pausa',
+} as const
+
+type DisplayWeek = ChallengeWeek & {
+  displayLabel: string
+  displayEndDate: string
+  timelineLabel: string
+  combinedCopy?: readonly string[]
+  combinedAgenda?: readonly string[]
+}
+
+const ibmCourseAgenda = [
+  'Generative AI and LLMs: Architecture and Data Preparation',
+  'Gen AI Foundational Models for NLP & Language Understanding',
+  'Generative AI Language Modeling with Transformers',
+  'Generative AI Engineering and Fine-Tuning Transformers',
+  'Generative AI Advanced Fine-Tuning for LLMs',
+  'Fundamentals of AI Agents Using RAG and LangChain',
+  'Project: Generative AI Applications with RAG and LangChain',
+] as const
+const weekOne = challengeWeeks.find(week => week.id === 'w1')
+const weekTwo = challengeWeeks.find(week => week.id === 'w2')
+if (!weekOne || !weekTwo) throw new Error('Roadmap requires both w1 and w2')
+const displayWeeks: DisplayWeek[] = [
+  {
+    ...weekOne,
+    displayLabel: 'Semanas 1–2',
+    displayEndDate: weekTwo.endDate,
+    timelineLabel: '01–02',
+    combinedCopy: [
+      'El itinerario de siete cursos de la especialización de IBM recorre la base de la ingeniería generativa: cómo se preparan y representan los datos, cómo funcionan los modelos fundacionales y cómo se construyen modelos de lenguaje con transformers. El recorrido conecta tokenización, vocabularios, embeddings, PyTorch, Hugging Face y las arquitecturas que sostienen las aplicaciones actuales con LLMs.',
+      'Después lleva esa base a la práctica con fine-tuning y técnicas de adaptación como LoRA y QLoRA, recuperación aumentada (RAG), bases vectoriales, LangChain y agentes. El último curso plantea un proyecto de aplicaciones generativas con RAG y LangChain, para seguir el camino desde los datos y los modelos hasta una solución que pueda probarse y desplegarse.',
+    ],
+    combinedAgenda: ibmCourseAgenda,
+    topics: [...new Set([...weekOne.topics, ...weekTwo.topics])],
+  },
+  ...challengeWeeks
+    .filter(week => week.id !== 'w1' && week.id !== 'w2')
+    .map(week => ({
+      ...week,
+      displayLabel: `Semana ${week.position}`,
+      displayEndDate: week.endDate,
+      timelineLabel: String(week.position).padStart(2, '0'),
+    })),
+]
+---
+
+<BaseLayout
+  title={`${challenge.title} — Marc Teixidó`}
+  description="Roadmap intensivo de ocho semanas para reforzar el perfil AI Engineer / AI Solutions Engineer combinando IA generativa moderna, arquitectura cloud y despliegue de soluciones IA en producción."
+  canonicalPath="/roadmap/"
+>
+  <main class="min-h-screen px-5 py-8 sm:px-8 md:px-10 md:py-10">
+    <div class="mx-auto max-w-6xl">
+      <a class="control" href="/#career-sprint">Volver a la ruta del portfolio <span aria-hidden="true">↖</span></a>
+      <header class="mt-12 grid items-start gap-6 md:mt-16 xl:grid-cols-[minmax(0,1.15fr)_minmax(18rem,.65fr)] xl:gap-12">
+        <div class="min-w-0">
+          <p class="section-kicker">{formatDate(challenge.startDate)} — {formatDate(challenge.endDate)}</p>
+          <h1 data-route-heading tabindex="-1" class="mt-5 max-w-4xl break-words text-[clamp(2.75rem,7vw,5rem)] font-black uppercase leading-[.95] tracking-[-.02em]">{challenge.title}</h1>
+        </div>
+        <p class="max-w-2xl text-lg font-light leading-relaxed opacity-70 xl:text-xl">Roadmap intensivo de ocho semanas para reforzar el perfil AI Engineer / AI Solutions Engineer combinando IA generativa moderna, arquitectura cloud y despliegue de soluciones IA en producción.</p>
+      </header>
+
+      {displayWeeks.length ? (
+        <ol class="relative mt-12 ml-5 space-y-0 border-l-2 border-[#D7E2EA]/45 pl-6 md:mt-14 md:ml-8 md:pl-8">
+          {displayWeeks.map(week => (
+            <li id={week.id} class="relative min-w-0 pb-10 pt-10 pl-4 first:pt-1 sm:pl-6 md:pb-12 md:pt-12 md:first:pt-2">
+              <span class="absolute -left-11 top-4 z-10 grid h-10 w-10 place-items-center rounded-full border border-[#D7E2EA]/45 bg-[#0C0C0C] text-[.65rem] font-medium tracking-[.08em] ring-4 ring-[#0C0C0C] md:-left-14 md:top-6 md:h-12 md:w-12" aria-hidden="true">{week.timelineLabel}</span>
+              <article id={week.combinedAgenda ? 'w2' : undefined} class="min-w-0">
+                <header class="min-w-0">
+                  <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs uppercase tracking-[.16em] opacity-60">
+                    <p>{week.displayLabel}</p>
+                    <span aria-hidden="true">·</span>
+                    <p class="normal-case tracking-normal">{formatDate(week.startDate)} — {formatDate(week.displayEndDate)}</p>
+                    <span aria-hidden="true">·</span>
+                    <p>{progressLabels[week.progressState]}</p>
+                  </div>
+                  <h2 class="mt-2 break-words text-2xl font-medium uppercase leading-tight sm:text-3xl" data-route-heading tabindex="-1">
+                    {week.resource ? (
+                      <a
+                        href={week.resource.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${week.focus} — abre en una nueva pestaña`}
+                        class="break-words transition-colors duration-200 hover:text-[#FFFFFF] hover:underline hover:decoration-[#D7E2EA] hover:underline-offset-[0.18em] focus-visible:rounded-sm focus-visible:underline focus-visible:decoration-[#D7E2EA] focus-visible:underline-offset-[0.18em]"
+                      >
+                        {week.focus} <span aria-hidden="true">↗</span>
+                      </a>
+                    ) : (
+                      week.focus
+                    )}
+                  </h2>
+                  {week.combinedCopy ? (
+                    <div class="mt-3 max-w-3xl space-y-3 font-light leading-relaxed opacity-80">
+                      {week.combinedCopy.map(paragraph => <p>{paragraph}</p>)}
+                    </div>
+                  ) : (
+                    <p class="mt-3 font-light leading-relaxed opacity-80">{week.objective}</p>
+                  )}
+                </header>
+
+                <details data-disclosure class="group mt-5 !border-0 !rounded-none pt-1">
+                  <summary
+                    id={`roadmap-details-${week.id}-summary`}
+                    class="!inline-flex !min-h-11 !w-fit max-w-full !cursor-pointer !items-center !gap-2 !rounded-full border border-[#D7E2EA]/30 bg-[#D7E2EA]/[0.04] px-3 py-1.5 text-xs font-medium uppercase tracking-[.16em] transition-colors duration-200 hover:border-[rgb(215_226_234_/_0.6)] hover:bg-[rgb(215_226_234_/_0.08)] hover:text-[#FFFFFF] focus-visible:outline-[3px] focus-visible:outline-[#D7E2EA] focus-visible:outline-offset-4"
+                    aria-controls={`roadmap-details-${week.id}-panel`}
+                  >
+                    <span class="break-words">Explorar agenda y temas</span>
+                    <span aria-hidden="true" class="opacity-50">·</span>
+                    <span class="inline-grid w-14 shrink-0">
+                      <span class="col-start-1 row-start-1 group-open:hidden">Abrir</span>
+                      <span class="col-start-1 row-start-1 hidden group-open:inline">Cerrar</span>
+                    </span>
+                    <span aria-hidden="true" class="!border-0 !rounded-none grid h-7 w-7 shrink-0 place-items-center text-sm leading-none transition-transform duration-300 group-open:rotate-180">↓</span>
+                  </summary>
+                  <div id={`roadmap-details-${week.id}-panel`} data-disclosure-panel>
+                    <div class="disclosure-panel-inner !px-0 !pb-5 !pt-4 sm:!pb-6">
+                      <div class="grid gap-6 lg:grid-cols-2">
+                        <section>
+                          <h3 class="text-sm uppercase tracking-[.16em] opacity-60">Agenda</h3>
+                          {week.combinedAgenda ? (
+                            <ol class="mt-4 space-y-2">
+                              {week.combinedAgenda.map((course, index) => (
+                                <li class="grid gap-2 text-sm font-light leading-relaxed sm:grid-cols-[2rem_minmax(0,1fr)]">
+                                  <span class="font-medium opacity-60">{String(index + 1).padStart(2, '0')}</span>
+                                  <span>{course}</span>
+                                </li>
+                              ))}
+                            </ol>
+                          ) : (
+                            <div class="mt-4 space-y-5">
+                              {week.agenda.map(day => (
+                                <div>
+                                  <h4 class="font-medium">{day.day}</h4>
+                                  <ol class="mt-3 space-y-2">
+                                    {day.blocks.map(block => <li class="grid gap-1 text-sm font-light leading-relaxed sm:grid-cols-[7.5rem_minmax(0,1fr)]"><span class="font-medium">{block.time}</span><span>{block.activity}</span></li>)}
+                                  </ol>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </section>
+
+                        <section>
+                          <h3 class="text-sm uppercase tracking-[.16em] opacity-60">Temas</h3>
+                          <ul class="mt-4 flex flex-wrap gap-2">{week.topics.map(topic => <li class="tag-dark">{topic}</li>)}</ul>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </details>
+              </article>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <div class="mt-16 rounded-[28px] border border-[#D7E2EA]/20 p-6 sm:p-8" role="status" aria-live="polite">
+          <p class="section-kicker">Sin semanas publicadas</p>
+          <p class="mt-3 text-xl font-light leading-relaxed opacity-80">La ruta todavía no tiene semanas públicas.</p>
+        </div>
+      )}
+    </div>
+  </main>
+</BaseLayout>

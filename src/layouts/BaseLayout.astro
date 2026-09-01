@@ -4,6 +4,7 @@ import '@fontsource/kanit/400.css'
 import '@fontsource/kanit/500.css'
 import '@fontsource/kanit/900.css'
 import '../index.css'
+import { professionalProfile } from '../data/portfolio'
 
 type JsonLd = Record<string, unknown>
 
@@ -16,7 +17,6 @@ interface Props {
   imageAlt?: string
   robots?: string
   jsonLd?: JsonLd | JsonLd[]
-  redirectTo?: string
 }
 
 const {
@@ -25,10 +25,9 @@ const {
   canonicalPath,
   type = 'website',
   imagePath = '/og-card.png',
-  imageAlt = 'Marc Teixidó Rosauro — Software Engineer, IT Project Lead, AI & Automation',
+  imageAlt = professionalProfile.identity.seo.imageAlt,
   robots = 'index,follow,max-image-preview:large',
   jsonLd = [],
-  redirectTo,
 } = Astro.props
 const canonical = canonicalPath === null ? null : new URL(canonicalPath ?? Astro.url.pathname, Astro.site)
 const socialImage = new URL(imagePath, Astro.site)
@@ -64,25 +63,10 @@ const serializeJsonLd = (value: JsonLd) => JSON.stringify(value).replaceAll('<',
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImage} />
     <meta name="twitter:image:alt" content={imageAlt} />
-    {redirectTo && <meta http-equiv="refresh" content={`0;url=${redirectTo}`} />}
 
     <title>{title}</title>
     {jsonLdEntries.map(entry => <script is:inline type="application/ld+json" set:html={serializeJsonLd(entry)} />)}
-    <script is:inline>
-      document.documentElement.classList.add('js')
-      if (location.pathname === '/') {
-        const h = location.hash
-        if (h === '#/blog') location.replace('/blog/')
-        else if (h.startsWith('#/blog/')) {
-          const value = h.slice(7), q = value.indexOf('?'), id = q < 0 ? value : value.slice(0,q)
-          const params = new URLSearchParams(q < 0 ? '' : value.slice(q+1))
-          const from = params.get('from') === 'landing' ? 'landing' : 'index'
-          let target = '/blog/articulo-no-encontrado/'
-          try { if (id && decodeURIComponent(id)) target = `/blog/${encodeURIComponent(decodeURIComponent(id))}/` } catch {}
-          location.replace(`${target}?from=${from}`)
-        }
-      }
-    </script>
+    <script is:inline>document.documentElement.classList.add('js')</script>
   </head>
   <body><slot /><script src="../scripts/navigation.ts"></script><script src="../scripts/enhancements.ts"></script></body>
 </html>

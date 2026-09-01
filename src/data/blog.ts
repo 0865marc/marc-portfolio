@@ -1,9 +1,25 @@
+import { readdirSync, readFileSync } from 'node:fs'
+import { basename, extname, join } from 'node:path'
 import { PROFILE_SOURCE_ID } from './portfolio'
+
+const BLOG_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+const BLOG_STATES = ['draft', 'published', 'deleted'] as const
+const BLOG_CODE_LANGUAGES = ['bash', 'json', 'markdown', 'typescript', 'text'] as const
+
+export type BlogCodeLanguage = typeof BLOG_CODE_LANGUAGES[number]
+export type BlogPostStatus = typeof BLOG_STATES[number]
+
+export type BlogCodeBlock = {
+  language: BlogCodeLanguage
+  code: string
+  title?: string
+}
 
 export type BlogArticleSection = {
   heading: string
   paragraphs: string[]
   points?: string[]
+  codeBlocks?: BlogCodeBlock[]
 }
 
 export type BlogPost = {
@@ -19,88 +35,222 @@ export type BlogPost = {
   takeaway: string[]
 }
 
-export type LegacyBlogRoute = {
+type BlogContentTag = {
   id: string
-  formerTitle: string
-  destination: '/blog/'
+  label: string
 }
 
-export const blogPosts: BlogPost[] = [
-  {
-    id: 'hermes-agent-hetzner-instalacion-segura',
-    category: 'Agentes y automatización',
-    tags: ['Hermes', 'Hetzner', 'Telegram', 'Codex', 'Supervisión humana'],
-    title: 'Hermes: autonomía útil con supervisión humana',
-    excerpt:
-      'Qué estoy aprendiendo al mantener un agente activo 24/7 y decidir qué puede ejecutar solo, qué necesita aprobación y cómo conservar el control.',
-    publishedAt: '2026-08-10',
-    sourceId: PROFILE_SOURCE_ID,
-    introduction: [
-      'Hermes es un agente autónomo que mantengo desplegado 24/7 en un VPS de Hetzner. Telegram funciona como interfaz para interactuar con él y supervisar su actividad, mientras el sistema se conecta con herramientas de desarrollo y puede ejecutar tareas autónomas y periódicas.',
-      'Lo que me interesa no es presentar otro chatbot, sino explorar una pregunta de ingeniería y producto: cuánta autonomía resulta realmente útil cuando un agente puede actuar sobre herramientas, cambios y despliegues, y cómo se conserva una supervisión humana clara.',
-    ],
-    sections: [
-      {
-        heading: 'Un agente que puede actuar',
-        paragraphs: [
-          'Hermes no se limita a responder texto. Puede ejecutar tareas de desarrollo, coordinar trabajo mediante otros agentes, revisar Pull Requests, supervisar cambios, desplegar y mantener procesos periódicos. Esa capacidad de actuar es precisamente lo que hace necesario diseñar sus límites con cuidado.',
-          'El sistema vive de forma permanente en un VPS. Esta continuidad permite encargar procesos que no dependen de mantener una sesión local abierta, pero también obliga a pensar en estados, permisos y mecanismos de supervisión antes de aumentar su alcance.',
-        ],
-      },
-      {
-        heading: 'Telegram como interfaz de supervisión',
-        paragraphs: [
-          'Telegram es la interfaz desde la que interactúo con el agente y sigo su actividad. Tener un canal cotidiano reduce la fricción para iniciar o revisar trabajo, y mantiene visible que existe una persona responsable detrás de las decisiones importantes.',
-          'La interfaz no cambia el principio de control: una instrucción accesible no implica que toda acción deba ser automática. El valor está en separar con claridad conversación, ejecución y aprobación.',
-        ],
-      },
-      {
-        heading: 'Trabajo conectado al desarrollo',
-        paragraphs: [
-          'Habitualmente Hermes utiliza Codex con GPT-5.6 Sol para tareas de programación. Su entorno está conectado con herramientas de desarrollo para que pueda trabajar sobre tareas concretas y coordinar procesos que normalmente requerirían varias intervenciones manuales.',
-        ],
-        points: [
-          'Ejecutar tareas de desarrollo y coordinar trabajo mediante agentes.',
-          'Revisar Pull Requests y supervisar cambios.',
-          'Desplegar cambios automáticamente dentro de los workflows definidos.',
-          'Ejecutar procesos periódicos e interactuar conmigo mediante Telegram.',
-        ],
-      },
-      {
-        heading: 'Autonomía no significa permiso ilimitado',
-        paragraphs: [
-          'Mi foco está en decidir qué acciones puede completar un agente por sí mismo y cuáles necesitan una aprobación explícita. Cuanto mayor es el impacto potencial de una acción, más importante resulta que el workflow haga visible el contexto, la evidencia y el punto exacto de decisión humana.',
-          'La supervisión tampoco consiste en revisar manualmente cada paso. Consiste en construir fronteras comprensibles: tareas acotadas, herramientas con un propósito concreto y gates que impiden convertir una instrucción ambigua en un cambio difícil de revertir.',
-        ],
-      },
-      {
-        heading: 'Un laboratorio práctico de sistemas agénticos',
-        paragraphs: [
-          'Hermes es un proyecto en evolución y un entorno de experimentación continua. Me permite probar nuevas formas de desarrollar software con modelos de lenguaje, observar dónde aportan autonomía real y detectar qué partes siguen necesitando criterio humano.',
-          'El aprendizaje principal no está en conseguir que el agente haga más cosas, sino en hacer que cada capacidad tenga un alcance, una supervisión y una responsabilidad que se puedan explicar.',
-        ],
-      },
-    ],
-    takeaway: [
-      'Un agente útil no es el que puede hacerlo todo, sino el que combina capacidad de ejecución con límites comprensibles y una ruta clara de aprobación humana.',
-    ],
-  },
-]
+type BlogContentPost = Omit<BlogPost, 'sourceId' | 'tags'> & {
+  status: BlogPostStatus
+  position: number
+  tags: string[]
+}
 
-export const legacyBlogRoutes: LegacyBlogRoute[] = [
-  {
-    id: 'arquitecturas-plataformas-iot',
-    formerTitle: 'Arquitecturas para plataformas IoT',
-    destination: '/blog/',
-  },
-  {
-    id: 'rabbitmq-celery-procesos-pesados',
-    formerTitle: 'RabbitMQ y Celery para procesos pesados',
-    destination: '/blog/',
-  },
-  {
-    id: 'infraestructura-distribuida-latencia',
-    formerTitle: 'Infraestructura distribuida y latencia',
-    destination: '/blog/',
-  },
-]
+type BlogContent = {
+  tags: unknown[]
+  posts: unknown[]
+}
+
+type ContentFile = {
+  file: string
+  value: unknown
+}
+
+const contentRoot = join(process.cwd(), 'content')
+
+const fail = (field: string, message: string): never => {
+  throw new Error(`Invalid blog content at ${field}: ${message}`)
+}
+
+const expectRecord = (value: unknown, field: string): Record<string, unknown> => {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) return fail(field, 'expected an object')
+  return value as Record<string, unknown>
+}
+
+const expectString = (value: unknown, field: string): string => {
+  if (typeof value !== 'string' || !value.trim()) return fail(field, 'expected a non-empty string')
+  return value
+}
+
+const expectStringList = (value: unknown, field: string): string[] => {
+  if (!Array.isArray(value) || !value.length) return fail(field, 'expected a non-empty array')
+  return value.map((item, index) => expectString(item, `${field}[${index}]`))
+}
+
+const expectId = (value: unknown, field: string): string => {
+  const id = expectString(value, field)
+  if (!BLOG_ID_PATTERN.test(id)) fail(field, 'must use lowercase letters, numbers, and single hyphens')
+  return id
+}
+
+const expectDate = (value: unknown, field: string): string => {
+  const date = expectString(value, field)
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date)
+  if (!match) return fail(field, 'must use YYYY-MM-DD')
+
+  const [year, month, day] = match.slice(1).map(Number)
+  const parsed = new Date(Date.UTC(year, month - 1, day))
+  if (parsed.getUTCFullYear() !== year || parsed.getUTCMonth() !== month - 1 || parsed.getUTCDate() !== day) {
+    return fail(field, 'must be a real calendar date')
+  }
+  return date
+}
+
+const expectStatus = (value: unknown, field: string): BlogPostStatus => {
+  const status = expectString(value, field)
+  if (!BLOG_STATES.includes(status as BlogPostStatus)) fail(field, `must be one of ${BLOG_STATES.join(', ')}`)
+  return status as BlogPostStatus
+}
+
+const expectPosition = (value: unknown, field: string): number => {
+  if (typeof value !== 'number' || !Number.isSafeInteger(value) || value < 1) return fail(field, 'must be a positive integer')
+  return value
+}
+
+const parseCodeBlock = (value: unknown, field: string): BlogCodeBlock => {
+  const record = expectRecord(value, field)
+  const language = expectString(record.language, `${field}.language`)
+  if (!(BLOG_CODE_LANGUAGES as readonly string[]).includes(language)) {
+    fail(`${field}.language`, `must be one of ${BLOG_CODE_LANGUAGES.join(', ')}`)
+  }
+
+  const title = record.title === undefined ? undefined : expectString(record.title, `${field}.title`)
+  return {
+    language: language as BlogCodeLanguage,
+    code: expectString(record.code, `${field}.code`),
+    ...(title === undefined ? {} : { title }),
+  }
+}
+
+const parseSection = (value: unknown, field: string): BlogArticleSection => {
+  const record = expectRecord(value, field)
+  const points = record.points === undefined ? undefined : expectStringList(record.points, `${field}.points`)
+  const codeBlockValues = record.codeBlocks
+  const codeBlocks = codeBlockValues === undefined
+    ? undefined
+    : (() => {
+        if (!Array.isArray(codeBlockValues) || !codeBlockValues.length) {
+          return fail(`${field}.codeBlocks`, 'expected a non-empty array')
+        }
+        return codeBlockValues.map((block, index) => parseCodeBlock(block, `${field}.codeBlocks[${index}]`))
+      })()
+
+  return {
+    heading: expectString(record.heading, `${field}.heading`),
+    paragraphs: expectStringList(record.paragraphs, `${field}.paragraphs`),
+    ...(points === undefined ? {} : { points }),
+    ...(codeBlocks === undefined ? {} : { codeBlocks }),
+  }
+}
+
+const parseTag = (value: unknown, field: string): BlogContentTag => {
+  const record = expectRecord(value, field)
+  return {
+    id: expectId(record.id, `${field}.id`),
+    label: expectString(record.label, `${field}.label`),
+  }
+}
+
+const parsePost = (value: unknown, field: string): BlogContentPost => {
+  const record = expectRecord(value, field)
+  const sectionValues = record.sections
+  if (!Array.isArray(sectionValues) || !sectionValues.length) {
+    return fail(`${field}.sections`, 'expected a non-empty array')
+  }
+
+  return {
+    id: expectId(record.id, `${field}.id`),
+    status: expectStatus(record.status, `${field}.status`),
+    position: expectPosition(record.position, `${field}.position`),
+    category: expectString(record.category, `${field}.category`),
+    tags: expectStringList(record.tags, `${field}.tags`),
+    title: expectString(record.title, `${field}.title`),
+    excerpt: expectString(record.excerpt, `${field}.excerpt`),
+    publishedAt: expectDate(record.publishedAt, `${field}.publishedAt`),
+    introduction: expectStringList(record.introduction, `${field}.introduction`),
+    sections: sectionValues.map((section, index) => parseSection(section, `${field}.sections[${index}]`)),
+    takeaway: expectStringList(record.takeaway, `${field}.takeaway`),
+  }
+}
+
+const comparePosts = (left: BlogContentPost, right: BlogContentPost): number =>
+  left.position - right.position || (left.id < right.id ? -1 : left.id > right.id ? 1 : 0)
+
+export const buildPublishedBlogPosts = (content: BlogContent): BlogPost[] => {
+  const tags = content.tags.map((tag, index) => parseTag(tag, `tags[${index}]`))
+  const tagLabels = new Map<string, string>()
+  for (const tag of tags) {
+    if (tagLabels.has(tag.id)) fail(`tags.${tag.id}`, 'duplicate ID')
+    tagLabels.set(tag.id, tag.label)
+  }
+
+  const posts = content.posts.map((post, index) => parsePost(post, `posts[${index}]`))
+  const postIds = new Set<string>()
+  const positions = new Set<number>()
+  for (const post of posts) {
+    if (postIds.has(post.id)) fail(`posts.${post.id}`, 'duplicate ID')
+    if (positions.has(post.position)) fail(`posts.${post.id}.position`, 'duplicate position')
+    postIds.add(post.id)
+    positions.add(post.position)
+
+    const postTagIds = new Set<string>()
+    for (const tagId of post.tags) {
+      if (!tagLabels.has(tagId)) fail(`posts.${post.id}.tags`, `unknown tag "${tagId}"`)
+      if (postTagIds.has(tagId)) fail(`posts.${post.id}.tags`, `duplicate tag "${tagId}"`)
+      postTagIds.add(tagId)
+    }
+  }
+
+  return posts
+    .filter(post => post.status === 'published')
+    .sort(comparePosts)
+    .map(post => ({
+      id: post.id,
+      category: post.category,
+      tags: post.tags.map(tagId => tagLabels.get(tagId)!),
+      title: post.title,
+      excerpt: post.excerpt,
+      publishedAt: post.publishedAt,
+      sourceId: PROFILE_SOURCE_ID,
+      introduction: post.introduction,
+      sections: post.sections,
+      takeaway: post.takeaway,
+    }))
+}
+
+const readJsonDirectory = (directoryName: string): ContentFile[] => {
+  const directory = join(contentRoot, directoryName)
+  const files = (() => {
+    try {
+      return readdirSync(directory)
+    } catch (error) {
+      return fail(directory, error instanceof Error ? error.message : 'unable to read directory')
+    }
+  })()
+
+  return files
+    .filter(file => extname(file) === '.json')
+    .sort()
+    .map(file => {
+      const path = join(directory, file)
+      try {
+        return { file: path, value: JSON.parse(readFileSync(path, 'utf8')) }
+      } catch (error) {
+        return fail(path, error instanceof Error ? error.message : 'invalid JSON')
+      }
+    })
+}
+
+const assertFilenameMatchesId = ({ file, value }: ContentFile): unknown => {
+  const record = expectRecord(value, file)
+  const id = expectId(record.id, `${file}.id`)
+  if (basename(file, extname(file)) !== id) fail(file, `filename must match ID "${id}"`)
+  return value
+}
+
+const readBlogContent = (): BlogContent => ({
+  tags: readJsonDirectory('tags').map(assertFilenameMatchesId),
+  posts: readJsonDirectory('posts').map(assertFilenameMatchesId),
+})
+
+export const blogPosts: BlogPost[] = buildPublishedBlogPosts(readBlogContent())

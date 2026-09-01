@@ -1,0 +1,11 @@
+name = "marc-portfolio-cms-auth"
+main = "src/index.js"
+compatibility_date = "2023-03-24"
+workers_dev = false
+
+routes = [
+  { pattern = "cms-auth.portfolio.mybrawl.io", custom_domain = true },
+]
+
+[vars]
+ALLOWED_DOMAINS = "portfolio.mybrawl.io"

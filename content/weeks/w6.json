@@ -1,0 +1,31 @@
+{
+  "id": "w6",
+  "status": "published",
+  "position": 6,
+  "startDate": "2026-09-28",
+  "endDate": "2026-10-04",
+  "title": "Semana 6",
+  "focus": "AWS Generative AI Developer — Learning Plan",
+  "objective": "Objetivo previsto: pasar de prototipos IA a sistemas production-grade mediante evaluación, observabilidad, troubleshooting, control de coste y operación escalable en AWS.",
+  "resourceLabel": "Ver plan GenAI",
+  "resourceHref": "https://skillbuilder.aws/learning-plan/BGTH16YCTU/aws-generative-ai-developer-advanced-learning-plan-includes-labs/ZDN46CX881",
+  "agenda": [
+    {
+      "day": "Plan semanal",
+      "blocks": [
+        { "time": "Evaluación", "activity": "Evaluación de modelos y aplicaciones" },
+        { "time": "Operación", "activity": "Observabilidad y troubleshooting" },
+        { "time": "Eficiencia", "activity": "Coste y latencia" },
+        { "time": "Integración", "activity": "Integración AWS" },
+        { "time": "Escalabilidad", "activity": "Escalabilidad y operación en producción" }
+      ]
+    }
+  ],
+  "topics": ["evaluación", "modelos", "aplicaciones", "observabilidad", "troubleshooting", "coste", "latencia", "integración AWS", "escalabilidad", "producción"],
+  "milestones": [
+    "Hito previsto: definir una aproximación de evaluación y observabilidad.",
+    "Hito previsto: documentar decisiones de coste, latencia y escalabilidad."
+  ],
+  "criteria": ["Presentar la operación production-grade como objetivo de aprendizaje, no como sistema ya desplegado."],
+  "progressState": "planned"
+}

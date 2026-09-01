@@ -1,0 +1,16 @@
+{
+  "name": "marc-portfolio-cms-auth",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "npm@11.16.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "verify:upstream": "node scripts/verify-upstream.mjs",
+    "predeploy": "npm run verify:upstream",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "4.123.0"
+  }
+}

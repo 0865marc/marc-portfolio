@@ -1,0 +1,31 @@
+{
+  "id": "w7",
+  "status": "published",
+  "position": 7,
+  "startDate": "2026-10-05",
+  "endDate": "2026-10-11",
+  "title": "Semana 7",
+  "focus": "AWS Generative AI Developer — Exam Prep",
+  "objective": "Objetivo previsto: consolidar conocimientos y detectar áreas débiles mediante repaso de dominios, casos de arquitectura, laboratorios, Practice Question Sets y simulacros.",
+  "resourceLabel": "Ver plan de preparación",
+  "resourceHref": "https://skillbuilder.aws/learning-plan/9VXVGYT38G/exam-prep-plan-aws-certified-generative-ai-developer--professional-aipc01--english/4SCMN2659K",
+  "agenda": [
+    {
+      "day": "Plan semanal",
+      "blocks": [
+        { "time": "Dominios", "activity": "Repaso previsto de dominios" },
+        { "time": "Casos", "activity": "Casos de arquitectura" },
+        { "time": "Laboratorios", "activity": "SimuLearn y labs" },
+        { "time": "Preguntas", "activity": "Practice Question Sets" },
+        { "time": "Simulacros", "activity": "Simulacros previstos" }
+      ]
+    }
+  ],
+  "topics": ["dominios", "casos de arquitectura", "SimuLearn", "labs", "Practice Question Sets", "simulacros"],
+  "milestones": [
+    "Hito previsto: detectar áreas débiles para orientar el repaso.",
+    "Hito previsto: organizar la preparación prevista del examen."
+  ],
+  "criteria": ["No presentar el examen, sus prácticas o sus resultados como hechos ya realizados."],
+  "progressState": "planned"
+}

@@ -1,0 +1,30 @@
+{
+  "id": "w8",
+  "status": "published",
+  "position": 8,
+  "startDate": "2026-10-12",
+  "endDate": "2026-10-18",
+  "title": "Semana 8",
+  "focus": "AWS Generative AI Developer — Exam + Portfolio",
+  "objective": "Objetivo previsto: cerrar el sprint con preparación de certificaciones y experiencia práctica documentada, sin afirmar que el examen, la certificación o los proyectos se hayan completado.",
+  "resourceLabel": "Ver plan de preparación",
+  "resourceHref": "https://skillbuilder.aws/learning-plan/9VXVGYT38G/exam-prep-plan-aws-certified-generative-ai-developer--professional-aipc01--english/4SCMN2659K",
+  "agenda": [
+    {
+      "day": "Plan semanal",
+      "blocks": [
+        { "time": "Repaso", "activity": "Repaso final previsto" },
+        { "time": "Examen", "activity": "Examen previsto AWS Certified Generative AI Developer – Professional" },
+        { "time": "Portfolio", "activity": "Documentación de arquitectura y aprendizajes" },
+        { "time": "Consolidación", "activity": "Consolidación prevista de proyectos y casos de estudio en portfolio" }
+      ]
+    }
+  ],
+  "topics": ["repaso final", "AWS Certified Generative AI Developer – Professional", "arquitectura", "aprendizajes", "proyectos", "casos de estudio", "portfolio"],
+  "milestones": [
+    "Hito previsto: dejar documentados arquitectura y aprendizajes.",
+    "Hito previsto: consolidar proyectos y casos de estudio previstos para el portfolio."
+  ],
+  "criteria": ["Presentar examen, certificación y proyectos como objetivos previstos, no como resultados obtenidos."],
+  "progressState": "planned"
+}

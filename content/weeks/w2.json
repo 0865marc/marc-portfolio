@@ -1,0 +1,30 @@
+{
+  "id": "w2",
+  "status": "published",
+  "position": 2,
+  "startDate": "2026-08-31",
+  "endDate": "2026-09-06",
+  "title": "Semana 2",
+  "focus": "IBM Generative AI Engineering with LLMs — Coursera",
+  "objective": "Objetivo previsto: completar la especialización y trasladar sus conceptos a sistemas reales mediante adaptación de modelos, RAG, bases vectoriales, agentes y aplicaciones LLM.",
+  "resourceLabel": "Ver especialización",
+  "resourceHref": "https://www.coursera.org/specializations/generative-ai-engineering-with-llms",
+  "agenda": [
+    {
+      "day": "Plan semanal",
+      "blocks": [
+        { "time": "Adaptación", "activity": "Fine-tuning y adaptación de modelos" },
+        { "time": "Eficiencia", "activity": "LoRA y QLoRA" },
+        { "time": "RAG", "activity": "RAG y bases de datos vectoriales" },
+        { "time": "Agentes", "activity": "Agentes y aplicaciones LLM" }
+      ]
+    }
+  ],
+  "topics": ["fine-tuning", "adaptación", "LoRA", "QLoRA", "RAG", "bases vectoriales", "agentes", "aplicaciones LLM"],
+  "milestones": [
+    "Hito previsto: organizar una práctica de adaptación de modelos.",
+    "Hito previsto: trasladar conceptos de RAG o agentes a una aplicación prevista."
+  ],
+  "criteria": ["Presentar la finalización y la aplicación de la especialización como objetivos previstos, no como logros."],
+  "progressState": "planned"
+}
