@@ -65,6 +65,9 @@ const privacyTerms = [
   'Hermes',
   ...retiredBlogIds,
 ]
+const approvedGptRoute = 'career-sprint-daily/2026-08-31/index.html'
+const approvedGptSentence = 'Un GPT decoder-only normal no necesita esta ruta: prompt y respuesta forman una sola secuencia y se relacionan mediante causal self-attention.'
+const gptOccurrences = (value: string) => value.match(/\bGPT\b/gi) ?? []
 const unauthorizedRoadmapTerms = ['SAA-C03', 'AIP-C01', 'AWS Skill Builder', 'microcredencial', '150 USD', '300 USD']
 
 describe('static output', () => {
@@ -134,6 +137,17 @@ describe('static output', () => {
   it('does not publish private terms in textual public output', () => {
     const output = readPublicTextOutput().toLocaleLowerCase('es')
     for (const term of privacyTerms) expect(output).not.toContain(term.toLocaleLowerCase('es'))
+  })
+
+  it('allows GPT only in the approved daily sentence', () => {
+    const approvedOutput = read(approvedGptRoute)
+    expect(approvedOutput).toContain(approvedGptSentence)
+    expect(gptOccurrences(approvedOutput)).toHaveLength(1)
+    const approvedPath = join(dist, approvedGptRoute)
+    for (const path of publicTextFiles(dist)) {
+      if (path === approvedPath) continue
+      expect(gptOccurrences(readFileSync(path, 'utf8')), path).toHaveLength(0)
+    }
   })
 
   it('does not publish the replaced certification roadmap', () => {
@@ -218,6 +232,20 @@ describe('static output', () => {
     for (const id of retiredBlogIds) expect(existsSync(join(dist, 'blog', id, 'index.html'))).toBe(false)
   })
 
+  it('preserves daily Python and inline formula rendering contracts', () => {
+    const html = read(approvedGptRoute)
+    const config = read('admin/config.yml')
+    const dailyCmsConfig = config.slice(config.indexOf('  - name: daily'))
+    const knowledgeCmsConfig = config.slice(0, config.indexOf('  - name: tags'))
+    const dailyLanguageOptions = dailyCmsConfig.match(/options: \[bash, json, markdown, typescript, text, python\]/g) ?? []
+
+    expect(dailyLanguageOptions).toHaveLength(3)
+    expect(knowledgeCmsConfig).toContain('options: [bash, json, markdown, typescript, text]')
+    expect(knowledgeCmsConfig).not.toContain('options: [bash, json, markdown, typescript, text, python]')
+    expect(html).toContain('<code class="language-python">weights = torch.softmax(scores, dim=-1)</code>')
+    expect(html).toContain('<code class="article-inline-code">Attention(Q, K, V) = softmax(QKᵀ / sqrt(d_k)) V</code>')
+    expect(html).not.toContain('$$')
+  })
   it('keeps the CMS private, self-hosted, and configured for challenge collections', () => {
     const admin = read('admin/index.html')
     const config = read('admin/config.yml')

@@ -197,6 +197,23 @@ describe('challenge content adapter', () => {
     expect(result.daily[0].sections[0].blocks[2]).toEqual({ type: 'code', language: 'text', code: 'resultado', title: 'Resultado' })
   })
 
+  it('preserves Python and inline formula source blocks', () => {
+    const entry = dailyProgressEntries.find(candidate => candidate.id === '2026-08-31')
+    expect(entry).toBeDefined()
+    if (!entry) return
+    const attention = entry.sections.find(section => section.heading === 'Attention selecciona información de forma blanda')
+    expect(attention).toBeDefined()
+    if (!attention) return
+    expect(attention.blocks[1]).toEqual({
+      type: 'paragraph',
+      text: '`Attention(Q, K, V) = softmax(QKᵀ / sqrt(d_k)) V`',
+    })
+    expect(attention.blocks[5]).toEqual({
+      type: 'code',
+      language: 'python',
+      code: 'weights = torch.softmax(scores, dim=-1)',
+    })
+  })
   it.each([
     { label: 'a mismatched date ID', entry: daily({ id: '2026-08-25' }), error: /must equal activityDate/ },
     {

@@ -347,7 +347,7 @@ collections:
               - label: Lenguaje
                 name: language
                 widget: select
-                options: [bash, json, markdown, typescript, text]
+                options: [bash, json, markdown, typescript, text, python]
               - label: Código
                 name: code
                 widget: code
@@ -391,7 +391,7 @@ collections:
                   - label: Lenguaje
                     name: language
                     widget: select
-                    options: [bash, json, markdown, typescript, text]
+                    options: [bash, json, markdown, typescript, text, python]
                   - label: Código
                     name: code
                     widget: code
@@ -429,7 +429,7 @@ collections:
               - label: Lenguaje
                 name: language
                 widget: select
-                options: [bash, json, markdown, typescript, text]
+                options: [bash, json, markdown, typescript, text, python]
               - label: Código
                 name: code
                 widget: code

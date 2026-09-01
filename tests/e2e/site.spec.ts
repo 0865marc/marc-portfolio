@@ -30,7 +30,10 @@ const materialAxeViolations = async (page: Page) => (await new AxeBuilder({ page
 
 const dailyBlockText = (blocks: typeof dailyProgressEntries[number]['introduction']) => blocks.flatMap(block => {
   if (block.type === 'paragraph') return block.text
-  if (block.type === 'code') return [block.title ?? '', block.code]
+  if (block.type === 'code') {
+    const title = block.title
+    return title?.trim() ? [title, block.code] : [block.code]
+  }
   return block.items
 })
 const readingMinutes = (text: string[]) => Math.max(1, Math.ceil(text.join(' ').trim().split(/\s+/).length / 210))
@@ -178,7 +181,10 @@ test('daily 2026-08-31 reading time covers all published blocks', async ({ page 
   ]
   const expectedMinutes = readingMinutes(publishedBlocks)
   await page.goto(`/career-sprint-daily/${entry.activityDate}/`)
-  for (const block of publishedBlocks) await expect(page.locator('article')).toContainText(block.replaceAll('`', ''))
+  for (const block of publishedBlocks) {
+    expect(block.trim()).not.toBe('')
+    await expect(page.locator('article')).toContainText(block.replaceAll('`', ''))
+  }
   await expect(page.locator('article header').getByText(`${expectedMinutes} min de lectura`, { exact: true })).toBeVisible()
 })
 

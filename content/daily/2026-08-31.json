@@ -149,9 +149,8 @@
           "text": "La fórmula completa ya tiene para mí una lectura concreta:"
         },
         {
-          "type": "code",
-          "language": "text",
-          "code": "$$\nAttention(Q, K, V) = softmax(QKᵀ / sqrt(d_k)) V\n$$"
+          "type": "paragraph",
+          "text": "`Attention(Q, K, V) = softmax(QKᵀ / sqrt(d_k)) V`"
         },
         {
           "type": "paragraph",
@@ -167,7 +166,7 @@
         },
         {
           "type": "code",
-          "language": "text",
+          "language": "python",
           "code": "weights = torch.softmax(scores, dim=-1)"
         },
         {
