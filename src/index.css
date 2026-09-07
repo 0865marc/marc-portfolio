@@ -227,6 +227,15 @@ a {
   overflow: hidden;
 }
 
+.ainkii-route-actions > a {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding-inline: 1rem;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
 .contact-copy {
   width: 100%;
   container-type: inline-size;
@@ -894,7 +903,7 @@ a {
 
 
   .profile-facts {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .profile-facts > div {
@@ -984,6 +993,14 @@ a {
 
 @media (max-width: 639px) {
   .article-prose { line-height: 1.76; }
+
+  .article-prose > p,
+  .article-prose section > p:not(.article-section-number),
+  .article-prose aside > p:not(:first-child) {
+    text-align: left;
+    text-align-last: auto;
+    text-justify: auto;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

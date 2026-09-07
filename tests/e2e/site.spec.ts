@@ -48,16 +48,23 @@ test('landing exposes the personal profile and current Home visibility', async (
   await page.goto('/')
   const navigation = page.getByRole('navigation', { name: 'Navegación principal' })
 
-  await expect(page).toHaveTitle('Marc Teixidó — Ingeniero de software y responsable de proyectos IT')
-  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', 'Portfolio de Marc Teixidó: desarrollo de software, coordinación de proyectos IT, datos, infraestructura y automatización.')
-  await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute('content', 'Marc Teixidó — Ingeniero de software y responsable de proyectos IT')
+  await expect(page).toHaveTitle('Marc Teixidó — Product Engineering e IA aplicada')
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', 'Perfil orientado a Product Engineering con foco en IA aplicada y evidencia publicada: cerca de 3 años full-stack y alrededor de 1 año coordinando proyectos IT.')
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', 'Marc Teixidó — Product Engineering e IA aplicada')
+  await expect(page.locator('meta[property="og:description"]')).toHaveAttribute('content', 'Perfil orientado a Product Engineering con foco en IA aplicada y evidencia publicada: cerca de 3 años full-stack y alrededor de 1 año coordinando proyectos IT.')
+  await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute('content', 'Marc Teixidó — Product Engineering, cerca de 3 años full-stack, alrededor de 1 año coordinando proyectos IT e IA aplicada')
+  await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute('content', 'Marc Teixidó — Product Engineering e IA aplicada')
+  await expect(page.locator('meta[name="twitter:description"]')).toHaveAttribute('content', 'Perfil orientado a Product Engineering con foco en IA aplicada y evidencia publicada: cerca de 3 años full-stack y alrededor de 1 año coordinando proyectos IT.')
+  await expect(page.locator('meta[name="twitter:image:alt"]')).toHaveAttribute('content', 'Marc Teixidó — Product Engineering, cerca de 3 años full-stack, alrededor de 1 año coordinando proyectos IT e IA aplicada')
   await expect(page.getByRole('heading', { level: 1, name: 'Marc Teixidó', exact: true })).toBeVisible()
   await expect(page.getByText('Balaguer, Lleida', { exact: true })).toBeVisible()
-  await expect(page.getByText('Software y producto digital', { exact: true })).toBeVisible()
-  await expect(page.getByText('Ingeniero de software y responsable de proyectos IT', { exact: true }).first()).toBeVisible()
-  await expect(page.getByText('Construyo y coordino productos digitales, desde el backend y la infraestructura hasta los datos y la automatización.', { exact: true })).toBeVisible()
+  await expect(page.getByText('Perfil orientado a Product Engineering con foco en IA aplicada', { exact: true })).toBeVisible()
+  await expect(page.getByText('Responsable de proyectos IT en Taurus Research & Development', { exact: true })).toBeVisible()
+  await expect(page.getByText('Conecto visión de producto y ejecución técnica para convertir necesidades en software, coordinar su entrega y aplicar automatización e IA cuando aportan valor.', { exact: true })).toBeVisible()
   const jsonLd = await page.locator('script[type="application/ld+json"]').allTextContents()
+  expect(jsonLd.join('')).toContain('"jobTitle":"Responsable de proyectos IT"')
   expect(jsonLd.join('')).toContain('"homeLocation":{"@type":"Place","name":"Balaguer, Lleida"}')
+  expect(jsonLd.join('')).toContain('"worksFor":{"@type":"Organization","name":"Taurus Research & Development"}')
   await expect(navigation.locator('a')).toHaveText(['01 Perfil', '02 Career Sprint', '03 Contacto'])
   await expect(navigation.getByRole('link', { name: 'Perfil', exact: true })).toHaveAttribute('href', '#about')
   await expect(navigation.getByRole('link', { name: 'Career Sprint', exact: true })).toHaveAttribute('href', '#career-sprint')
@@ -65,16 +72,22 @@ test('landing exposes the personal profile and current Home visibility', async (
   await expect(navigation.getByRole('link', { name: 'Proyecto', exact: true })).toHaveCount(0)
   await expect(navigation.getByRole('link', { name: 'Blog', exact: true })).toHaveCount(0)
   await expect(page.locator('a[href="#projects"], a[href="#blog"]')).toHaveCount(0)
-  await expect(page.getByRole('link', { name: 'DOCUMENTANDO DIARIAMENTE', exact: true })).toHaveAttribute('href', '/career-sprint-daily/')
-  await expect(page.getByRole('link', { name: 'Conocer mi trayectoria', exact: true })).toHaveAttribute('href', '#about')
+  await expect(page.getByRole('link', { name: 'Ver plan de 8 semanas', exact: true })).toHaveAttribute('href', '/roadmap/')
+  await expect(page.getByRole('link', { name: 'Ver evidencia publicada', exact: true })).toHaveAttribute('href', '/career-sprint-daily/')
+  await expect(page.getByRole('link', { name: 'Contactar', exact: true })).toHaveAttribute('href', '#contact')
+  await expect(page.getByRole('link', { name: 'Ver experiencia', exact: true })).toHaveAttribute('href', '#about')
   await expect(page.getByRole('link', { name: 'Explorar Ainkii', exact: true })).toHaveCount(0)
   await expect(page.getByRole('heading', { level: 2, name: 'Software, producto y coordinación técnica', exact: true })).toBeVisible()
+  const profileFactCards = page.locator('#about .profile-facts > div')
   await expect(page.getByRole('link', { name: 'Career Sprint', exact: true })).toHaveCount(1)
   await expect(page.getByText('Sobre mí', { exact: true })).toBeVisible()
-  await expect(page.getByText('Taurus Research & Development', { exact: true })).toBeVisible()
-  await expect(page.getByText('Del desarrollo full-stack a la coordinación de proyectos y productos digitales.', { exact: true })).toBeVisible()
+  await expect(page.locator('#about').getByText('Mi experiencia combina desarrollo full-stack y coordinación de proyectos IT. Trabajo entre las necesidades de producto, las decisiones técnicas y la entrega, manteniendo una visión de principio a fin.', { exact: true })).toBeVisible()
+  await expect(page.locator('#about').getByText('Taurus Research & Development', { exact: true })).toBeVisible()
+  await expect(profileFactCards).toHaveCount(2)
+  await expect(profileFactCards.locator('dt')).toHaveText(['Desarrollo full-stack', 'Liderazgo de proyectos IT'])
+  await expect(profileFactCards.locator('.profile-fact-value')).toHaveText(['≈ 3 años', '≈ 1 año'])
+  await expect(profileFactCards.getByText(/^(IA aplicada|Evidencia publicada)$/)).toHaveCount(0)
   await expect(page.getByText('Coordino el roadmap y el desarrollo de un ecosistema internacional de servicios web, móviles y cloud para un producto de cocina conectado. Trabajo con dirección, distribuidores y desarrolladores externos, traduciendo necesidades de producto en especificaciones, prioridades y entregas. También introduzco automatizaciones con IA en procesos de documentación, contenido y monitorización.', { exact: true })).toBeVisible()
-  await expect(page.getByText('De principio a fin', { exact: true })).toBeVisible()
   await expect(page.getByText('Fui responsable de migrar la plataforma interna de la empresa a una arquitectura más moderna y escalable. Desarrollé funcionalidades de CRM y ERP, procesos asíncronos con Celery y RabbitMQ, dashboards y modelos predictivos sobre datos de sensores. También gestioné despliegues, migraciones y entornos de test y producción.', { exact: true })).toBeVisible()
   await expect(page.locator('#about').getByText('Inglés · Uso profesional', { exact: true })).toBeVisible()
   await expect(page.locator('#career-sprint')).toBeVisible()
@@ -84,6 +97,53 @@ test('landing exposes the personal profile and current Home visibility', async (
   await expect(page.locator('div[hidden] > section#blog')).toHaveCount(1)
   await expect(page.locator('div[hidden] > section#blog')).toBeHidden()
   expect(remoteRequests).toEqual([])
+})
+
+test('profile facts use the available mobile width and a centered desktop cap', async ({ page }, info) => {
+  test.skip(info.project.name !== 'chromium')
+  const profileFacts = page.locator('#about .profile-facts')
+  const measureProfileFacts = () => profileFacts.evaluate(element => {
+    const container = element.parentElement
+    const [firstCard, secondCard] = Array.from(element.children)
+    if (!container || element.children.length !== 2 || !(firstCard instanceof HTMLElement) || !(secondCard instanceof HTMLElement)) {
+      throw new Error('Expected profile facts to have a container and two HTML cards')
+    }
+    const blockRect = element.getBoundingClientRect()
+    const containerRect = container.getBoundingClientRect()
+    const columns = getComputedStyle(element).gridTemplateColumns
+      .trim()
+      .split(/\s+/)
+      .map(column => Number.parseFloat(column))
+    return {
+      block: { left: blockRect.left, right: blockRect.right, width: blockRect.width },
+      container: { left: containerRect.left, right: containerRect.right, width: containerRect.width },
+      cards: {
+        first: { top: firstCard.offsetTop, bottom: firstCard.offsetTop + firstCard.offsetHeight },
+        second: { top: secondCard.offsetTop },
+      },
+      columns: { count: columns.length, first: columns[0] ?? 0, second: columns[1] ?? 0 },
+      hasHorizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    }
+  })
+
+  await page.setViewportSize({ width: 390, height: 900 })
+  await page.goto('/')
+  const mobile = await measureProfileFacts()
+  expect(Math.abs(mobile.block.width - mobile.container.width)).toBeLessThanOrEqual(1)
+  expect(mobile.columns.count).toBe(1)
+  expect(mobile.cards.second.top).toBeGreaterThanOrEqual(mobile.cards.first.bottom - 1)
+  expect(mobile.hasHorizontalOverflow).toBe(false)
+
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  const desktop = await measureProfileFacts()
+  const leftGutter = desktop.block.left - desktop.container.left
+  const rightGutter = desktop.container.right - desktop.block.right
+  expect(desktop.block.width).toBeLessThanOrEqual(897)
+  expect(Math.abs(leftGutter - rightGutter)).toBeLessThanOrEqual(1)
+  expect(desktop.columns.count).toBe(2)
+  expect(Math.abs(desktop.columns.first - desktop.columns.second)).toBeLessThanOrEqual(1)
+  expect(Math.abs(desktop.cards.first.top - desktop.cards.second.top)).toBeLessThanOrEqual(1)
+  expect(desktop.hasHorizontalOverflow).toBe(false)
 })
 
 test('roadmap renders seven visible events from the eight-week source', async ({ page }, info) => {
@@ -116,7 +176,7 @@ test('roadmap renders seven visible events from the eight-week source', async ({
   }
   await expect(page.getByText('Hitos', { exact: true })).toHaveCount(0)
   await expect(page.getByText('Reservas', { exact: true })).toHaveCount(0)
-  await expect(page.locator('main > div > header').getByText('24 de agosto de 2026 — 18 de octubre de 2026', { exact: true })).toBeVisible()
+  await expect(page.locator('main > div > header').getByText('Plan de 8 semanas · 24 de agosto de 2026 — 18 de octubre de 2026', { exact: true })).toBeVisible()
   await expect(page.getByText('Planificada', { exact: true })).toHaveCount(7)
   for (const week of challengeWeeks.slice(2)) {
     const weekSection = page.locator(`#${week.id}`)
@@ -132,7 +192,7 @@ test('daily progress publishes both factual entries and retires the old routes',
   test.skip(!['chromium', 'chromium-js-off', 'chromium-mobile-320'].includes(info.project.name))
   await page.goto('/career-sprint-daily/')
 
-  await expect(page.getByRole('heading', { level: 1, name: 'Progreso diario', exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1, name: 'Evidencia publicada', exact: true })).toBeVisible()
   await expect(page.locator('ol > li')).toHaveCount(dailyProgressEntries.length)
   for (const entry of dailyProgressEntries) {
     await expect(page.getByRole('link', { name: new RegExp(entry.title) })).toHaveAttribute('href', `/career-sprint-daily/${entry.activityDate}/`)
@@ -204,8 +264,8 @@ test('Blog uses current published entries and retired paths stay 404', async ({ 
   test.skip(!['chromium', 'firefox', 'webkit', 'chromium-js-off'].includes(info.project.name))
   await page.goto('/blog/')
 
-  await expect(page).toHaveTitle('Blog de Marc Teixidó — Software, automatización y proyectos')
-  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', 'Notas de Marc Teixidó sobre desarrollo de software, herramientas, automatización y decisiones técnicas.')
+  await expect(page).toHaveTitle('Blog de Marc Teixidó — Ingeniería de software e IA aplicada')
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', 'Artículos publicados sobre ingeniería de software, automatización, herramientas y aprendizaje técnico.')
   await expect(page.getByRole('heading', { level: 1, name: 'Blog', exact: true })).toBeVisible()
   await expect(page.locator('a.control').first()).toHaveAttribute('href', '/')
   await expect(page.locator('[data-blog-card]')).toHaveCount(blogPosts.length)
@@ -238,13 +298,19 @@ test('Ainkii remains a separate project in development', async ({ page }, info) 
   test.skip(!['chromium', 'chromium-mobile-320'].includes(info.project.name))
   await page.goto('/proyectos/ainkii/')
   await expect(page).toHaveTitle('Ainkii — Producto educativo en desarrollo | Marc Teixidó')
-  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', 'Proyecto educativo en desarrollo para ayudar a docentes a revisar temarios, detectar huecos y convertir contenidos en materiales de estudio.')
-  await expect(page.locator('a.control').first()).toHaveAttribute('href', '/')
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', 'Proyecto educativo en desarrollo que explora cómo ayudar a docentes a revisar temarios y organizar materiales de estudio con apoyo de IA.')
+  const backLink = page.locator('a.control').first()
+  await expect(backLink).toHaveAttribute('href', '/')
 
-  await expect(page.getByRole('heading', { level: 1, name: 'Ainkii' })).toBeFocused()
-  await expect(page.getByText('Ainkii está en desarrollo para ordenar materiales de aprendizaje con IA.', { exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1, name: 'Ainkii' })).not.toBeFocused()
+  await page.keyboard.press('Tab')
+  await expect(backLink).toBeFocused()
+  await expect(page.getByText('Ainkii es un proyecto en desarrollo que explora cómo ordenar materiales de aprendizaje con apoyo de IA.', { exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 3, name: 'Qué estoy explorando', exact: true })).toBeVisible()
   await expect(page.locator('.ainkii-capabilities li')).toHaveCount(8)
   await expect(page.locator('.ainkii-human-gate')).toHaveCount(1)
+  expect(await page.locator('.ainkii-route-actions a').evaluateAll(controls => controls.every(control => control.scrollWidth <= control.clientWidth))).toBe(true)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true)
 })
 
 test('challenge routes fit desktop and narrow viewports without material axe violations', async ({ page }, info) => {
@@ -291,7 +357,7 @@ test('primary navigation moves focus to visible landing anchors', async ({ page,
   await page.goto('/')
   await navigation.getByRole('link', { name: 'Career Sprint', exact: true }).click()
   await expect(page).toHaveURL(/\/#career-sprint$/)
-  await expect(page.getByRole('heading', { name: 'RETO 8 SEMANAS', exact: true })).toBeFocused()
+  await expect(page.getByRole('heading', { name: 'Reto de 8 semanas', exact: true })).toBeFocused()
 
   await page.goto('/')
   const contactLink = navigation.getByRole('link', { name: 'Contacto', exact: true })
@@ -338,10 +404,14 @@ test('reduced motion keeps challenge content static and readable', async ({ page
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
 })
 
-test('mobile challenge routes pass material axe checks', async ({ page }, info) => {
+test('mobile challenge routes pass material axe checks and keep article copy left-aligned', async ({ page }, info) => {
   test.skip(info.project.name !== 'chromium-mobile-320')
   for (const route of ['/', '/roadmap/', '/career-sprint-daily/', '/blog/']) {
     await page.goto(route)
     expect(await materialAxeViolations(page)).toEqual([])
   }
+  const [firstDailyEntry] = dailyProgressEntries
+  if (!firstDailyEntry) throw new Error('Expected a published daily entry for mobile typography')
+  await page.goto(`/career-sprint-daily/${firstDailyEntry.activityDate}/`)
+  await expect(page.locator('.article-prose p').first()).toHaveCSS('text-align', 'left')
 })

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="840" viewBox="0 0 1200 840" role="img" aria-labelledby="title description">
+  <title id="title">Meta del sprint · AWS Solutions Architect – Advanced Learning Plan</title>
+  <desc id="description">Portada editorial abstracta para un plan de aprendizaje de arquitectura de soluciones con laboratorios.</desc>
+  <defs>
+    <linearGradient id="field" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#334554" />
+      <stop offset="1" stop-color="#1A1724" />
+    </linearGradient>
+    <linearGradient id="structure" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#BBCCD7" />
+      <stop offset="1" stop-color="#646973" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="840" fill="#0C0C0C" />
+  <rect x="32" y="32" width="1136" height="776" rx="48" fill="url(#field)" stroke="#D7E2EA" stroke-opacity=".24" />
+  <g fill="none" stroke="#D7E2EA" stroke-opacity=".14" stroke-width="2">
+    <path d="M84 620h1032M84 690h1032M84 760h1032" />
+    <path d="M164 560v220M304 560v220M444 560v220M584 560v220M724 560v220M864 560v220M1004 560v220" />
+  </g>
+  <g fill="none" stroke="url(#structure)" stroke-width="5">
+    <path d="M132 694h170v-88h170v132h170V574h170v88h170" />
+    <path d="M302 606v88M472 738V606M642 574v132M812 662v-88" stroke-opacity=".72" />
+  </g>
+  <g fill="#D7E2EA">
+    <circle cx="132" cy="694" r="9" />
+    <circle cx="302" cy="606" r="9" />
+    <circle cx="472" cy="738" r="9" />
+    <circle cx="642" cy="574" r="9" />
+    <circle cx="812" cy="662" r="9" />
+    <circle cx="982" cy="574" r="9" />
+  </g>
+  <g fill="#D7E2EA" font-family="Kanit, Arial, sans-serif">
+    <text x="84" y="118" font-size="20" font-weight="500" letter-spacing="5" fill-opacity=".62">META DEL SPRINT · 02</text>
+    <text x="82" y="326" font-size="104" font-weight="900" letter-spacing="-2">SOLUTIONS</text>
+    <text x="86" y="432" font-size="96" font-weight="900" letter-spacing="-2" fill-opacity=".84">ARCHITECT</text>
+    <text x="88" y="506" font-size="21" font-weight="500" letter-spacing="3" fill-opacity=".62">ADVANCED LEARNING PLAN · LABS</text>
+  </g>
+  <g transform="translate(924 112)" fill="none" stroke="#D7E2EA" stroke-opacity=".7" stroke-width="3">
+    <path d="M0 112h224M112 0v224" />
+    <rect x="36" y="36" width="152" height="152" rx="24" />
+    <path d="M36 112h152M112 36v152" stroke-opacity=".44" />
+  </g>
+</svg>

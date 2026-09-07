@@ -26,7 +26,7 @@ const ainkiiJsonLd = {
 
 <BaseLayout
   title="Ainkii — Producto educativo en desarrollo | Marc Teixidó"
-  description="Proyecto educativo en desarrollo para ayudar a docentes a revisar temarios, detectar huecos y convertir contenidos en materiales de estudio."
+  description="Proyecto educativo en desarrollo que explora cómo ayudar a docentes a revisar temarios y organizar materiales de estudio con apoyo de IA."
   canonicalPath="/proyectos/ainkii/"
   imageAlt="Ainkii — proyecto educativo en desarrollo para organizar materiales de aprendizaje"
   jsonLd={ainkiiJsonLd}
@@ -38,7 +38,7 @@ const ainkiiJsonLd = {
         <div class="mt-16 grid items-end gap-10 lg:grid-cols-[minmax(0,1fr)_22rem]">
           <div>
             <div class="flex flex-wrap gap-3 text-xs uppercase tracking-[.2em] opacity-60">
-              <span>Proyecto insignia</span><span aria-hidden="true">·</span><span>{ainkii.status}</span>
+              <span>Exploración de producto</span><span aria-hidden="true">·</span><span>{ainkii.status}</span>
             </div>
             <h1 data-route-heading tabindex="-1" class="hero-heading mt-5 text-[clamp(4rem,14vw,10rem)] font-black uppercase leading-[.84]">Ainkii</h1>
             <p class="mt-8 max-w-4xl text-2xl font-light leading-relaxed sm:text-3xl">{ainkii.description}</p>
@@ -55,9 +55,9 @@ const ainkiiJsonLd = {
       <div class="mx-auto max-w-6xl">
         <div class="grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:items-start">
           <div>
-            <p class="section-kicker">Recorrido del material</p>
+            <p class="section-kicker">Hipótesis de recorrido</p>
             <h2 id="ainkii-purpose-title" class="mt-5 text-[clamp(2.75rem,7vw,6rem)] font-black uppercase leading-[.92]">Del temario al estudio</h2>
-            <p class="mt-7 text-xl font-light leading-relaxed text-black/70">El modelo muestra el paso de un temario a temas, conocimientos y tarjetas de aprendizaje.</p>
+            <p class="mt-7 text-xl font-light leading-relaxed text-black/70">El esquema representa una dirección en exploración: pasar de un temario a temas, conocimientos y tarjetas de aprendizaje.</p>
           </div>
           <AinkiiModel />
         </div>
@@ -65,10 +65,10 @@ const ainkiiJsonLd = {
         <section aria-labelledby="ainkii-capabilities-title" class="mt-24">
           <div class="grid gap-6 lg:grid-cols-[1fr_25rem] lg:items-end">
             <div>
-              <p class="section-kicker">Tareas de apoyo</p>
-              <h2 id="ainkii-capabilities-title" class="mt-4 text-4xl font-medium uppercase sm:text-6xl">Qué puede revisar la IA</h2>
+              <p class="section-kicker">Líneas de exploración</p>
+              <h3 id="ainkii-capabilities-title" class="mt-4 text-4xl font-medium uppercase sm:text-6xl">Qué estoy explorando</h3>
             </div>
-            <p class="font-light leading-relaxed text-black/65">La lista describe el alcance que estoy trabajando; no es un catálogo cerrado.</p>
+            <p class="font-light leading-relaxed text-black/65">Estas tareas describen hipótesis de apoyo que estoy trabajando, no capacidades terminadas.</p>
           </div>
           <ol class="ainkii-capabilities mt-12">
             {ainkii.capabilities.map((capability, index) => (
@@ -88,10 +88,10 @@ const ainkiiJsonLd = {
         <div>
           <p class="section-kicker">Estado</p>
           <h2 id="ainkii-status-title" class="hero-heading mt-5 text-[clamp(3rem,9vw,7rem)] font-black uppercase leading-none">En desarrollo</h2>
-          <p class="mt-7 max-w-3xl text-xl font-light leading-relaxed opacity-80">No anuncio una fecha ni un catálogo cerrado. La página recoge el alcance que estoy trabajando ahora.</p>
+          <p class="mt-7 max-w-3xl text-xl font-light leading-relaxed opacity-80">No anuncio una fecha ni presento capacidades terminadas. Esta página recoge las líneas de exploración que estoy trabajando ahora.</p>
         </div>
-        <div class="flex flex-col gap-3">
-          <a class="button-light" href={`mailto:${professionalProfile.contacts.email}`}>Hablar sobre Ainkii <span aria-hidden="true">↗</span></a>
+        <div class="ainkii-route-actions flex min-w-0 flex-col gap-3">
+          <a class="button-light" href={`mailto:${professionalProfile.contacts.email}`}>Conversar sobre Ainkii <span aria-hidden="true">↗</span></a>
           <a class="control" href="/#about">Conocer mi trayectoria</a>
         </div>
       </div>

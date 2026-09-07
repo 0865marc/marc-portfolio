@@ -48,6 +48,7 @@ export type ProfessionalProfile = {
     displayName: string
     location: string
     headline: string
+    positioning: string
     summary: string
     aboutIntro: string
     seo: {
@@ -93,29 +94,25 @@ export const professionalProfile: ProfessionalProfile = {
     displayName: 'Marc Teixidó',
     location: 'Balaguer, Lleida',
     headline: 'Ingeniero de software y responsable de proyectos IT',
-    summary: 'Construyo y coordino productos digitales, desde el backend y la infraestructura hasta los datos y la automatización.',
-    aboutIntro: 'Soy graduado en Ingeniería Electrónica Industrial y Automática. Desde 2022 trabajo desarrollando software y he ido asumiendo cada vez más responsabilidad sobre arquitectura, proveedores y decisiones técnicas. Me interesa entender los problemas de principio a fin y usar la automatización —incluida la IA— cuando aporta una mejora real.',
+    positioning: 'Perfil orientado a Product Engineering con foco en IA aplicada',
+    summary: 'Conecto visión de producto y ejecución técnica para convertir necesidades en software, coordinar su entrega y aplicar automatización e IA cuando aportan valor.',
+    aboutIntro: 'Mi experiencia combina desarrollo full-stack y coordinación de proyectos IT. Trabajo entre las necesidades de producto, las decisiones técnicas y la entrega, manteniendo una visión de principio a fin.',
     seo: {
-      title: 'Marc Teixidó — Ingeniero de software y responsable de proyectos IT',
-      description: 'Portfolio de Marc Teixidó: desarrollo de software, coordinación de proyectos IT, datos, infraestructura y automatización.',
-      imageAlt: 'Marc Teixidó — Ingeniero de software y responsable de proyectos IT',
+      title: 'Marc Teixidó — Product Engineering e IA aplicada',
+      description: 'Perfil orientado a Product Engineering con foco en IA aplicada y evidencia publicada: cerca de 3 años full-stack y alrededor de 1 año coordinando proyectos IT.',
+      imageAlt: 'Marc Teixidó — Product Engineering, cerca de 3 años full-stack, alrededor de 1 año coordinando proyectos IT e IA aplicada',
     },
   },
   facts: [
     {
-      label: 'Trayectoria',
-      value: 'Desde 2022',
-      context: 'Del desarrollo full-stack a la coordinación de proyectos y productos digitales.',
+      label: 'Desarrollo full-stack',
+      value: '≈ 3 años',
+      context: 'Software de negocio, datos, despliegues e infraestructura entre 2022 y 2025.',
     },
     {
-      label: 'Producto integral',
-      value: 'De principio a fin',
-      context: 'Entiendo el problema, aterrizo la solución y acompaño su implementación.',
-    },
-    {
-      label: 'Base técnica',
-      value: 'Ingeniería y software',
-      context: 'Una visión técnica para conectar producto, negocio y desarrollo.',
+      label: 'Liderazgo de proyectos IT',
+      value: '≈ 1 año',
+      context: 'Responsable de proyectos IT en Taurus Research & Development desde 2025.',
     },
   ],
   experience: [
@@ -162,8 +159,8 @@ export const professionalProfile: ProfessionalProfile = {
       category: 'Producto educativo personal',
       status: 'En desarrollo',
       href: '/proyectos/ainkii/',
-      teaser: 'Proyecto educativo en desarrollo.',
-      description: 'Ainkii está en desarrollo para ordenar materiales de aprendizaje con IA.',
+      teaser: 'Exploración de producto educativo en desarrollo.',
+      description: 'Ainkii es un proyecto en desarrollo que explora cómo ordenar materiales de aprendizaje con apoyo de IA.',
       focus: 'Recorrido de un temario a materiales de estudio',
       tags: ['Producto educativo', 'IA aplicada', 'Materiales de aprendizaje'],
       audience: 'Profesores y creadores de materiales educativos.',

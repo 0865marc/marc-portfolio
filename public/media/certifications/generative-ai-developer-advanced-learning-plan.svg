@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="840" viewBox="0 0 1200 840" role="img" aria-labelledby="title description">
+  <title id="title">Meta del sprint · AWS Generative AI Developer – Advanced Learning Plan</title>
+  <desc id="description">Portada editorial abstracta para un plan de aprendizaje de desarrollo GenAI con laboratorios.</desc>
+  <defs>
+    <linearGradient id="field" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#1A1724" />
+      <stop offset="1" stop-color="#334554" />
+    </linearGradient>
+    <radialGradient id="core" cx="55%" cy="43%" r="65%">
+      <stop offset="0" stop-color="#BBCCD7" stop-opacity=".82" />
+      <stop offset="1" stop-color="#646973" stop-opacity=".06" />
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="840" fill="#0C0C0C" />
+  <rect x="32" y="32" width="1136" height="776" rx="48" fill="url(#field)" stroke="#D7E2EA" stroke-opacity=".24" />
+  <circle cx="894" cy="282" r="224" fill="url(#core)" opacity=".62" />
+  <g fill="none" stroke="#D7E2EA" stroke-opacity=".5" stroke-width="3">
+    <path d="M756 194l124 82 116-60 104 124-136 68-116-74-120 110" />
+    <path d="M880 276l-44 186 140-68M996 216l-160 246" />
+  </g>
+  <g fill="#D7E2EA">
+    <circle cx="756" cy="194" r="10" />
+    <circle cx="880" cy="276" r="14" />
+    <circle cx="996" cy="216" r="10" />
+    <circle cx="1100" cy="340" r="10" />
+    <circle cx="996" cy="408" r="13" />
+    <circle cx="836" cy="462" r="10" />
+    <circle cx="716" cy="572" r="10" />
+  </g>
+  <g fill="#D7E2EA" font-family="Kanit, Arial, sans-serif">
+    <text x="84" y="118" font-size="20" font-weight="500" letter-spacing="5" fill-opacity=".62">META DEL SPRINT · 03</text>
+    <text x="82" y="326" font-size="142" font-weight="900" letter-spacing="-5">GENAI</text>
+    <text x="86" y="432" font-size="94" font-weight="900" letter-spacing="-2" fill-opacity=".84">DEVELOPER</text>
+    <text x="88" y="506" font-size="21" font-weight="500" letter-spacing="3" fill-opacity=".62">ADVANCED LEARNING PLAN · LABS</text>
+  </g>
+  <g transform="translate(88 638)" fill="none" stroke="#D7E2EA" stroke-opacity=".68" stroke-width="3">
+    <rect x="0" y="0" width="210" height="70" rx="20" />
+    <rect x="232" y="0" width="210" height="70" rx="20" />
+    <path d="M210 35h22" />
+  </g>
+</svg>
