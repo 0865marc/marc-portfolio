@@ -13,6 +13,7 @@ source_of_truth:
     - package.json
     - astro.config.mjs
     - src
+    - content
     - tailwind.config.js
     - tsconfig.json
   operations:

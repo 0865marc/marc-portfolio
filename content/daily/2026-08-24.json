@@ -10,7 +10,7 @@
     "reproducibilidad"
   ],
   "title": "Lo que aprendí hoy sobre tokenización y carga de datos",
-  "excerpt": "Lo Hoy conecté arquitecturas generativas, tokenización, vocabularios y DataLoader: transformar texto comprensible en representaciones que una red neuronal pueda procesar.",
+  "excerpt": "Hoy conecté arquitecturas generativas, tokenización, vocabularios y DataLoader: transformar texto comprensible en representaciones que una red neuronal pueda procesar.",
   "introduction": [
     {
       "type": "paragraph",

@@ -5,9 +5,10 @@ const focusRoute = () => {
   if (heading && !location.hash && pageHasFocusTarget) heading.focus({ preventScroll: true })
 }
 
-focusRoute()
-addEventListener('pageshow', focusRoute, { once: true })
-addEventListener('pagereveal', focusRoute, { once: true })
+addEventListener('pagereveal', event => {
+  const viewTransition = (event as Event & { viewTransition?: unknown }).viewTransition
+  if (viewTransition) focusRoute()
+}, { once: true })
 
 const back = document.querySelector<HTMLAnchorElement>('[data-article-back]')
 if (back && new URLSearchParams(location.search).get('from') === 'landing') {

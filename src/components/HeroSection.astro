@@ -2,6 +2,7 @@
 import { professionalProfile } from '../data/portfolio'
 
 const { identity } = professionalProfile
+const currentExperience = professionalProfile.experience.find(entry => entry.endDate === null)!
 ---
 
 <section aria-labelledby="hero-title" class="flex min-h-[100svh] items-center px-5 py-8 sm:px-8 md:px-10 md:py-10">
@@ -18,14 +19,15 @@ const { identity } = professionalProfile
 
     <div class="my-auto grid items-end gap-12 py-16 lg:grid-cols-[minmax(0,1fr)_22rem]">
       <div class="min-w-0">
-        <p data-intro style="--intro-delay: 140ms" class="text-sm uppercase tracking-[.2em] opacity-65">Software y producto digital</p>
+        <p data-intro style="--intro-delay: 140ms" class="text-sm uppercase tracking-[.2em] opacity-65">{identity.positioning}</p>
         <h1 id="hero-title" data-route-heading tabindex="-1" data-intro style="--intro-delay: 210ms" class="hero-heading mt-6 break-words text-[clamp(3.5rem,11vw,9rem)] font-black uppercase leading-[.86]">
           {identity.displayName}
         </h1>
-        <p data-intro style="--intro-delay: 280ms" class="mt-8 max-w-3xl text-2xl font-medium leading-tight sm:text-3xl">{identity.headline}</p>
+        <p data-intro style="--intro-delay: 280ms" class="mt-8 max-w-3xl text-2xl font-medium leading-tight sm:text-3xl">{currentExperience.role} en {currentExperience.company}</p>
         <p data-intro style="--intro-delay: 340ms" class="mt-5 max-w-2xl text-xl font-light leading-relaxed sm:text-2xl">{identity.summary}</p>
-        <div data-intro style="--intro-delay: 400ms" class="mt-9 flex flex-wrap gap-3">
-          <a class="button-light" href="#about">Conocer mi trayectoria <span aria-hidden="true">↓</span></a>
+        <div data-intro style="--intro-delay: 400ms" class="mt-9 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap">
+          <a class="button-light" href="#contact">Contactar <span aria-hidden="true">↓</span></a>
+          <a class="control" href="#about">Ver experiencia <span aria-hidden="true">↓</span></a>
         </div>
       </div>
 
@@ -36,8 +38,8 @@ const { identity } = professionalProfile
             <dd class="mt-2 text-lg font-light leading-relaxed">{identity.location}</dd>
           </div>
           <div>
-            <dt class="text-xs uppercase tracking-[.22em] opacity-60">Rol</dt>
-            <dd class="mt-2 text-lg font-light leading-relaxed">{identity.headline}</dd>
+            <dt class="text-xs uppercase tracking-[.22em] opacity-60">Empresa actual</dt>
+            <dd class="mt-2 text-lg font-light leading-relaxed">{currentExperience.company}</dd>
           </div>
         </dl>
       </aside>

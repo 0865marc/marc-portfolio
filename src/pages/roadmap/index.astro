@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { challenge, challengeWeeks, type ChallengeWeek } from '../../data/challenge'
+import { progressHref } from '../../lib/challengeRoutes'
 
 const dateFormatter = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
 const formatDate = (date: string) => dateFormatter.format(new Date(`${date}T12:00:00Z`))
@@ -57,18 +58,21 @@ const displayWeeks: DisplayWeek[] = [
 
 <BaseLayout
   title={`${challenge.title} — Marc Teixidó`}
-  description="Roadmap intensivo de ocho semanas para reforzar el perfil AI Engineer / AI Solutions Engineer combinando IA generativa moderna, arquitectura cloud y despliegue de soluciones IA en producción."
+  description="Plan de ocho semanas con objetivos previstos de IA generativa, arquitectura cloud y despliegue de soluciones de IA; el estado planificado no representa trabajo completado."
   canonicalPath="/roadmap/"
 >
   <main class="min-h-screen px-5 py-8 sm:px-8 md:px-10 md:py-10">
     <div class="mx-auto max-w-6xl">
-      <a class="control" href="/#career-sprint">Volver a la ruta del portfolio <span aria-hidden="true">↖</span></a>
+      <a class="control" href="/#career-sprint">Volver al Career Sprint <span aria-hidden="true">↖</span></a>
       <header class="mt-12 grid items-start gap-6 md:mt-16 xl:grid-cols-[minmax(0,1.15fr)_minmax(18rem,.65fr)] xl:gap-12">
         <div class="min-w-0">
-          <p class="section-kicker">{formatDate(challenge.startDate)} — {formatDate(challenge.endDate)}</p>
+          <p class="section-kicker">Plan de 8 semanas · {formatDate(challenge.startDate)} — {formatDate(challenge.endDate)}</p>
           <h1 data-route-heading tabindex="-1" class="mt-5 max-w-4xl break-words text-[clamp(2.75rem,7vw,5rem)] font-black uppercase leading-[.95] tracking-[-.02em]">{challenge.title}</h1>
         </div>
-        <p class="max-w-2xl text-lg font-light leading-relaxed opacity-70 xl:text-xl">Roadmap intensivo de ocho semanas para reforzar el perfil AI Engineer / AI Solutions Engineer combinando IA generativa moderna, arquitectura cloud y despliegue de soluciones IA en producción.</p>
+        <div class="min-w-0">
+          <p class="max-w-2xl text-lg font-light leading-relaxed opacity-70 xl:text-xl">Este plan reúne objetivos previstos de IA generativa, arquitectura cloud y despliegue de soluciones de IA. El estado planificado no representa trabajo completado.</p>
+          <a class="control mt-5" href={progressHref()}>Ver evidencia publicada <span aria-hidden="true">↗</span></a>
+        </div>
       </header>
 
       {displayWeeks.length ? (
@@ -115,7 +119,7 @@ const displayWeeks: DisplayWeek[] = [
                     class="!inline-flex !min-h-11 !w-fit max-w-full !cursor-pointer !items-center !gap-2 !rounded-full border border-[#D7E2EA]/30 bg-[#D7E2EA]/[0.04] px-3 py-1.5 text-xs font-medium uppercase tracking-[.16em] transition-colors duration-200 hover:border-[rgb(215_226_234_/_0.6)] hover:bg-[rgb(215_226_234_/_0.08)] hover:text-[#FFFFFF] focus-visible:outline-[3px] focus-visible:outline-[#D7E2EA] focus-visible:outline-offset-4"
                     aria-controls={`roadmap-details-${week.id}-panel`}
                   >
-                    <span class="break-words">Explorar agenda y temas</span>
+                    <span class="break-words">Ver agenda y temas previstos</span>
                     <span aria-hidden="true" class="opacity-50">·</span>
                     <span class="inline-grid w-14 shrink-0">
                       <span class="col-start-1 row-start-1 group-open:hidden">Abrir</span>
