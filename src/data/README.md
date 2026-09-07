@@ -1,76 +1,56 @@
 # Fuentes de contenido público
 
-El portfolio usa datos TypeScript estáticos y revisables. No hay CMS, API, base de datos ni contenido generado en tiempo de ejecución. Un cambio solo llega a producción después del flujo independiente de implementación y release del repositorio.
+El sitio es estático: el perfil vive en TypeScript y el conocimiento, la ruta y la bitácora viven en JSON Git-backed. No hay API, base de datos ni contenido generado en tiempo de ejecución.
 
-## Perfil profesional
+## Perfil profesional y proyecto separado
 
-`src/data/portfolio.ts` es la fuente pública de verdad sobre Marc. `professionalProfile` conserva:
+`src/data/portfolio.ts` contiene únicamente los hechos compactos que siguen siendo públicos: identidad, experiencia verificable, formación, idiomas, contactos y Ainkii. `professionalProfile.identity` centraliza el copy del Hero, la introducción de Perfil y el SEO de Home. La experiencia actual se publica con el empleador autorizado `Taurus Research & Development` y la descripción detallada proporcionada; no debe recuperar datos adicionales de operación interna, proveedores, cifras, arquitectura o calendarios, ni reintroducir Hermes.
 
-- identidad, ubicación y posicionamiento;
-- trayectoria y métricas con contexto;
-- empresas, puestos, fechas, responsabilidades, tecnologías e IA aplicada;
-- capacidades técnicas y profesionales;
-- formación e idiomas;
-- los proyectos Ainkii y Hermes;
-- contactos ya públicos;
-- reglas explícitas para no inferir información ausente.
+`professionalProfile.source.id` identifica la procedencia factual. `Ainkii` es el único proyecto seleccionado, permanece «En desarrollo» y es evidencia separada: no debe presentarse como el proyecto del reto de ocho semanas.
+La ubicación pública actual de la identidad es `Balaguer, Lleida`; las ubicaciones de experiencia se mantienen como hechos históricos independientes.
 
-`professionalProfile.source.id` establece la procedencia del perfil completo. Las entidades que pueden consumirse de forma independiente (`Experience`, `Project` y `BlogPost`) repiten `sourceId`; los hechos, capacidades, habilidades, formación, idiomas y fortalezas anidados heredan la procedencia del perfil raíz. El contenido visible puede resumir esos datos para mantener una página legible, pero no debe crear una biografía paralela ni añadir una cifra, tecnología, empresa, resultado, certificación o nivel profesional que no exista en la fuente.
+## Blog gestionado
 
-Esta estructura está preparada para que un futuro chatbot pueda reutilizarla, pero el repositorio no implementa todavía recuperación, prompts, API ni interfaz conversacional. Un consumidor futuro debe:
+Los archivos de autoría son `content/posts/*.json` y `content/tags/*.json`. `src/data/blog.ts` es el único adaptador hacia `BlogPost` y `blogPosts`; los componentes no leen JSON directamente.
 
-1. consultar únicamente información marcada como pública;
-2. respetar nombres canónicos y alias (`Ainkii` es el nombre público; `Ainki` solo un alias histórico);
-3. responder que el dato no consta cuando falte evidencia;
-4. no convertir textos editoriales en métricas o resultados;
-5. conservar los límites de posicionamiento e idiomas definidos en `knowledgePolicy`.
+- Cada post tiene `id`, `status`, `position`, categoría, IDs de tags, fecha y prosa estructurada.
+- Solo `published` llega a landing, `/blog/`, rutas, JSON-LD y sitemap. `draft` y `deleted` no borran físicamente el archivo.
+- La landing muestra como máximo los tres primeros artículos; `/blog/` conserva todos los publicados.
+- Los IDs de tag son estables y el adaptador resuelve sus etiquetas visibles al compilar.
 
-## Notas publicadas
+## Ruta y progreso gestionados
 
-`src/data/blog.ts` contiene el archivo público. Cada `BlogPost` tiene este contrato:
+`content/weeks/w1.json` a `content/weeks/w8.json` son la ruta factual de 2026. `src/data/challenge.ts` valida y adapta semanas y entradas diarias; ningún componente consume esos JSON directamente.
 
-```ts
-{
-  id: string
-  category: string
-  tags: string[]
-  title: string
-  excerpt: string
-  publishedAt: string
-  sourceId: typeof PROFILE_SOURCE_ID
-  introduction: string[]
-  sections: {
-    heading: string
-    paragraphs: string[]
-    points?: string[]
-  }[]
-  takeaway: string[]
-}
-```
+Una semana contiene `id`, `status`, `position`, fechas, título/foco, objetivo, agenda por día y bloque, reparto de horas, `hoursPlanned` opcional, temas, hitos, reservas, criterios y `progressState`.
 
-- `id` es un slug único y estable con formato `^[a-z0-9]+(?:-[a-z0-9]+)*$`.
-- `publishedAt` usa `YYYY-MM-DD`.
-- `sourceId` identifica la procedencia factual del contenido.
-- `tags`, `title` y `excerpt` alimentan las tarjetas y el filtrado futuro.
-- `introduction`, `sections` y `takeaway` forman el artículo semántico.
+- Las ocho semanas son consecutivas del `2026-08-24` al `2026-10-18`.
+- Todas comienzan `planned`; la fecha no cambia ese estado automáticamente.
+- `hoursPlanned` solo existe donde el plan da un total explícito: W1, W2, W4, W5, W6 y W7 usan `63`; W3 y W8 lo omiten.
+- Hitos, exámenes, costes, cursos, labs y criterios son objetivos o referencias del plan hasta que exista evidencia diaria publicada.
 
-La landing y `/blog/` muestran únicamente `blogPosts`. Los filtros interactivos aparecen cuando el tamaño del archivo hace que aporten valor; con una colección pequeña se renderiza una lista directa y completamente usable sin JavaScript.
+`content/daily/` admite un JSON por jornada real. Una entrada debe tener `id` igual al nombre de archivo e `activityDate` (`YYYY-MM-DD`), `weekId` existente, posición única, estado editorial, tags existentes, `hoursActual` opcional no negativo y la misma prosa estructurada que un artículo. No hay jornadas de ejemplo, vacías ni futuras: una colección diaria vacía es válida y muestra un estado accesible.
 
-`legacyBlogRoutes` conserva slugs históricos cuyos cuerpos de muestra se retiraron. Esas rutas generan documentos `noindex` con retorno explícito al archivo: no vuelven a publicar el contenido genérico y tampoco dejan un enlace histórico sin salida.
+Solo jornadas `published` generan `/career-sprint-daily/<YYYY-MM-DD>/`, JSON-LD y sitemap. Su fecha debe estar dentro de la semana referenciada.
 
-## Rutas
+## CMS y rutas
 
-- `/#blog`: sección de notas en la landing.
-- `/blog/`: archivo público.
-- `/blog/<id>/`: detalle canónico generado en build.
-- `/blog/<id>/?from=landing|index`: conserva el origen del enlace de vuelta.
-- `/#/blog...`: compatibilidad progresiva con bookmarks antiguos.
+`/admin/` usa Sveltia CMS autoalojado en español. Las colecciones `Conocimiento`, `Etiquetas`, `Semanas` y `Progreso diario` guardan JSON en ramas y pull requests editoriales; `delete:false` y `publish:false` evitan operaciones destructivas o merge directo. OAuth, el Worker y sus secretos se documentan en [`ops/cms-auth/README.md`](../../ops/cms-auth/README.md).
+
+Rutas públicas:
+
+- `/#career-sprint`, `/#progress`, `/#contact`: secciones visibles de la portada; `#blog` y `#projects` quedan ocultos temporalmente.
+- `/roadmap/`: ledger editorial de las semanas publicadas.
+- `/career-sprint-daily/`: cronología diaria publicada.
+- `/career-sprint-daily/<YYYY-MM-DD>/`: detalle estático de una jornada publicada.
+- `/blog/` y `/blog/<id>/`: Blog.
+- `/proyectos/ainkii/`: proyecto separado.
+
+Las rutas retiradas responden con la página 404 y no se reutilizan.
 
 ## Editar y verificar
 
-Al añadir una nota, usa un ID nuevo, conserva la procedencia factual y completa el contenido en español. Al editarla, no cambies el ID. Al retirar una ruta conocida, muévela a `legacyBlogRoutes` en lugar de reutilizar el slug para otro tema.
-
-La verificación mínima es:
+No cambies ni reutilices IDs o nombres de archivo. Publica una jornada solo después de realizarla y comprobar que la copy es factual; no conviertas la agenda ni una reserva de examen en evidencia.
 
 ```sh
 npm run check
@@ -78,7 +58,6 @@ npm run test:unit
 npm run build
 npm run test:static
 npm run test:e2e
-git diff --check
 ```
 
 La publicación, el commit y el despliegue pertenecen a gates posteriores; los archivos de datos no conceden esa autoridad.
