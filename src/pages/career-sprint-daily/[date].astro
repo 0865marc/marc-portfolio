@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro'
 import Article from '../../components/Article.astro'
 import { dailyProgressEntries, type DailyProgressEntry } from '../../data/challenge'
 import { professionalProfile } from '../../data/portfolio'
+import { learningConcepts, conceptHref } from '../../data/learning'
 
 export function getStaticPaths() {
   return dailyProgressEntries.map(entry => ({ params: { date: entry.activityDate }, props: { entry } }))
@@ -13,6 +14,8 @@ interface Props {
 }
 
 const { entry } = Astro.props
+const related = learningConcepts.filter(concept => concept.tags.some(tag => entry.tags.includes(tag)))
+  .slice(0, 2).map(concept => ({ href: conceptHref(concept.id), label: concept.title }))
 const entryJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
@@ -31,7 +34,7 @@ const entryJsonLd = {
 ---
 
 <BaseLayout
-  title={`${entry.title} — Progreso del reto — Marc Teixidó`}
+  title={`${entry.title} — Archivo de notas — Marc Teixidó`}
   description={entry.excerpt}
   canonicalPath={`/career-sprint-daily/${entry.activityDate}/`}
   type="article"
@@ -40,9 +43,9 @@ const entryJsonLd = {
   <main class="min-h-screen px-5 py-8 sm:px-8 md:px-10 md:py-10">
     <div class="article-back-layout mx-auto mb-8 max-w-6xl">
       <div class="mx-auto w-full max-w-3xl">
-        <a data-article-back class="control" href="/career-sprint-daily/">Volver al progreso <span aria-hidden="true">↖</span></a>
+        <a data-article-back class="control" href="/career-sprint-daily/">Volver al archivo <span aria-hidden="true">↖</span></a>
       </div>
     </div>
-    <Article post={entry} />
+    <Article post={entry} related={related} />
   </main>
 </BaseLayout>

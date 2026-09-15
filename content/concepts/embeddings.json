@@ -1,0 +1,56 @@
+{
+  "id": "embeddings",
+  "status": "published",
+  "position": 2,
+  "publishedAt": "2026-09-07",
+  "category": "Representar el lenguaje",
+  "tags": [
+    "embeddings",
+    "modelos-de-lenguaje"
+  ],
+  "title": "Embeddings",
+  "excerpt": "Cómo aprende el modelo una lista de números para representar cada token.",
+  "introduction": [
+    "Un ID permite localizar un token. Su embedding es la lista de números con la que el modelo puede trabajar y aprender relaciones."
+  ],
+  "sections": [
+    {
+      "heading": "Una lista de números por token",
+      "paragraphs": [
+        "Imagina una tabla con una fila por token. Cada fila contiene varios números: ese es su embedding. Cuando llega un ID, la capa de embeddings busca la fila correspondiente.",
+        "Al entrenar, esos números pueden cambiar para ayudar a resolver la tarea. Las palabras que aparecen en contextos parecidos pueden acabar con representaciones cercanas. Un embedding recién creado todavía no ha aprendido esas relaciones.",
+        "Si tenemos 3 frases de 6 tokens y usamos 8 números por token, pasamos de una tabla de IDs [3, 6] a una estructura [3, 6, 8]. Esa estructura de números se llama tensor."
+      ],
+      "codeBlocks": [
+        {
+          "title": "Ejemplo paso a paso",
+          "language": "text",
+          "code": "IDs:        [3 frases, 6 posiciones]\nEmbeddings: [3 frases, 6 posiciones, 8 números]"
+        }
+      ]
+    },
+    {
+      "heading": "Aprender mirando las palabras de alrededor",
+      "paragraphs": [
+        "Word2Vec aprende representaciones a partir de las palabras vecinas. En una de sus variantes, CBOW, se oculta una palabra y se intenta predecirla a partir de las que la rodean. En la otra, Skip-gram, se parte de una palabra para predecir sus vecinas.",
+        "GloVe utiliza recuentos de palabras que aparecen cerca unas de otras en una colección de textos. Son dos maneras de aprovechar el contexto para aprender relaciones.",
+        "Estos métodos asignan una representación fija a cada palabra. «Banco» empieza con el mismo vector al hablar de un asiento o de dinero. Para distinguir esos usos, hace falta un paso posterior que tenga en cuenta la frase concreta."
+      ]
+    },
+    {
+      "heading": "Representar cada token o resumir la frase",
+      "paragraphs": [
+        "En PyTorch, Embedding devuelve una lista de números por token. EmbeddingBag puede reunir varias mediante una suma o una media, algo útil para obtener una representación sencilla de un texto.",
+        "Esa media pierde el orden: cambiar de sitio las palabras no cambia la suma. Un modelo que incorpora contexto puede relacionar los tokens antes de reunirlos y conservar información que la media inicial no tenía."
+      ],
+      "points": [
+        "IDs cercanos solo indican filas cercanas en una tabla; no garantizan palabras parecidas.",
+        "Los embeddings se aprenden con datos. Su tamaño, por sí solo, no dice si son buenos.",
+        "Conserva las representaciones de cada token si tu tarea necesita conocer el orden o las relaciones dentro de la frase."
+      ]
+    }
+  ],
+  "takeaway": [
+    "Un embedding convierte un token en una representación que se puede aprender. El contexto permite ir más allá y distinguir cómo se usa ese token en cada frase."
+  ]
+}

@@ -1,0 +1,28 @@
+schema_version: 1
+task_id: "20260915-learning-progress"
+review_status: pending
+summary: "Present IBM/Coursera learning as in progress, remove planned AWS formation, and keep courses 5–7 unavailable."
+knowledge_delta:
+  added_nodes: []
+  changed_nodes:
+    - path: "src/components/FormationSection.astro"
+      fact: "Formation presents IBM/Coursera as explicitly in progress and no longer includes the planned AWS block or cloud framing."
+      evidence: "src/components/FormationSection.astro; tests/static-output.test.ts; tests/e2e/site.spec.ts"
+    - path: "src/data/learningCourses.ts"
+      fact: "Course availability controls published explanations, not completion or certification. Courses 1–4 are available; courses 5–7 remain pending."
+      evidence: "src/data/learningCourses.ts; src/data/README.md"
+    - path: "src/pages/aprendizaje/index.astro"
+      fact: "The menu lists all seven courses, with native disabled buttons labelled Pendiente for courses 5–7. Pending course bodies and hash links are not emitted, so their direct hashes fall back to course 1 with or without JavaScript."
+      evidence: "src/pages/aprendizaje/index.astro; src/learning.css; tests/static-output.test.ts; tests/e2e/site.spec.ts"
+  deprecated_nodes: []
+  adr_needed: false
+  adr_reason: "Owner-directed copy and content availability change within the existing static architecture."
+  design_changed: true
+  design_notes: "Formation now has one card. Pending course entries use muted text, an explicit status label and native disabled behavior; the existing sticky navigation and visual tokens remain."
+  stale_knowledge:
+    - path: ".agents/tasks/reviews/20260907-formation-and-concepts.yaml"
+      fact: "Its planned AWS formation and all-course availability are superseded by this delta."
+    - path: ".agents/domains/portfolio.md"
+      fact: "Its ML/AWS challenge framing is outdated; the formation section presents ongoing IBM/Coursera learning."
+reviewed_by: ""
+reviewed_at: null

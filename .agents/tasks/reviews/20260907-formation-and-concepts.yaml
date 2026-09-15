@@ -1,0 +1,54 @@
+schema_version: 1
+task_id: "20260907-formation-and-concepts"
+review_status: pending
+summary: "Present continuing education in the portfolio and a visual learning page organized by the seven IBM specialization courses."
+knowledge_delta:
+  added_nodes:
+    - path: "src/data/learning.ts"
+      symbol: "learningConcepts"
+      fact: "Published concepts are loaded from content/concepts with the shared article validator and rendered as inline details in their assigned course. Earlier concept URLs redirect to course anchors."
+      evidence: "src/data/learning.ts; src/pages/aprendizaje/index.astro; src/pages/aprendizaje/[id].astro"
+    - path: "src/components/FormationSection.astro"
+      fact: "Formation shows IBM/Coursera learning and explicitly planned AWS topics; university education is mentioned once in AboutSection. Previous career-sprint and progress anchors remain valid."
+      evidence: "src/components/FormationSection.astro"
+    - path: "src/data/learningCourses.ts"
+      fact: "Seven courses follow the public IBM Coursera syllabus checked on 2026-09-07. Examples for courses 1–3 are distinct from the planned syllabus for courses 4–7."
+      evidence: "src/data/learningCourses.ts; src/pages/aprendizaje/index.astro"
+    - path: "src/components/LearningLab.astro"
+      fact: "Static initial examples and progressive controls demonstrate token granularity, order-invariant bag-of-words counts and causal attention visibility. No models or external APIs run."
+      evidence: "src/lib/learningLabs.ts; src/scripts/learningLabs.ts; tests/unit/learningLabs.test.ts; tests/e2e/site.spec.ts"
+  changed_nodes:
+    - path: "src/pages/aprendizaje/index.astro"
+      fact: "Only the selected course is visible; native hash links and CSS preserve direct entry, history and no-JavaScript selection. The index starts below the introductory header, stays beside the course content on desktop and becomes a sticky disclosure on mobile. Courses 1–3 explain concepts in plain Spanish, with concrete examples before implementation details."
+      evidence: "src/pages/aprendizaje/index.astro; src/learning.css; src/scripts/learningLabs.ts; tests/e2e/site.spec.ts"
+    - path: "src/pages/index.astro"
+      fact: "Home shows profile, projects, formation, blog and contact; the main learning CTA links to /aprendizaje/. Ainkii copy states the intended teacher workflow in plain language while retaining its development status."
+      evidence: "src/pages/index.astro; src/components/HeroSection.astro; src/components/ProjectsSection.astro"
+    - path: "public/admin/config.yml"
+      fact: "The concepts collection shares the validated article field schema through a YAML anchor, with its own folder and preview path."
+      evidence: "public/admin/config.yml"
+    - path: "src/pages/career-sprint-daily/index.astro"
+      fact: "Dated notes and roadmap URLs remain available as archive views leading to the thematic concept index."
+      evidence: "src/pages/career-sprint-daily/index.astro; src/pages/roadmap/index.astro"
+    - path: "src/scripts/navigation.ts"
+      fact: "Cross-document snapshot animations are removed after a reproducible consecutive-navigation stall; native document navigation and hash-heading focus remain."
+      evidence: "src/index.css; src/scripts/navigation.ts; tests/e2e/site.spec.ts"
+  deprecated_nodes:
+    - path: "src/components/CareerSprintSection.astro"
+      fact: "Replaced by FormationSection.astro."
+      evidence: "src/pages/index.astro"
+  adr_needed: false
+  adr_reason: "Static routing, publication-state validation and release boundaries are unchanged."
+  design_changed: true
+  design_notes: "Existing colors, font family and radii retained. Ainkii switches to a horizontal diagram only when its own container is wide enough; label containment is tested at 320, 1024 and 1440 pixels. Home headings are shorter, navigation wraps at narrow widths, article titles use sentence case, and prose is left-aligned. Learning shows one course at a time, with a persistent sidebar or mobile disclosure, a highlighted selection, light interactive figures and inline detail expansions. Document changes are immediate; in-page motion still respects reduced-motion preferences."
+  stale_knowledge:
+    - path: ".agents/context/architecture.md"
+      fact: "Landing composition and route map predate the formation and thematic learning flow."
+    - path: ".agents/domains/portfolio.md"
+      fact: "Career Sprint priority and hidden Home project/blog contracts have been superseded by the owner's current request."
+    - path: ".agents/domains/blog.md"
+      fact: "Home blog visibility and challenge priority need revision."
+    - path: ".agents/DESIGN.md"
+      fact: "Current article titles use sentence case and primary prose is left-aligned."
+reviewed_by: ""
+reviewed_at: null

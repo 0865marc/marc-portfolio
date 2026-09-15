@@ -1,15 +1,22 @@
 ---
-import type { BlogPost } from '../data/blog'
+import type { ArticleContent } from '../data/articleContent'
 import type { DailyArticleBlock, DailyProgressEntry } from '../data/challenge'
 import ArticleInlineText from './ArticleInlineText.astro'
 import DailyArticleBlocks from './DailyArticleBlocks.astro'
 
 interface Props {
-  post: BlogPost | DailyProgressEntry
+  post: ArticleContent | DailyProgressEntry
+  showDate?: boolean
+  takeawayLabel?: string
+  backHref?: string
+  backLabel?: string
+  related?: { href: string; label: string }[]
 }
 
-const { post } = Astro.props
-const isDailyArticle = (article: BlogPost | DailyProgressEntry): article is DailyProgressEntry => 'activityDate' in article
+const { post, showDate = true, takeawayLabel = 'Cierre', related = [] } = Astro.props
+const isDailyArticle = (article: ArticleContent | DailyProgressEntry): article is DailyProgressEntry => 'activityDate' in article
+const backHref = Astro.props.backHref ?? (isDailyArticle(post) ? '/career-sprint-daily/' : '/aprendizaje/')
+const backLabel = Astro.props.backLabel ?? (isDailyArticle(post) ? 'Volver al archivo de notas' : 'Volver al aprendizaje')
 const blockText = (blocks: DailyArticleBlock[]) => blocks.flatMap(block => {
   if (block.type === 'paragraph') return block.text
   if (block.type === 'code') return [block.title ?? '', block.code]
@@ -45,12 +52,11 @@ const codeCaption = (language: string, title?: string) => title?.trim() || `Cód
     <header>
       <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-medium uppercase tracking-[.18em] text-black/60">
         <p>{post.category}</p>
-        <span aria-hidden="true">·</span>
-        <p>{publicationDate}</p>
+        {showDate && <><span aria-hidden="true">·</span><p>{publicationDate}</p></>}
         <span aria-hidden="true">·</span>
         <p>{readingMinutes} min de lectura</p>
       </div>
-      <h1 data-route-heading tabindex="-1" class="mt-5 break-words text-[clamp(1.9rem,4.5vw,3.5rem)] font-black uppercase leading-[.94] tracking-[-.02em]">{post.title}</h1>
+      <h1 data-route-heading tabindex="-1" class="mt-5 break-words text-[clamp(1.9rem,4.5vw,3.5rem)] font-medium leading-[1.08] tracking-[-.02em]">{post.title}</h1>
       <p class="mt-6 text-xl font-light leading-relaxed text-black/70">{post.excerpt}</p>
       <ul class="mt-5 flex flex-wrap gap-2" aria-label="Etiquetas">
         {post.tags.map(tag => <li class="tag-light">{tag}</li>)}
@@ -92,10 +98,14 @@ const codeCaption = (language: string, title?: string) => title?.trim() || `Cód
         </section>
       ))}
       <aside>
-        <p class="mb-3 text-xs font-medium uppercase tracking-[.2em]">Cierre</p>
+        <p class="mb-3 text-xs font-medium uppercase tracking-[.2em]">{takeawayLabel}</p>
         {isDailyArticle(post) ? <DailyArticleBlocks blocks={post.takeaway} captionScope="takeaway" /> : post.takeaway.map(paragraph => <p><ArticleInlineText text={paragraph} /></p>)}
       </aside>
     </div>
+    <nav aria-label="Seguir leyendo" class="mt-10 border-t border-black/20 pt-7">
+      {related.length > 0 && <><p class="mb-4 text-sm font-medium">Otros conceptos</p><ul class="mb-6 space-y-2">{related.map(item => <li><a class="inline-flex min-h-11 items-center gap-2 underline underline-offset-4" href={item.href}>{item.label} <span aria-hidden="true">↗</span></a></li>)}</ul></>}
+      <a class="control max-w-full" href={backHref}>{backLabel} <span aria-hidden="true">↖</span></a>
+    </nav>
   </article>
 
   <aside class="article-index-aside" aria-label="Navegación complementaria del artículo">

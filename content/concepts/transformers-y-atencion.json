@@ -1,0 +1,84 @@
+{
+  "id": "transformers-y-atencion",
+  "status": "published",
+  "position": 5,
+  "publishedAt": "2026-09-07",
+  "category": "Relacionar y evaluar",
+  "tags": [
+    "transformers",
+    "atencion"
+  ],
+  "title": "Transformers y atención",
+  "excerpt": "Cómo combina un transformer la información de una frase y qué partes puede consultar.",
+  "introduction": [
+    "La atención permite relacionar tokens dentro de un texto. Un transformer utiliza esas relaciones para construir representaciones que incorporan contexto."
+  ],
+  "sections": [
+    {
+      "heading": "Saber qué token es y dónde aparece",
+      "paragraphs": [
+        "El embedding da una representación inicial al token. Para tener en cuenta el orden, el modelo también necesita información sobre su posición: primero, segundo, tercero…",
+        "Esa información puede aprenderse o construirse con una regla, como las funciones de senos y cosenos usadas en el transformer original. El objetivo es que el modelo pueda distinguir las mismas palabras colocadas de otra manera."
+      ]
+    },
+    {
+      "heading": "Queries, Keys y Values, paso a paso",
+      "paragraphs": [
+        "Para calcular la atención se crean tres listas de números a partir de cada representación. Se llaman Query, Key y Value. Puedes pensar en la Query como lo que se busca, en la Key como la información con la que se compara esa búsqueda y en el Value como lo que se va a aportar.",
+        "El modelo compara la Query de un token con las Keys de los tokens disponibles. Convierte esas puntuaciones en pesos que suman 1 mediante una operación llamada softmax. Después mezcla los Values usando esos pesos: unos contribuyen más que otros.",
+        "Estas listas y comparaciones se calculan con parámetros aprendidos. La analogía de la búsqueda ayuda a seguir los pasos, pero el cálculo es una operación entre números."
+      ],
+      "codeBlocks": [
+        {
+          "title": "Ejemplo paso a paso",
+          "language": "text",
+          "code": "Query de un token + Keys disponibles\n  → puntuaciones\n  → pesos que suman 1\n  → mezcla de Values según esos pesos"
+        }
+      ]
+    },
+    {
+      "heading": "Consultar la misma frase o una distinta",
+      "paragraphs": [
+        "En self-attention, un token consulta información de la misma secuencia. En cross-attention, consulta otra: por ejemplo, mientras genera una traducción, el decoder puede consultar la representación de la frase original.",
+        "Multi-head attention hace varias de estas combinaciones en paralelo, cada una con sus propios parámetros. Así el modelo puede aprender distintas relaciones y reunir sus resultados."
+      ]
+    },
+    {
+      "heading": "Ocultar lo que todavía no se debería ver",
+      "paragraphs": [
+        "Cuando entrenamos un modelo para predecir el siguiente token, la respuesta ya está en el texto de entrenamiento. La máscara causal oculta los tokens futuros para que cada predicción use solo la posición actual y las anteriores.",
+        "La máscara de padding tiene otra función: excluye los tokens de relleno que añadimos para igualar longitudes. Ambas máscaras deciden qué posiciones están disponibles; los pesos de atención deciden cuánto aporta cada una de las permitidas."
+      ]
+    },
+    {
+      "heading": "Qué añade el resto del transformer",
+      "paragraphs": [
+        "La atención reúne información de otros tokens. Después, una pequeña red transforma la representación de cada posición. Un transformer encadena varios bloques como este para seguir elaborando las representaciones.",
+        "Las conexiones residuales suman la entrada de una parte del bloque a su resultado, de modo que la información anterior siga teniendo un camino directo. La normalización ayuda a controlar la escala de los valores durante el entrenamiento.",
+        "En el esquema, B cuenta los ejemplos del batch, S las posiciones de cada frase y D los números de cada vector. El bloque mantiene esas dimensiones, aunque cambien los valores que contienen."
+      ],
+      "codeBlocks": [
+        {
+          "title": "Ejemplo paso a paso",
+          "language": "text",
+          "code": "Entrada: [B, S, D]\n  → combinar información con atención\n  → transformar cada posición\nSalida:  [B, S, D]"
+        }
+      ]
+    },
+    {
+      "heading": "Qué comprobar al llevarlo a código",
+      "paragraphs": [
+        "Las dimensiones ayudan a seguir qué representa cada grupo de números. Un cálculo puede ejecutarse sin errores y aun así mezclar ejemplos o posiciones que deberían estar separados."
+      ],
+      "points": [
+        "Los pesos de cada Query deben repartirse entre las Keys que puede consultar.",
+        "Las frases de un batch se procesan juntas, pero no deben intercambiar contexto entre sí.",
+        "W_K es la matriz de parámetros que produce las Keys; K contiene el resultado para el texto que hemos dado al modelo.",
+        "Obtener una salida con parámetros recién creados solo comprueba que el cálculo funciona. Aprender requiere entrenamiento."
+      ]
+    }
+  ],
+  "takeaway": [
+    "La posición aporta el orden, la máscara limita qué se puede consultar y la atención mezcla la información disponible. Juntas permiten representar cada token teniendo en cuenta su contexto."
+  ]
+}

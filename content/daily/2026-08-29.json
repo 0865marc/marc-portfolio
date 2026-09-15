@@ -6,8 +6,9 @@
   "weekId": "w1",
   "category": "Career Sprint",
   "tags": [
-    "verificacion",
-    "reproducibilidad"
+    "embeddings",
+    "secuencias",
+    "evaluacion"
   ],
   "title": "De aprender el contexto a medir una secuencia generada",
   "excerpt": "Hoy he recorrido una parte bastante amplia del camino que sigue un modelo de lenguaje: aprender representaciones de palabras, reutilizar conocimiento preentrenado, conservar el orden de una secuencia, transformar una frase en otra y decidir después si el resultado es bueno.",

@@ -7,15 +7,14 @@ const ainkii = professionalProfile.projects.find(project => project.id === 'aink
 const currentYear = new Date().getFullYear()
 ---
 
-<slot name="career-sprint" />
-<section id="projects" aria-labelledby="projects-title" class="scroll-mt-6 px-5 py-16 sm:px-8 md:px-10 md:py-24" hidden>
+<section id="projects" aria-labelledby="projects-title" class="scroll-mt-6 px-5 py-16 sm:px-8 md:px-10 md:py-24">
   <div class="mx-auto max-w-6xl">
     <div data-section-intro class="grid items-end gap-8 xl:grid-cols-[minmax(0,1fr)_minmax(0,25rem)]">
       <div class="min-w-0">
-        <p class="section-kicker">Evidencia separada</p>
-        <h2 id="projects-title" data-route-heading tabindex="-1" class="hero-heading mt-4 text-3xl font-black uppercase leading-tight sm:text-4xl">Ainkii</h2>
+        <p class="section-kicker">Proyecto personal</p>
+        <h2 id="projects-title" data-route-heading tabindex="-1" class="mt-4 text-4xl font-black uppercase leading-tight sm:text-5xl">Ainkii</h2>
       </div>
-      <p data-section-intro-copy class="min-w-0 text-lg font-light leading-relaxed opacity-80">Proyecto educativo personal en desarrollo, presentado de forma independiente dentro del portfolio.</p>
+      <p data-section-intro-copy class="min-w-0 text-lg font-light leading-relaxed opacity-80">{ainkii.teaser}</p>
     </div>
 
     <article data-project-card class="mt-8 rounded-[28px] border border-[#D7E2EA]/25 p-5 sm:p-8 md:p-10">
@@ -26,9 +25,8 @@ const currentYear = new Date().getFullYear()
             <span aria-hidden="true">·</span>
             <p>{ainkii.status}</p>
           </div>
-          <h3 class="mt-4 text-2xl font-medium uppercase leading-tight sm:text-3xl">{ainkii.canonicalName}</h3>
-          <p class="mt-4 text-lg font-light leading-relaxed opacity-80">{ainkii.teaser}</p>
-          <p class="mt-4 text-xs uppercase tracking-[.18em] opacity-60">Enfoque · {ainkii.focus}</p>
+          <h3 class="mt-4 text-2xl font-medium leading-tight sm:text-3xl">Organizar lo que enseñas. Preparar cómo se estudia.</h3>
+          <p class="mt-4 text-lg font-light leading-relaxed opacity-80">Estoy desarrollando una herramienta para estructurar temarios, conectar conceptos y preparar tarjetas de aprendizaje. La IA ayuda a revisar el contenido; el docente conserva el control editorial.</p>
           <a class="button-light mt-6" href={ainkii.href}>Ver el proyecto <span aria-hidden="true">↗</span></a>
         </div>
         <AinkiiModel compact showDecision={false} />
@@ -37,7 +35,7 @@ const currentYear = new Date().getFullYear()
   </div>
 </section>
 
-<slot name="notes" />
+<slot name="formation" />
 
 <footer id="contact" aria-labelledby="contact-title" class="scroll-mt-6 px-5 pt-16 sm:px-8 sm:pt-20 md:px-10 md:pt-24">
   <div class="mx-auto max-w-6xl">
@@ -46,10 +44,10 @@ const currentYear = new Date().getFullYear()
       <div class="mt-4 grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] xl:items-end">
         <div class="contact-copy min-w-0">
           <h2 id="contact-title" data-route-heading tabindex="-1" class="hero-heading text-3xl font-black uppercase leading-tight sm:text-4xl">¿Hablamos?</h2>
-          <p class="mt-4 max-w-2xl text-lg font-light leading-relaxed opacity-80">Si estás valorando un perfil orientado a Product Engineering que combine desarrollo full-stack, coordinación de proyectos IT e IA aplicada, podemos hablar de la posición, el equipo y cómo podría contribuir.</p>
+          <p class="mt-4 max-w-2xl text-lg font-light leading-relaxed opacity-80">¿Buscas un perfil que combine desarrollo de software y coordinación de proyectos? Escríbeme y hablamos de tu equipo y del puesto.</p>
         </div>
         <address class="flex min-w-0 w-full flex-col items-stretch gap-3 not-italic">
-          <a class="contact-action button-light w-full max-w-full justify-between gap-4" href={`mailto:${contacts.email}`}>Proponer una conversación <span aria-hidden="true">↗</span></a>
+          <a class="contact-action button-light w-full max-w-full justify-between gap-4" href={`mailto:${contacts.email}`}>Escríbeme por correo <span aria-hidden="true">↗</span></a>
           <a class="contact-action control w-full max-w-full justify-between gap-4" href={contacts.linkedin} rel="me">Ver perfil en LinkedIn <span aria-hidden="true">↗</span></a>
         </address>
       </div>

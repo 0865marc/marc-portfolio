@@ -1,8 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import AboutSection from '../components/AboutSection.astro'
-import BlogSection from '../components/BlogSection.astro'
-import CareerSprintSection from '../components/CareerSprintSection.astro'
+import FormationSection from '../components/FormationSection.astro'
 import HeroSection from '../components/HeroSection.astro'
 import ProjectsSection from '../components/ProjectsSection.astro'
 import { professionalProfile } from '../data/portfolio'
@@ -46,8 +45,7 @@ const websiteJsonLd = {
     <HeroSection />
     <AboutSection />
     <ProjectsSection>
-      <CareerSprintSection slot="career-sprint" />
-      <div slot="notes" hidden><BlogSection /></div>
+      <FormationSection slot="formation" />
     </ProjectsSection>
   </main>
 </BaseLayout>

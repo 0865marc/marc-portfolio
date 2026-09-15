@@ -1,0 +1,9 @@
+---
+import { learningConcepts, conceptHref } from '../../data/learning'
+export function getStaticPaths() {
+  return learningConcepts.map(concept => ({ params: { id: concept.id } }))
+}
+// Preserve earlier concept URLs while making the course page the only reading surface.
+const destination = conceptHref(Astro.params.id!)
+return Astro.redirect(destination, 301)
+---

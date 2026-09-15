@@ -1,9 +1,10 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { extname, join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { blogPosts } from '../src/data/blog'
 import { challengeWeeks, dailyProgressEntries } from '../src/data/challenge'
 import { professionalProfile } from '../src/data/portfolio'
+import { learningConcepts, conceptHref } from '../src/data/learning'
+import { learningCourses } from '../src/data/learningCourses'
 
 const dist = join(process.cwd(), 'dist')
 const retiredBlogIds = [
@@ -22,11 +23,11 @@ const escapeHtmlText = (value: string) => value
   .replaceAll('>', '&gt;')
 const publicHtmlPaths = [
   'index.html',
+  'aprendizaje/index.html',
+  ...learningConcepts.map(concept => `aprendizaje/${concept.id}/index.html`),
   'roadmap/index.html',
   'career-sprint-daily/index.html',
   'proyectos/ainkii/index.html',
-  'blog/index.html',
-  ...blogPosts.map(post => `blog/${post.id}/index.html`),
   ...dailyProgressEntries.map(entry => `career-sprint-daily/${entry.activityDate}/index.html`),
   '404.html',
 ] as const
@@ -76,28 +77,34 @@ describe('static output', () => {
     path => expect(statSync(join(dist, path)).size).toBeGreaterThan(50),
   )
 
-  it('exposes the public profile while hiding temporary Home sections', () => {
+  it('exposes projects and separates formation from the thematic learning space', () => {
     const landing = read('index.html')
-    expect(landing).toContain('<title>Marc Teixidó — Product Engineering e IA aplicada</title>')
-    expect(landing).toContain('name="description" content="Perfil orientado a Product Engineering con foco en IA aplicada y evidencia publicada: cerca de 3 años full-stack y alrededor de 1 año coordinando proyectos IT."')
-    expect(landing).toContain('property="og:title" content="Marc Teixidó — Product Engineering e IA aplicada"')
-    expect(landing).toContain('property="og:description" content="Perfil orientado a Product Engineering con foco en IA aplicada y evidencia publicada: cerca de 3 años full-stack y alrededor de 1 año coordinando proyectos IT."')
-    expect(landing).toContain('property="og:image:alt" content="Marc Teixidó — Product Engineering, cerca de 3 años full-stack, alrededor de 1 año coordinando proyectos IT e IA aplicada"')
-    expect(landing).toContain('name="twitter:title" content="Marc Teixidó — Product Engineering e IA aplicada"')
-    expect(landing).toContain('name="twitter:description" content="Perfil orientado a Product Engineering con foco en IA aplicada y evidencia publicada: cerca de 3 años full-stack y alrededor de 1 año coordinando proyectos IT."')
-    expect(landing).toContain('name="twitter:image:alt" content="Marc Teixidó — Product Engineering, cerca de 3 años full-stack, alrededor de 1 año coordinando proyectos IT e IA aplicada"')
-
-    expect(landing).toContain('Marc Teixidó')
+    const { identity } = professionalProfile
+    expect(landing).toContain(`<title>${identity.seo.title}</title>`)
+    for (const attribute of ['name="description"', 'property="og:description"', 'name="twitter:description"']) {
+      expect(landing).toContain(`${attribute} content="${identity.seo.description}"`)
+    }
+    expect(landing).toContain(identity.headline)
+    expect(landing).toContain(identity.summary)
+    expect(landing).toContain(identity.aboutIntro)
     expect(landing).toContain('Balaguer, Lleida')
-    expect(landing).toContain('Perfil orientado a Product Engineering con foco en IA aplicada')
-    expect(landing).toContain('Responsable de proyectos IT en Taurus Research &amp; Development')
-    expect(landing).toContain('Conecto visión de producto y ejecución técnica para convertir necesidades en software, coordinar su entrega y aplicar automatización e IA cuando aportan valor.')
-    expect(landing).toContain('Mi experiencia combina desarrollo full-stack y coordinación de proyectos IT. Trabajo entre las necesidades de producto, las decisiones técnicas y la entrega, manteniendo una visión de principio a fin.')
-    expect(landing).toContain('Contactar')
-    expect(landing).toContain('Ver experiencia')
-    expect(landing).not.toContain('Explorar Ainkii')
+    expect(landing).toContain('"jobTitle":"Responsable de proyectos IT"')
+    expect(landing).toContain('"worksFor":{"@type":"Organization","name":"Taurus Research & Development"}')
+    for (const id of ['about', 'projects', 'formacion', 'contact']) {
+      expect(landing).toContain(`href="#${id}"`)
+      expect(landing).not.toMatch(new RegExp(`<section[^>]*id="${id}"[^>]*hidden`))
+    }
+    expect(landing).toContain('href="/proyectos/ainkii/"')
+    expect(landing).toContain('href="/aprendizaje/"')
+    expect(landing).toContain('En curso · IBM / Coursera')
+    expect(landing).not.toContain('Formación prevista')
+    expect(landing).not.toContain('IA y arquitectura cloud')
+    expect(landing).not.toContain('href="/career-sprint-daily/"')
+    expect(landing).not.toContain('href="/roadmap/"')
+    expect(landing).not.toContain('Evidencia publicada')
+    expect(landing).toContain('id="career-sprint"')
+    expect(landing).toContain('id="progress"')
     expect(landing.match(/class="profile-fact-value"/g) ?? []).toHaveLength(2)
-    expect(landing).not.toMatch(/<dt[^>]*>IA aplicada<\/dt>\s*<dd[^>]*class="profile-fact-value"[^>]*>Evidencia publicada<\/dd>/)
     for (const fact of professionalProfile.facts) {
       expect(landing).toContain(fact.label)
       expect(landing).toContain(fact.value)
@@ -106,28 +113,42 @@ describe('static output', () => {
     for (const entry of professionalProfile.experience) {
       expect(landing).toContain(escapeHtmlText(entry.company))
       expect(landing).toContain(entry.role)
-      expect(landing).toContain(entry.summary)
+      for (const sentence of entry.summary.split(/(?<=\.)\s+(?=[A-ZÁÉÍÓÚ])/)) expect(landing).toContain(escapeHtmlText(sentence))
     }
-    expect(landing).toContain('Sobre mí')
-    expect(landing).toContain('Software, producto y coordinación técnica')
-    expect(landing).toContain('Taurus Research &amp; Development')
-    expect(landing).toContain('"jobTitle":"Responsable de proyectos IT"')
-    expect(landing).toContain('"homeLocation":{"@type":"Place","name":"Balaguer, Lleida"}')
-    expect(landing).toContain('"worksFor":{"@type":"Organization","name":"Taurus Research & Development"}')
-    expect(landing).toMatch(/<nav[\s\S]*?href="#about"[\s\S]*?Perfil[\s\S]*?href="#career-sprint"[\s\S]*?Career Sprint[\s\S]*?href="#contact"[\s\S]*?Contacto[\s\S]*?<\/nav>/)
-    expect(landing).not.toContain('Career Sprint ↘')
-    expect(landing).not.toContain('href="#projects"')
-    expect(landing).not.toContain('href="#blog"')
-    expect(landing).toContain('href="/proyectos/ainkii/"')
-    expect(landing).toContain('id="career-sprint"')
-    expect(landing).toContain('Reto de 8 semanas')
-    expect(landing).toContain('Ver plan de 8 semanas')
-    expect(landing).toContain('Ver evidencia publicada')
-    expect(landing).not.toContain('DOCUMENTANDO DIARIAMENTE')
-    expect(landing).toContain('id="contact"')
-    expect(landing).toMatch(/<section[^>]*id="projects"[^>]*hidden/)
-    expect(landing).toMatch(/<div[^>]*hidden[^>]*>[\s\S]*id="blog"/)
-    expect(landing).not.toContain('id="root"')
+    expect(landing).toContain(professionalProfile.education.qualification)
+    expect(landing).toContain('Escríbeme por correo')
+  })
+
+  it('organizes inline explanations by course and redirects earlier concept URLs', () => {
+    const index = read('aprendizaje/index.html')
+    const sitemap = read('sitemap.xml')
+    expect(index).not.toMatch(/<article[^>]*data-reading-root/)
+    expect(index).not.toContain('min de lectura')
+    expect(index).not.toContain('type="Article"')
+    expect(sitemap).toContain('<loc>https://portfolio.mybrawl.io/aprendizaje/</loc>')
+    expect(learningCourses).toHaveLength(7)
+    for (const course of learningCourses) {
+      expect(index).toContain(escapeHtmlText(course.title))
+      if (course.available) {
+        expect(index).toContain(`id="${course.id}"`)
+        expect(index).toContain(`href="#${course.id}"`)
+        expect(index).toContain(escapeHtmlText(course.officialTitle))
+        expect(index).toContain(`href="${course.url}"`)
+      } else {
+        expect(index).not.toContain(`id="${course.id}"`)
+        expect(index).not.toContain(`href="#${course.id}"`)
+        expect(index).not.toContain(escapeHtmlText(course.description))
+        expect(index).toContain(`${escapeHtmlText(course.title)}<small>Pendiente</small>`)
+      }
+    }
+    for (const concept of learningConcepts) {
+      expect(index).toContain(concept.title)
+      const html = read(`aprendizaje/${concept.id}/index.html`)
+      expect(html).toContain(conceptHref(concept.id))
+      expect(html).toContain('http-equiv="refresh"')
+      expect(sitemap).not.toContain(`/aprendizaje/${concept.id}/`)
+    }
+    for (const lab of ['token', 'bag', 'attention']) expect(index).toContain(`data-${lab}-lab`)
   })
 
   it('keeps local identity assets and only local public media', () => {
@@ -182,28 +203,21 @@ describe('static output', () => {
     }
     expect(html).toContain('<title>Ainkii — Producto educativo en desarrollo | Marc Teixidó</title>')
     expect(html).toContain('Proyecto educativo en desarrollo que explora cómo ayudar a docentes a revisar temarios y organizar materiales de estudio con apoyo de IA.')
-    expect(html).toContain('Ainkii es un proyecto en desarrollo que explora cómo ordenar materiales de aprendizaje con apoyo de IA.')
+    expect(html).toContain(professionalProfile.projects[0].description)
     expect(html).toContain('"@type":"CreativeWork"')
-    expect(html).toContain('Qué estoy explorando')
+    expect(html).toContain('Qué quiero resolver')
     expect(html).not.toContain('Proyecto insignia')
     expect(html).not.toContain('próximamente')
   })
 
-  it('keeps the current Blog index metadata', () => {
-    const html = read('blog/index.html')
-    expect(html).toContain('<title>Blog de Marc Teixidó — Ingeniería de software e IA aplicada</title>')
-    expect(html).toContain('name="description" content="Artículos publicados sobre ingeniería de software, automatización, herramientas y aprendizaje técnico."')
-  })
-
-  it.each(blogPosts)('emits $id with canonical article metadata', post => {
-    const html = read(`blog/${post.id}/index.html`)
-    const canonical = `https://portfolio.mybrawl.io/blog/${post.id}/`
-    expect(html).toContain(post.title)
-    expect(html).toContain(post.excerpt)
-    expect(html).toContain(`rel="canonical" href="${canonical}"`)
-    expect(html).toContain(`property="og:url" content="${canonical}"`)
-    expect(html).toContain(`"mainEntityOfPage":"${canonical}"`)
-    expect(html).toContain('"@type":"BlogPosting"')
+  it('removes blog pages, navigation, sitemap entries and CMS collection', () => {
+    expect(existsSync(join(dist, 'blog'))).toBe(false)
+    expect(publicNavigation).not.toMatch(/href="(?:[^"#]*\/blog\/|#blog)/)
+    expect(read('index.html')).not.toContain('id="blog"')
+    expect(read('sitemap.xml')).not.toContain('/blog/')
+    const config = read('admin/config.yml')
+    expect(config).not.toContain('- name: posts')
+    expect(config).not.toContain('folder: content/posts')
   })
 
   it('emits the roadmap, published daily chronology, and only published routes', () => {
@@ -218,11 +232,11 @@ describe('static output', () => {
     expect(challengeWeeks).toHaveLength(8)
     expect(challengeWeeks.map(week => week.id)).toEqual(['w1', 'w2', 'w3', 'w4', 'w5', 'w6', 'w7', 'w8'])
     expect(challengeWeeks.map(week => week.progressState)).toEqual(Array(8).fill('planned'))
-    expect(roadmap).toContain('Career Sprint — AI Engineering &amp; Cloud Architecture')
-    expect(roadmap).toContain('el estado planificado no representa trabajo completado')
-    expect(roadmap).toContain('Ver evidencia publicada')
-    expect(progress).toContain('Evidencia publicada')
-    expect(progress).toContain('Actividad realizada y revisada')
+    expect(roadmap).toContain('Plan de formación de 2026')
+    expect(roadmap).toContain('El itinerario original recoge los objetivos de ocho semanas.')
+    expect(roadmap).toContain('Explorar conceptos')
+    expect(progress).toContain('Notas originales')
+    expect(progress).toContain('Explorar por conceptos')
     expect(progress).not.toContain('Lo Hoy')
     expect(roadmap).toContain('Semanas 1–2')
     expect((roadmap.match(/<li id="w\d+"/g) ?? [])).toHaveLength(7)
@@ -255,7 +269,6 @@ describe('static output', () => {
     expect(sitemap).toContain('<loc>https://portfolio.mybrawl.io/roadmap/</loc>')
     expect(sitemap).toContain('<loc>https://portfolio.mybrawl.io/career-sprint-daily/</loc>')
     expect(sitemap).not.toContain('<loc>https://portfolio.mybrawl.io/progreso/')
-    for (const post of blogPosts) expect(sitemap).toContain(`<loc>https://portfolio.mybrawl.io/blog/${post.id}/</loc>`)
     for (const entry of dailyProgressEntries) expect(sitemap).toContain(`<loc>https://portfolio.mybrawl.io/career-sprint-daily/${entry.activityDate}/</loc>`)
     for (const id of retiredBlogIds) expect(existsSync(join(dist, 'blog', id, 'index.html'))).toBe(false)
   })
@@ -283,9 +296,10 @@ describe('static output', () => {
     expect(statSync(join(dist, 'admin', 'locales', 'es-CO.json')).size).toBeGreaterThan(10_000)
     expect(admin).toContain('content="noindex,nofollow"')
     expect(admin).toContain('src="./bootstrap.js"')
-    expect(config).toContain('label: Conocimiento')
     expect(config).toContain('- name: weeks')
     expect(config).toContain('- name: daily')
+    expect(config).toContain('- name: concepts')
+    expect(config).toContain('folder: content/concepts')
     expect(config).toContain('delete: false')
     expect(config).toContain('publish: false')
     expect(config).toMatch(/name: weeks[\s\S]*?create: false[\s\S]*?readonly: true/)
@@ -303,9 +317,9 @@ describe('static output', () => {
     expect(html).toContain('<title>Página no encontrada — Marc Teixidó</title>')
     expect(html).toContain('content="noindex,follow"')
     expect(html).toContain('Página no disponible')
-    expect(html).toContain('Parece que esta página no existe o ha cambiado de dirección. Puedes volver al portfolio o continuar por el Career Sprint.')
-    expect(html).toContain('Ver el Career Sprint')
-    expect(html).toContain('href="/roadmap/"')
+    expect(html).toContain('Esta página no existe o ha cambiado de dirección. Puedes volver al portfolio o explorar el cuaderno de IA.')
+    expect(html).toContain('Explorar conceptos')
+    expect(html).toContain('href="/aprendizaje/"')
     expect(html).not.toContain('rel="canonical"')
   })
 })

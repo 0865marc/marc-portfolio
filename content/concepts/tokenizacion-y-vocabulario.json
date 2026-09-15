@@ -1,0 +1,54 @@
+{
+  "id": "tokenizacion-y-vocabulario",
+  "status": "published",
+  "position": 1,
+  "publishedAt": "2026-09-07",
+  "category": "Preparar el texto",
+  "tags": [
+    "tokenizacion",
+    "datos"
+  ],
+  "title": "Tokenización y vocabulario",
+  "excerpt": "Cómo dividir una frase en tokens y dar a cada uno su identificador.",
+  "introduction": [
+    "Para trabajar con un texto, el modelo necesita una versión numérica. El primer paso es separar sus piezas y saber qué número corresponde a cada una."
+  ],
+  "sections": [
+    {
+      "heading": "De una frase a sus piezas",
+      "paragraphs": [
+        "Tokenizar es dividir un texto en piezas llamadas tokens. Algunas coinciden con palabras completas; otras son fragmentos o signos. Las reglas dependen del tokenizador, así que dos tokenizadores pueden dividir la misma frase de forma distinta.",
+        "Después se busca cada pieza en el vocabulario, una tabla que le asigna un número o ID. En el ejemplo interactivo, «La» tiene el ID 1. Ese número solo identifica la pieza: no indica su importancia ni su significado.",
+        "El ID permite buscar el embedding del token: una lista de números que el modelo utiliza para hacer sus cálculos. En el segundo curso veremos cómo se aprende esa representación."
+      ],
+      "codeBlocks": [
+        {
+          "title": "Ejemplo paso a paso",
+          "language": "text",
+          "code": "Frase → piezas (tokens) → identificadores (IDs)\nCada ID → su lista de números (embedding) → modelo"
+        }
+      ]
+    },
+    {
+      "heading": "Usar el tokenizador que espera el modelo",
+      "paragraphs": [
+        "Un modelo ya entrenado viene preparado para un vocabulario concreto. Si en ese vocabulario el ID 42 corresponde a «gato», enviarle el 42 significa pedir la representación de «gato». No importa qué palabra tenga ese número en otra tabla.",
+        "Por eso el modelo y su tokenizador deben ir juntos. Los números pueden tener un formato válido y aun así señalar las piezas equivocadas."
+      ]
+    },
+    {
+      "heading": "Si preparas tu propio vocabulario",
+      "paragraphs": [
+        "En un ejercicio desde cero, puedes construir el vocabulario con los textos de entrenamiento. Después conservas esa misma tabla para comprobar el modelo con textos nuevos."
+      ],
+      "points": [
+        "En un vocabulario que lo utilice, <unk> representa una pieza desconocida. Otros tokenizadores pueden descomponerla en piezas más pequeñas.",
+        "<pad> sirve para completar frases cortas al formar un batch. Hay que conocer su ID; no siempre es 0.",
+        "Guarda la tabla y las reglas para dividir el texto: necesitarás ambas al volver a usar el modelo."
+      ]
+    }
+  ],
+  "takeaway": [
+    "El modelo debe recibir los IDs de su propio vocabulario. Mantener juntos el modelo y el tokenizador evita cambiar el significado de las entradas sin darte cuenta."
+  ]
+}

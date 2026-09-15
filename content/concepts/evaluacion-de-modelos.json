@@ -1,0 +1,62 @@
+{
+  "id": "evaluacion-de-modelos",
+  "status": "published",
+  "position": 6,
+  "publishedAt": "2026-09-07",
+  "category": "Relacionar y evaluar",
+  "tags": [
+    "evaluacion",
+    "modelos-de-lenguaje"
+  ],
+  "title": "Evaluar un modelo de lenguaje",
+  "excerpt": "Cómo comprobar si el modelo mejora y qué nos dicen sus métricas.",
+  "introduction": [
+    "Para saber si un modelo funciona, necesitamos probarlo con ejemplos nuevos y medir algo relacionado con la tarea que queremos resolver."
+  ],
+  "sections": [
+    {
+      "heading": "Practicar y comprobar son pasos distintos",
+      "paragraphs": [
+        "La pérdida es una medida del error que usamos durante el entrenamiento. Ayuda a ajustar los parámetros: por ejemplo, penaliza al modelo cuando da poca probabilidad al token correcto.",
+        "La validación comprueba cómo responde a textos que no se han usado para esos ajustes. Es parecido a estudiar con unos ejercicios y comprobar después lo aprendido con otros. Mejorar solo en los ejercicios conocidos no basta."
+      ]
+    },
+    {
+      "heading": "Perplexity: cuánto sorprende el texto al modelo",
+      "paragraphs": [
+        "La perplexity mide, de forma agregada, cuánta probabilidad daba el modelo a los tokens que aparecen en un texto de prueba. Un valor más bajo significa que ese texto le resultaba más previsible.",
+        "Se calcula a partir de la pérdida media de entropía cruzada por token, usando logaritmos naturales. Para comparar valores, hay que mantener los mismos textos y un procedimiento compatible, incluida la tokenización.",
+        "Un texto previsible puede contener un error. Por eso una buena perplexity no demuestra que una respuesta sea verdadera o útil."
+      ],
+      "codeBlocks": [
+        {
+          "title": "Ejemplo paso a paso",
+          "language": "text",
+          "code": "perplexity = exp(pérdida media por token)"
+        }
+      ]
+    },
+    {
+      "heading": "Comparar con una respuesta de referencia",
+      "paragraphs": [
+        "BLEU, frecuente en traducción, compara grupos de palabras con traducciones de referencia y tiene en cuenta la longitud de la respuesta. ROUGE, habitual en resúmenes, mide coincidencias con textos de referencia mediante distintas variantes.",
+        "«El gato está durmiendo» y «El gato duerme» pueden transmitir la misma idea con palabras distintas. Una métrica de coincidencias no recoge por sí sola todo ese significado; tampoco detecta todos los errores de una respuesta que comparte muchas palabras."
+      ]
+    },
+    {
+      "heading": "Mirar también los ejemplos",
+      "paragraphs": [
+        "Las métricas ayudan a comparar resultados, pero conviene leer algunas respuestas y sus errores. Así se ve qué mejora en la práctica y qué problemas siguen apareciendo."
+      ],
+      "points": [
+        "Evalúa siempre sobre el mismo conjunto de textos al comparar dos versiones.",
+        "Elige una métrica relacionada con la tarea: continuar texto, clasificarlo o traducirlo.",
+        "Revisa respuestas acertadas y fallos concretos, además del número final.",
+        "Usa una solución sencilla como punto de partida para valorar si la complejidad adicional aporta algo."
+      ]
+    }
+  ],
+  "takeaway": [
+    "Una métrica responde a una pregunta concreta. Combinarla con ejemplos nuevos y revisión de errores permite interpretar mejor los resultados."
+  ]
+}

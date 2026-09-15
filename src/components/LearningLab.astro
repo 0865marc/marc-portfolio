@@ -1,0 +1,38 @@
+---
+import { tokenExamples, bagExamples, bagVocabulary, countWords, attentionTokens, visiblePositions } from '../lib/learningLabs'
+const { course } = Astro.props as { course: string }
+---
+{course === 'curso-1' && <figure class="learning-lab" data-token-lab aria-labelledby="token-lab-title">
+  <figcaption id="token-lab-title">Una frase, dividida en tokens</figcaption>
+  <p class="lab-sentence">«La IA aprende patrones.»</p>
+  <div data-lab-controls hidden>
+    <label for="token-mode">Dividir por</label>
+    <select id="token-mode"><option value="words">Palabras y signos</option><option value="fragments">Piezas más pequeñas</option></select>
+  </div>
+  <ol class="token-strip" data-token-output>{tokenExamples.words.map((token, i) => <li><strong>{token}</strong><small>ID {i + 1}</small></li>)}</ol>
+  <p class="lab-result" data-token-result role="status">5 tokens → 5 IDs. Cada ID identifica una pieza en el vocabulario.</p>
+  <p class="lab-note">Aquí usamos cortes e IDs inventados para ver cómo funciona. Un tokenizador real tiene sus propias reglas para dividir el texto y numerar las piezas.</p>
+</figure>}
+{course === 'curso-2' && <figure class="learning-lab" data-bag-lab aria-labelledby="bag-lab-title">
+  <figcaption id="bag-lab-title">Las mismas palabras, otro significado</figcaption>
+  <p class="lab-sentence" data-bag-sentence>El gato persigue al perro.</p>
+  <div data-lab-controls hidden>
+    <label for="bag-order">Quién persigue a quién</label>
+    <select id="bag-order">{bagExamples.map((sentence, i) => <option value={i}>{sentence}</option>)}</select>
+  </div>
+  <dl class="word-counts">{bagVocabulary.map((word, i) => <div><dt>{word}</dt><dd>{countWords(bagExamples[0])[i]}</dd></div>)}</dl>
+  <p class="lab-result" data-bag-result role="status">Cada palabra aparece una vez. Estos números no dicen quién persigue a quién.</p>
+  <p class="lab-note">En las dos frases aparecen las mismas palabras el mismo número de veces. Para distinguir su significado también necesitamos saber en qué orden están.</p>
+</figure>}
+{course === 'curso-3' && <figure class="learning-lab" data-attention-lab aria-labelledby="attention-lab-title">
+  <figcaption id="attention-lab-title">¿Qué palabras puede usar el modelo?</figcaption>
+  <div data-lab-controls hidden>
+    <label for="attention-mode">Qué parte de la frase puede usar</label>
+    <select id="attention-mode"><option value="causal">Hasta la palabra elegida (causal)</option><option value="full">Toda la frase (bidireccional)</option></select>
+    <p class="lab-control-label">Elige una palabra</p>
+    <div class="attention-controls">{attentionTokens.map((token, i) => <button type="button" data-position={i} aria-pressed={i === 2}>{token}</button>)}</div>
+  </div>
+  <ol class="attention-strip" aria-label="Posiciones disponibles">{attentionTokens.map((token, i) => <li data-visible={visiblePositions(2, true)[i]}><strong>{token}</strong><small>{i <= 2 ? 'Visible' : 'Oculto'}</small></li>)}</ol>
+  <p class="lab-result" data-attention-result role="status">Desde «mira», el modelo puede usar: El, gato, mira.</p>
+  <p class="lab-note">En este ejemplo cada palabra es un token. Se muestra cuáles están disponibles, sin calcular cuánta importancia da el modelo a cada una.</p>
+</figure>}

@@ -2,27 +2,27 @@ import { readdirSync, readFileSync } from 'node:fs'
 import { basename, extname, join } from 'node:path'
 import { PROFILE_SOURCE_ID } from './portfolio'
 
-const BLOG_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
-const BLOG_STATES = ['draft', 'published', 'deleted'] as const
-const BLOG_CODE_LANGUAGES = ['bash', 'json', 'markdown', 'typescript', 'text'] as const
+const ARTICLE_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+const ARTICLE_STATES = ['draft', 'published', 'deleted'] as const
+const ARTICLE_CODE_LANGUAGES = ['bash', 'json', 'markdown', 'typescript', 'text'] as const
 
-export type BlogCodeLanguage = typeof BLOG_CODE_LANGUAGES[number]
-export type BlogPostStatus = typeof BLOG_STATES[number]
+export type ArticleCodeLanguage = typeof ARTICLE_CODE_LANGUAGES[number]
+export type ArticleStatus = typeof ARTICLE_STATES[number]
 
-export type BlogCodeBlock = {
-  language: BlogCodeLanguage
+export type ArticleCodeBlock = {
+  language: ArticleCodeLanguage
   code: string
   title?: string
 }
 
-export type BlogArticleSection = {
+export type ArticleSection = {
   heading: string
   paragraphs: string[]
   points?: string[]
-  codeBlocks?: BlogCodeBlock[]
+  codeBlocks?: ArticleCodeBlock[]
 }
 
-export type BlogPost = {
+export type ArticleContent = {
   id: string
   category: string
   tags: string[]
@@ -31,22 +31,22 @@ export type BlogPost = {
   publishedAt: string
   sourceId: typeof PROFILE_SOURCE_ID
   introduction: string[]
-  sections: BlogArticleSection[]
+  sections: ArticleSection[]
   takeaway: string[]
 }
 
-type BlogContentTag = {
+type ArticleTag = {
   id: string
   label: string
 }
 
-type BlogContentPost = Omit<BlogPost, 'sourceId' | 'tags'> & {
-  status: BlogPostStatus
+type ArticleSource = Omit<ArticleContent, 'sourceId' | 'tags'> & {
+  status: ArticleStatus
   position: number
   tags: string[]
 }
 
-type BlogContent = {
+type ArticleCollection = {
   tags: unknown[]
   posts: unknown[]
 }
@@ -59,7 +59,7 @@ type ContentFile = {
 const contentRoot = join(process.cwd(), 'content')
 
 const fail = (field: string, message: string): never => {
-  throw new Error(`Invalid blog content at ${field}: ${message}`)
+  throw new Error(`Invalid article content at ${field}: ${message}`)
 }
 
 const expectRecord = (value: unknown, field: string): Record<string, unknown> => {
@@ -79,7 +79,7 @@ const expectStringList = (value: unknown, field: string): string[] => {
 
 const expectId = (value: unknown, field: string): string => {
   const id = expectString(value, field)
-  if (!BLOG_ID_PATTERN.test(id)) fail(field, 'must use lowercase letters, numbers, and single hyphens')
+  if (!ARTICLE_ID_PATTERN.test(id)) fail(field, 'must use lowercase letters, numbers, and single hyphens')
   return id
 }
 
@@ -96,10 +96,10 @@ const expectDate = (value: unknown, field: string): string => {
   return date
 }
 
-const expectStatus = (value: unknown, field: string): BlogPostStatus => {
+const expectStatus = (value: unknown, field: string): ArticleStatus => {
   const status = expectString(value, field)
-  if (!BLOG_STATES.includes(status as BlogPostStatus)) fail(field, `must be one of ${BLOG_STATES.join(', ')}`)
-  return status as BlogPostStatus
+  if (!ARTICLE_STATES.includes(status as ArticleStatus)) fail(field, `must be one of ${ARTICLE_STATES.join(', ')}`)
+  return status as ArticleStatus
 }
 
 const expectPosition = (value: unknown, field: string): number => {
@@ -107,22 +107,22 @@ const expectPosition = (value: unknown, field: string): number => {
   return value
 }
 
-const parseCodeBlock = (value: unknown, field: string): BlogCodeBlock => {
+const parseCodeBlock = (value: unknown, field: string): ArticleCodeBlock => {
   const record = expectRecord(value, field)
   const language = expectString(record.language, `${field}.language`)
-  if (!(BLOG_CODE_LANGUAGES as readonly string[]).includes(language)) {
-    fail(`${field}.language`, `must be one of ${BLOG_CODE_LANGUAGES.join(', ')}`)
+  if (!(ARTICLE_CODE_LANGUAGES as readonly string[]).includes(language)) {
+    fail(`${field}.language`, `must be one of ${ARTICLE_CODE_LANGUAGES.join(', ')}`)
   }
 
   const title = record.title === undefined ? undefined : expectString(record.title, `${field}.title`)
   return {
-    language: language as BlogCodeLanguage,
+    language: language as ArticleCodeLanguage,
     code: expectString(record.code, `${field}.code`),
     ...(title === undefined ? {} : { title }),
   }
 }
 
-const parseSection = (value: unknown, field: string): BlogArticleSection => {
+const parseSection = (value: unknown, field: string): ArticleSection => {
   const record = expectRecord(value, field)
   const points = record.points === undefined ? undefined : expectStringList(record.points, `${field}.points`)
   const codeBlockValues = record.codeBlocks
@@ -143,7 +143,7 @@ const parseSection = (value: unknown, field: string): BlogArticleSection => {
   }
 }
 
-const parseTag = (value: unknown, field: string): BlogContentTag => {
+const parseTag = (value: unknown, field: string): ArticleTag => {
   const record = expectRecord(value, field)
   return {
     id: expectId(record.id, `${field}.id`),
@@ -151,7 +151,7 @@ const parseTag = (value: unknown, field: string): BlogContentTag => {
   }
 }
 
-const parsePost = (value: unknown, field: string): BlogContentPost => {
+const parsePost = (value: unknown, field: string): ArticleSource => {
   const record = expectRecord(value, field)
   const sectionValues = record.sections
   if (!Array.isArray(sectionValues) || !sectionValues.length) {
@@ -173,10 +173,10 @@ const parsePost = (value: unknown, field: string): BlogContentPost => {
   }
 }
 
-const comparePosts = (left: BlogContentPost, right: BlogContentPost): number =>
+const comparePosts = (left: ArticleSource, right: ArticleSource): number =>
   left.position - right.position || (left.id < right.id ? -1 : left.id > right.id ? 1 : 0)
 
-export const buildPublishedBlogPosts = (content: BlogContent): BlogPost[] => {
+export const buildPublishedArticles = (content: ArticleCollection): ArticleContent[] => {
   const tags = content.tags.map((tag, index) => parseTag(tag, `tags[${index}]`))
   const tagLabels = new Map<string, string>()
   for (const tag of tags) {
@@ -248,9 +248,8 @@ const assertFilenameMatchesId = ({ file, value }: ContentFile): unknown => {
   return value
 }
 
-const readBlogContent = (): BlogContent => ({
+export const readArticleCollection = (collection: 'concepts'): ArticleCollection => ({
   tags: readJsonDirectory('tags').map(assertFilenameMatchesId),
-  posts: readJsonDirectory('posts').map(assertFilenameMatchesId),
+  posts: readJsonDirectory(collection).map(assertFilenameMatchesId),
 })
 
-export const blogPosts: BlogPost[] = buildPublishedBlogPosts(readBlogContent())

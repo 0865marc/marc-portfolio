@@ -1,6 +1,6 @@
 # Marc Portfolio
 
-Portfolio profesional y blog técnico construido con Astro y TypeScript. La aplicación se genera como un sitio estático y se sirve desde una imagen Nginx reproducible.
+Portfolio profesional con un espacio de aprendizaje sobre IA construido con Astro y TypeScript. La aplicación se genera como un sitio estático y se sirve desde una imagen Nginx reproducible.
 
 ## Desarrollo
 

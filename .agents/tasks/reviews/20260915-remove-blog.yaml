@@ -1,0 +1,43 @@
+schema_version: 1
+task_id: "20260915-remove-blog"
+review_status: pending
+summary: "Remove the public blog and its CMS collection, and remove the standalone email address from contact."
+knowledge_delta:
+  added_nodes:
+    - path: "src/data/articleContent.ts"
+      fact: "The shared article validator and types support learning concepts and the daily archive without loading historical blog posts."
+      evidence: "src/data/articleContent.ts; src/data/learning.ts; src/data/challenge.ts; tests/unit/articleContent.test.ts"
+  changed_nodes:
+    - path: "src/pages/index.astro"
+      fact: "Home contains profile, projects, formation and contact. Blog navigation, its landing section and all blog routes are removed."
+      evidence: "src/pages/index.astro; src/components/HeroSection.astro; tests/static-output.test.ts; tests/e2e/site.spec.ts"
+    - path: "src/components/ProjectsSection.astro"
+      fact: "Contact retains the email action and LinkedIn link, without a separate visible email address."
+      evidence: "src/components/ProjectsSection.astro; tests/e2e/site.spec.ts"
+    - path: "public/admin/config.yml"
+      fact: "The posts collection is removed; concepts now own the complete field schema. Historical content/posts JSON is archived source only and is not loaded or emitted."
+      evidence: "public/admin/config.yml; src/data/articleContent.ts; src/data/README.md"
+    - path: "src/pages/sitemap.xml.ts"
+      fact: "No blog URL is emitted. Static and browser checks require removed blog URLs to be absent or return the existing 404 page."
+      evidence: "src/pages/sitemap.xml.ts; scripts/verify-static-output.mjs; scripts/verify-container-image.sh; tests/e2e/site.spec.ts"
+  deprecated_nodes:
+    - path: "src/data/blog.ts"
+      fact: "Replaced by shared articleContent.ts; blog loaders, views, filters and route helpers are removed."
+      evidence: "src/data/articleContent.ts; src/data/README.md"
+  adr_needed: false
+  adr_reason: "Owner-directed feature removal; static architecture and release boundaries are unchanged."
+  design_changed: true
+  design_notes: "Remove the Blog navigation item and landing section, along with the standalone email text. The four mobile navigation links use two stable columns to prevent a font-loading layout shift. Existing contact buttons and design tokens remain."
+  stale_knowledge:
+    - path: ".agents/context/project.md"
+      fact: "Product description still includes the removed blog."
+    - path: ".agents/context/architecture.md"
+      fact: "Blog routes, views, content loader and navigation are obsolete."
+    - path: ".agents/domains/blog.md"
+      fact: "The public blog and CMS collection have been removed."
+    - path: ".agents/domains/portfolio.md"
+      fact: "Blog slots and navigation no longer exist."
+    - path: ".agents/tasks/reviews/20260907-formation-and-concepts.yaml"
+      fact: "The earlier pending delta's blog visibility and YAML field anchor are superseded by this removal."
+reviewed_by: ""
+reviewed_at: null
