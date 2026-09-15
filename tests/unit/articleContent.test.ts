@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildPublishedBlogPosts } from '../../src/data/blog'
+import { buildPublishedArticles } from '../../src/data/articleContent'
 
 const tag = (id: string, label = id) => ({ id, label })
 const post = (overrides: Record<string, unknown> = {}) => ({
@@ -17,9 +17,9 @@ const post = (overrides: Record<string, unknown> = {}) => ({
   ...overrides,
 })
 
-describe('blog content adapter', () => {
+describe('article content adapter', () => {
   it('publishes only published posts in ascending position order', () => {
-    const posts = buildPublishedBlogPosts({
+    const posts = buildPublishedArticles({
       tags: [tag('tag', 'Etiqueta visible')],
       posts: [
         post({ id: 'published-second', position: 20 }),
@@ -33,7 +33,7 @@ describe('blog content adapter', () => {
   })
 
   it('accepts a collection with only drafts and deleted posts', () => {
-    const posts = buildPublishedBlogPosts({
+    const posts = buildPublishedArticles({
       tags: [tag('tag')],
       posts: [
         post({ id: 'draft-article', status: 'draft', position: 1 }),
@@ -45,7 +45,7 @@ describe('blog content adapter', () => {
   })
 
   it('resolves stable tag IDs to their current visible labels', () => {
-    const [article] = buildPublishedBlogPosts({
+    const [article] = buildPublishedArticles({
       tags: [tag('revision-editorial', 'Edición revisada')],
       posts: [post({ tags: ['revision-editorial'] })],
     })
@@ -80,6 +80,6 @@ describe('blog content adapter', () => {
       error: /must be one of/,
     },
   ])('rejects $label', ({ content, error }) => {
-    expect(() => buildPublishedBlogPosts(content)).toThrow(error)
+    expect(() => buildPublishedArticles(content)).toThrow(error)
   })
 })

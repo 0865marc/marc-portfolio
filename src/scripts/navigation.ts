@@ -1,21 +1,3 @@
-const heading = document.querySelector<HTMLElement>('[data-route-heading]')
-
-const focusRoute = () => {
-  const pageHasFocusTarget = document.activeElement === document.body || document.activeElement === document.documentElement
-  if (heading && !location.hash && pageHasFocusTarget) heading.focus({ preventScroll: true })
-}
-
-addEventListener('pagereveal', event => {
-  const viewTransition = (event as Event & { viewTransition?: unknown }).viewTransition
-  if (viewTransition) focusRoute()
-}, { once: true })
-
-const back = document.querySelector<HTMLAnchorElement>('[data-article-back]')
-if (back && new URLSearchParams(location.search).get('from') === 'landing') {
-  back.href = '/'
-  back.firstChild!.textContent = 'Volver al portfolio '
-}
-
 const focusHash = () => {
   const id = location.hash.slice(1)
   if (!id || id.startsWith('/')) return

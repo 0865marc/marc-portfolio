@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from 'node:fs'
 import { basename, extname, join } from 'node:path'
-import type { BlogPost, BlogPostStatus } from './blog'
+import type { ArticleContent, ArticleStatus } from './articleContent'
 import { PROFILE_SOURCE_ID } from './portfolio'
 
 const CONTENT_ROOT = join(process.cwd(), 'content')
@@ -38,7 +38,7 @@ export type ChallengeResource = {
 
 export type ChallengeWeek = {
   id: string
-  status: BlogPostStatus
+  status: ArticleStatus
   position: number
   startDate: string
   endDate: string
@@ -68,8 +68,8 @@ export type DailyArticleSection = {
   blocks: DailyArticleBlock[]
 }
 
-export type DailyProgressEntry = Omit<BlogPost, 'introduction' | 'sections' | 'takeaway'> & {
-  status: BlogPostStatus
+export type DailyProgressEntry = Omit<ArticleContent, 'introduction' | 'sections' | 'takeaway'> & {
+  status: ArticleStatus
   introduction: DailyArticleBlock[]
   sections: DailyArticleSection[]
   takeaway: DailyArticleBlock[]
@@ -143,10 +143,10 @@ const expectDate = (value: unknown, field: string): string => {
   return date
 }
 
-const expectEditorialStatus = (value: unknown, field: string): BlogPostStatus => {
+const expectEditorialStatus = (value: unknown, field: string): ArticleStatus => {
   const status = expectString(value, field)
   if (!(EDITORIAL_STATES as readonly string[]).includes(status)) fail(field, `must be one of ${EDITORIAL_STATES.join(', ')}`)
-  return status as BlogPostStatus
+  return status as ArticleStatus
 }
 
 const expectProgressState = (value: unknown, field: string): ChallengeProgressState => {

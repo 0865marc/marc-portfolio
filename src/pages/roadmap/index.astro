@@ -57,21 +57,22 @@ const displayWeeks: DisplayWeek[] = [
 ---
 
 <BaseLayout
-  title={`${challenge.title} — Marc Teixidó`}
-  description="Plan de ocho semanas con objetivos previstos de IA generativa, arquitectura cloud y despliegue de soluciones de IA; el estado planificado no representa trabajo completado."
+  title="Plan de formación de 2026 — Marc Teixidó"
+  description="Archivo del plan de formación de ocho semanas en IA generativa y arquitectura cloud."
   canonicalPath="/roadmap/"
 >
   <main class="min-h-screen px-5 py-8 sm:px-8 md:px-10 md:py-10">
     <div class="mx-auto max-w-6xl">
-      <a class="control" href="/#career-sprint">Volver al Career Sprint <span aria-hidden="true">↖</span></a>
+      <a class="control" href="/#formacion">Volver a formación <span aria-hidden="true">↖</span></a>
       <header class="mt-12 grid items-start gap-6 md:mt-16 xl:grid-cols-[minmax(0,1.15fr)_minmax(18rem,.65fr)] xl:gap-12">
         <div class="min-w-0">
-          <p class="section-kicker">Plan de 8 semanas · {formatDate(challenge.startDate)} — {formatDate(challenge.endDate)}</p>
-          <h1 data-route-heading tabindex="-1" class="mt-5 max-w-4xl break-words text-[clamp(2.75rem,7vw,5rem)] font-black uppercase leading-[.95] tracking-[-.02em]">{challenge.title}</h1>
+          <p class="section-kicker">Archivo · {formatDate(challenge.startDate)} — {formatDate(challenge.endDate)}</p>
+          <h1 data-route-heading tabindex="-1" class="mt-5 max-w-4xl break-words text-[clamp(2.75rem,7vw,5rem)] font-black uppercase leading-[.95] tracking-[-.02em]">Plan de formación de 2026</h1>
         </div>
         <div class="min-w-0">
-          <p class="max-w-2xl text-lg font-light leading-relaxed opacity-70 xl:text-xl">Este plan reúne objetivos previstos de IA generativa, arquitectura cloud y despliegue de soluciones de IA. El estado planificado no representa trabajo completado.</p>
-          <a class="control mt-5" href={progressHref()}>Ver evidencia publicada <span aria-hidden="true">↗</span></a>
+          <p class="max-w-2xl text-lg font-light leading-relaxed opacity-70 xl:text-xl">El itinerario original recoge los objetivos de ocho semanas. Las explicaciones de lo aprendido están organizadas por conceptos en el cuaderno de IA.</p>
+          <a class="control mt-5" href="/aprendizaje/">Explorar conceptos <span aria-hidden="true">↗</span></a>
+          <a class="control mt-3" href={progressHref()}>Archivo de notas <span aria-hidden="true">↗</span></a>
         </div>
       </header>
 
@@ -87,7 +88,7 @@ const displayWeeks: DisplayWeek[] = [
                     <span aria-hidden="true">·</span>
                     <p class="normal-case tracking-normal">{formatDate(week.startDate)} — {formatDate(week.displayEndDate)}</p>
                     <span aria-hidden="true">·</span>
-                    <p>{progressLabels[week.progressState]}</p>
+                    <p>{week.progressState === 'planned' ? 'Objetivo previsto' : progressLabels[week.progressState]}</p>
                   </div>
                   <h2 class="mt-2 break-words text-2xl font-medium uppercase leading-tight sm:text-3xl" data-route-heading tabindex="-1">
                     {week.resource ? (
@@ -119,7 +120,7 @@ const displayWeeks: DisplayWeek[] = [
                     class="!inline-flex !min-h-11 !w-fit max-w-full !cursor-pointer !items-center !gap-2 !rounded-full border border-[#D7E2EA]/30 bg-[#D7E2EA]/[0.04] px-3 py-1.5 text-xs font-medium uppercase tracking-[.16em] transition-colors duration-200 hover:border-[rgb(215_226_234_/_0.6)] hover:bg-[rgb(215_226_234_/_0.08)] hover:text-[#FFFFFF] focus-visible:outline-[3px] focus-visible:outline-[#D7E2EA] focus-visible:outline-offset-4"
                     aria-controls={`roadmap-details-${week.id}-panel`}
                   >
-                    <span class="break-words">Ver agenda y temas previstos</span>
+                    <span class="break-words">Agenda y temas</span>
                     <span aria-hidden="true" class="opacity-50">·</span>
                     <span class="inline-grid w-14 shrink-0">
                       <span class="col-start-1 row-start-1 group-open:hidden">Abrir</span>

@@ -13,30 +13,25 @@ backend:
 publish_mode: editorial_workflow
 
 collections:
-  - name: posts
-    label: Conocimiento
-    label_singular: Artículo de conocimiento
-    description: >-
-      Guarda cambios en una rama y pull request. El estado controla la salida pública tras el merge.
-    folder: content/posts
+  - name: concepts
+    label: Conceptos de IA
+    label_singular: Concepto
+    description: Explicaciones por temas, con ejemplos y aplicaciones. Publica solo conceptos trabajados; los planes de formación se mantienen aparte.
+    folder: content/concepts
     format: json
     identifier_field: id
+    create: true
     delete: false
     publish: false
     reorder:
       key: position
-    sortable_fields:
-      fields: [position, title, publishedAt, status]
-      default:
-        field: position
-        direction: ascending
-    summary: '{{position}} · {{title}}'
-    preview_path: '/blog/{{slug}}/'
+    summary: '{{category}} · {{title}}'
+    preview_path: '/aprendizaje/{{slug}}/'
     fields:
       - label: ID permanente
         name: id
         widget: string
-        hint: No cambiar ni reutilizar después de crear el artículo.
+        hint: No cambiar ni reutilizar después de crear el concepto.
         pattern: ['^[a-z0-9]+(?:-[a-z0-9]+)*$', 'Usa minúsculas, números y guiones simples.']
       - label: Estado público
         name: status
@@ -50,7 +45,7 @@ collections:
         widget: number
         value_type: int
         min: 1
-        hint: Orden ascendente en la landing y el índice. También se puede reordenar desde la lista.
+        hint: Orden de los conceptos en su colección. También se puede reordenar desde la lista.
       - label: Categoría
         name: category
         widget: string

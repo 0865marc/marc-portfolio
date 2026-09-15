@@ -5,29 +5,30 @@ const { identity } = professionalProfile
 const currentExperience = professionalProfile.experience.find(entry => entry.endDate === null)!
 ---
 
-<section aria-labelledby="hero-title" class="flex min-h-[100svh] items-center px-5 py-8 sm:px-8 md:px-10 md:py-10">
-  <div class="mx-auto flex min-h-[calc(100svh-4rem)] w-full max-w-[1440px] flex-col md:min-h-[calc(100svh-5rem)]">
+<section aria-labelledby="hero-title" class="px-5 py-8 sm:px-8 md:px-10 md:py-10">
+  <div class="mx-auto w-full max-w-6xl">
     <nav data-intro style="--intro-delay: 40ms" aria-label="Navegación principal" class="landing-nav">
       <p class="landing-nav-mark">{identity.displayName} · Portfolio</p>
       <ul class="landing-nav-list">
-        <li><a class="landing-nav-link" href="#about"><span aria-hidden="true">01</span> Perfil</a></li>
-        <li><a class="landing-nav-link" href="#career-sprint"><span aria-hidden="true">02</span> Career Sprint</a></li>
-        <li><a class="landing-nav-link" href="#contact"><span aria-hidden="true">03</span> Contacto</a></li>
+        <li><a class="landing-nav-link" href="#about">Perfil</a></li>
+        <li><a class="landing-nav-link" href="#projects">Proyectos</a></li>
+        <li><a class="landing-nav-link" href="#formacion">Formación</a></li>
+        <li><a class="landing-nav-link" href="#contact">Contacto</a></li>
       </ul>
     </nav>
 
 
-    <div class="my-auto grid items-end gap-12 py-16 lg:grid-cols-[minmax(0,1fr)_22rem]">
+    <div class="grid items-end gap-8 pb-10 pt-12 sm:py-16 lg:grid-cols-[minmax(0,1fr)_12rem]">
       <div class="min-w-0">
-        <p data-intro style="--intro-delay: 140ms" class="text-sm uppercase tracking-[.2em] opacity-65">{identity.positioning}</p>
-        <h1 id="hero-title" data-route-heading tabindex="-1" data-intro style="--intro-delay: 210ms" class="hero-heading mt-6 break-words text-[clamp(3.5rem,11vw,9rem)] font-black uppercase leading-[.86]">
+        <p data-intro style="--intro-delay: 140ms" class="max-w-xl text-base font-light leading-relaxed opacity-80">{identity.headline}</p>
+        <h1 id="hero-title" data-route-heading tabindex="-1" data-intro style="--intro-delay: 210ms" class="hero-heading mt-5 break-words text-[clamp(3.5rem,9vw,5.5rem)] font-black uppercase leading-[.98]">
           {identity.displayName}
         </h1>
-        <p data-intro style="--intro-delay: 280ms" class="mt-8 max-w-3xl text-2xl font-medium leading-tight sm:text-3xl">{currentExperience.role} en {currentExperience.company}</p>
-        <p data-intro style="--intro-delay: 340ms" class="mt-5 max-w-2xl text-xl font-light leading-relaxed sm:text-2xl">{identity.summary}</p>
+        <p data-intro style="--intro-delay: 280ms" class="mt-6 max-w-3xl text-xl font-medium leading-snug sm:text-2xl">{currentExperience.role} en {currentExperience.company}</p>
+        <p data-intro style="--intro-delay: 340ms" class="mt-4 max-w-2xl text-lg font-light leading-relaxed sm:text-xl">{identity.summary}</p>
         <div data-intro style="--intro-delay: 400ms" class="mt-9 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap">
-          <a class="button-light" href="#contact">Contactar <span aria-hidden="true">↓</span></a>
-          <a class="control" href="#about">Ver experiencia <span aria-hidden="true">↓</span></a>
+          <a class="button-light" href="#projects">Ver proyectos <span aria-hidden="true">↓</span></a>
+          <a class="control" href="#contact">Contactar <span aria-hidden="true">↓</span></a>
         </div>
       </div>
 
@@ -36,10 +37,6 @@ const currentExperience = professionalProfile.experience.find(entry => entry.end
           <div>
             <dt class="text-xs uppercase tracking-[.22em] opacity-60">Ubicación</dt>
             <dd class="mt-2 text-lg font-light leading-relaxed">{identity.location}</dd>
-          </div>
-          <div>
-            <dt class="text-xs uppercase tracking-[.22em] opacity-60">Empresa actual</dt>
-            <dd class="mt-2 text-lg font-light leading-relaxed">{currentExperience.company}</dd>
           </div>
         </dl>
       </aside>

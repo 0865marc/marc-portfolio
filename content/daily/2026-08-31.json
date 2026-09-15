@@ -6,8 +6,9 @@
   "weekId": "w2",
   "category": "Career Sprint",
   "tags": [
-    "verificacion",
-    "reproducibilidad"
+    "transformers",
+    "atencion",
+    "clasificacion"
   ],
   "title": "De situar cada token a clasificar documentos con contexto",
   "excerpt": "Hoy he recorrido el camino desde los IDs de una secuencia hasta una predicción y he entendido cómo los componentes del transformer aportan contexto antes de clasificar documentos.",

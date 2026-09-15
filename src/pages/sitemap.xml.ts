@@ -1,5 +1,4 @@
 import type { APIRoute } from 'astro'
-import { blogPosts } from '../data/blog'
 import { dailyProgressEntries } from '../data/challenge'
 
 export const prerender = true
@@ -15,11 +14,10 @@ export const GET: APIRoute = ({ site }) => {
   const origin = site ?? new URL('https://portfolio.mybrawl.io')
   const entries = [
     { path: '/', lastmod: null },
+    { path: '/aprendizaje/', lastmod: null },
     { path: '/roadmap/', lastmod: null },
     { path: '/career-sprint-daily/', lastmod: null },
     { path: '/proyectos/ainkii/', lastmod: '2026-08-10' },
-    { path: '/blog/', lastmod: null },
-    ...blogPosts.map(post => ({ path: `/blog/${post.id}/`, lastmod: post.publishedAt })),
     ...dailyProgressEntries.map(entry => ({ path: `/career-sprint-daily/${entry.activityDate}/`, lastmod: entry.activityDate })),
   ]
   const urls = entries.map(entry => {

@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import LearningLab from '../../components/LearningLab.astro'
+import ArticleInlineText from '../../components/ArticleInlineText.astro'
+import { learningConcepts } from '../../data/learning'
+import { learningCourses, specializationUrl } from '../../data/learningCourses'
+import '../../learning.css'
+---
+<BaseLayout title="Aprender a construir con LLMs — Marc Teixidó" description="Mi aprendizaje en curso con Generative AI Engineering with LLMs: explicaciones y ejemplos visuales que comparto a medida que avanzo." canonicalPath="/aprendizaje/">
+  <main class="learning-page">
+    <header class="learning-header">
+      <a class="control" href="/#formacion">Volver al portfolio <span aria-hidden="true">↖</span></a>
+      <p class="section-kicker">Mi aprendizaje · IBM / Coursera</p>
+      <h1 data-route-heading tabindex="-1">Aprender a construir con LLMs</h1>
+      <p>Estoy cursando <a href={specializationUrl}>Generative AI Engineering with LLMs ↗</a>. Aquí comparto lo que voy aprendiendo, con explicaciones y ejemplos para explorar los conceptos de cada curso.</p>
+    </header>
+    <div class="learning-layout">
+      <nav class="course-nav" aria-label="Cursos de la especialización">
+        <p class="course-nav-title">Cursos de la especialización</p>
+        <details data-course-menu open>
+          <summary><span>Seleccionar curso<strong data-current-course hidden></strong></span><span aria-hidden="true">⌄</span></summary>
+          <ol>{learningCourses.map((course, i) => <li>
+            {course.available
+              ? <a href={`#${course.id}`} data-course-link><span>{String(i + 1).padStart(2, '0')}</span>{course.title}</a>
+              : <button type="button" class="course-unavailable" disabled><span>{String(i + 1).padStart(2, '0')}</span><span>{course.title}<small>Pendiente</small></span></button>}
+          </li>)}</ol>
+        </details>
+      </nav>
+      <div class="learning-content">
+        <div class="course-sections">
+          {learningCourses.map((course, i) => course.available && <section id={course.id} class="course-section" aria-labelledby={`${course.id}-title`}>
+            <header class="course-header">
+              <p class="course-number">Curso {String(i + 1).padStart(2, '0')} <span>{course.concepts.length ? 'Con ejemplos' : 'Conceptos clave'}</span></p>
+              <h2 id={`${course.id}-title`} data-route-heading tabindex="-1">{course.title}</h2>
+              <a class="course-source" href={course.url}>{course.officialTitle} <span aria-hidden="true">↗</span></a>
+            </header>
+            <div class="course-explainer">
+              <div class="course-copy">
+                <h3>{course.question}</h3>
+                <p>{course.description}</p>
+                <dl>{course.ideas.map(([term, explanation]) => <div><dt>{term}</dt><dd>{explanation}</dd></div>)}</dl>
+              </div>
+              {i < 3 ? <LearningLab course={course.id} /> : 'flow' in course && <figure class="course-diagram">
+                <figcaption>Las piezas del proceso</figcaption>
+                <ol>{course.flow.map(([title, detail], step) => <li><span aria-hidden="true">{step + 1}</span><div><strong>{title}</strong><p>{detail}</p></div></li>)}</ol>
+                <p class="diagram-takeaway">{course.takeaway}</p>
+              </figure>}
+            </div>
+            {course.concepts.length > 0 && <div class="course-notes">
+              <p>Para profundizar</p>
+              {course.concepts.map(id => {
+                const concept = learningConcepts.find(item => item.id === id)
+                return concept && <details>
+                  <summary>{concept.title}</summary>
+                  <div class="concept-explanation">
+                    {concept.sections.map(section => <div>
+                      <h3>{section.heading}</h3>
+                      {section.paragraphs.map(paragraph => <p><ArticleInlineText text={paragraph} /></p>)}
+                      {section.points && <ul>{section.points.map(point => <li><ArticleInlineText text={point} /></li>)}</ul>}
+                      {section.codeBlocks?.map(block => <pre tabindex="0" aria-label={block.title ?? 'Ejemplo'}><code>{block.code}</code></pre>)}
+                    </div>)}
+                  </div>
+                </details>
+              })}
+            </div>}
+          </section>)}
+        </div>
+        <footer class="learning-footer"><p>Marc Teixidó · Apuntes y ejemplos propios a partir del programa de IBM.</p><a class="control" href="/#formacion">Volver a mi formación <span aria-hidden="true">↖</span></a></footer>
+      </div>
+    </div>
+  </main>
+  <style set:html={learningCourses.filter(course => course.available).map(course => `.learning-page:has(#${course.id}:target) a[href="#${course.id}"] { background: #d7e2ea; color: #0c0c0c; font-weight: 500; }`).join('\n')} />
+  <script src="../../scripts/learningLabs.ts"></script>
+</BaseLayout>

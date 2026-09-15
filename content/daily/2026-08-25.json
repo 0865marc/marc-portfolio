@@ -6,8 +6,9 @@
   "weekId": "w1",
   "category": "Career Sprint",
   "tags": [
-    "verificacion",
-    "reproducibilidad"
+    "embeddings",
+    "clasificacion",
+    "modelos-de-lenguaje"
   ],
   "title": "De los índices a la predicción: embeddings, clasificación y modelos n-grama",
   "excerpt": "Embeddings, clasificación y modelos n-grama: de los IDs discretos a las representaciones que una red puede aprender y reutilizar.",

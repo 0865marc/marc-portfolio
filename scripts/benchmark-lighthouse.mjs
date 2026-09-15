@@ -9,7 +9,7 @@ const option = (name, fallback) => {
   return index < 0 ? fallback : values[index + 1]
 }
 const runs = Number(option('runs', '5'))
-const routes = option('routes', '/,/blog/').split(',').filter(Boolean)
+const routes = option('routes', '/,/aprendizaje/').split(',').filter(Boolean)
 const outputDirectory = resolve(option('output', 'lighthouse-results'))
 const targets = [['baseline', option('baseline')], ['candidate', option('candidate')]].filter(([, url]) => url)
 const targetRoutes = {
@@ -18,7 +18,7 @@ const targetRoutes = {
 }
 if (targets.length === 2 && targetRoutes.baseline.length !== targetRoutes.candidate.length) throw new Error('Baseline and candidate route lists must have equal lengths')
 if (!targets.length || !Number.isInteger(runs) || runs < 1) {
-  throw new Error('Usage: npm run benchmark:lighthouse -- --baseline URL --candidate URL [--runs 5] [--routes /,/blog/]')
+  throw new Error('Usage: npm run benchmark:lighthouse -- --baseline URL --candidate URL [--runs 5] [--routes /,/aprendizaje/]')
 }
 
 const chromePath = process.env.CHROME_PATH

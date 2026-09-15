@@ -57,7 +57,7 @@ for (const width of [375, 360, 390]) {
       const cls = shifts.reduce((total, shift) => total + shift.value, 0)
       console.log(JSON.stringify({ width, cls, fallback, loaded }))
       expect(await page.evaluate(() => document.fonts.check('500 13px Kanit'))).toBe(true)
-      expect(fallback.map(link => link.href)).toEqual(['#contact', '#about'])
+      expect(fallback.map(link => link.href)).toEqual(['#projects', '#contact'])
       expect(loaded.every(link => link.height >= 44 && link.x >= 20 && link.x + link.width <= width - 20)).toBe(true)
       expect.soft(cls, JSON.stringify({ requests: [...requests], shifts })).toBeLessThanOrEqual(0.1)
       // Font metrics may change widths, but must not change the CTA row arrangement.

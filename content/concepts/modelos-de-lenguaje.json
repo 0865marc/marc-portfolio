@@ -1,0 +1,51 @@
+{
+  "id": "modelos-de-lenguaje",
+  "status": "published",
+  "position": 4,
+  "publishedAt": "2026-09-07",
+  "category": "Representar el lenguaje",
+  "tags": [
+    "modelos-de-lenguaje",
+    "secuencias"
+  ],
+  "title": "Contexto y modelos de lenguaje",
+  "excerpt": "Cómo se aprende a continuar un texto a partir de lo que ya está escrito.",
+  "introduction": [
+    "Un modelo de lenguaje calcula qué tokens podrían venir después y les asigna probabilidades. Al repetir el proceso, puede continuar una frase."
+  ],
+  "sections": [
+    {
+      "heading": "Predecir la siguiente pieza",
+      "paragraphs": [
+        "Después de «Hoy hace mucho», podrían encajar «frío», «calor» o «viento». El modelo calcula probabilidades a partir del contexto. Para generar texto se elige un token según esas probabilidades y se añade a la frase; el proceso vuelve a empezar.",
+        "Un modelo de n-gramas utiliza una cantidad limitada de tokens anteriores. Por ejemplo, un trigrama predice usando los dos anteriores. Es una forma sencilla de trabajar con contexto, aunque deja fuera lo que se dijo antes de esa ventana.",
+        "En una versión neuronal, se pueden colocar los embeddings de la ventana uno detrás de otro. Esto se llama concatenar y permite conservar el lugar que ocupa cada token."
+      ],
+      "codeBlocks": [
+        {
+          "title": "Ejemplo paso a paso",
+          "language": "text",
+          "code": "Texto disponible → probabilidades → elegir un token\n        ↑                                  |\n        └──── añadirlo al texto ────────────┘"
+        }
+      ]
+    },
+    {
+      "heading": "Una memoria que se actualiza",
+      "paragraphs": [
+        "Una red recurrente, o RNN, recorre el texto paso a paso. En cada paso actualiza una lista de números que resume lo que ha visto. Esa memoria numérica se llama estado oculto.",
+        "La memoria tiene un tamaño fijo. Cuanto más largo es el texto, más información tiene que condensar en el mismo espacio; por eso puede costarle conservar detalles lejanos."
+      ]
+    },
+    {
+      "heading": "Leer una frase y producir otra",
+      "paragraphs": [
+        "En una traducción, la frase de entrada y la de salida pueden tener distinta longitud y orden. Un modelo encoder–decoder reparte el trabajo: el encoder representa la entrada y el decoder genera la salida paso a paso.",
+        "Al entrenar, podemos darle al decoder el token anterior correcto para que practique el siguiente paso. Esto se llama teacher forcing. Al generar una traducción nueva, continúa a partir de lo que él mismo ha producido, de modo que un error puede influir en los siguientes.",
+        "Las entradas y las respuestas esperadas van desplazadas una posición: con «El gato» se practica predecir «duerme»; con «El gato duerme» se practica lo que viene después. Algunas tareas usan además tokens especiales de inicio y final."
+      ]
+    }
+  ],
+  "takeaway": [
+    "Generar texto consiste en continuar a partir de un contexto. La forma de conservar ese contexto determina qué información puede usar el modelo en cada paso."
+  ]
+}

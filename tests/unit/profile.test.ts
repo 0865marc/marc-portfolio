@@ -8,11 +8,11 @@ describe('professional profile source', () => {
       location: 'Balaguer, Lleida',
       headline: 'Ingeniero de software y responsable de proyectos IT',
       positioning: 'Perfil orientado a Product Engineering con foco en IA aplicada',
-      summary: 'Conecto visión de producto y ejecución técnica para convertir necesidades en software, coordinar su entrega y aplicar automatización e IA cuando aportan valor.',
-      aboutIntro: 'Mi experiencia combina desarrollo full-stack y coordinación de proyectos IT. Trabajo entre las necesidades de producto, las decisiones técnicas y la entrega, manteniendo una visión de principio a fin.',
+      summary: 'Desarrollo software y coordino proyectos desde las necesidades de producto hasta la entrega. Incorporo automatización e IA a procesos de documentación, contenido y monitorización.',
+      aboutIntro: 'He trabajado en desarrollo full-stack, migración de plataformas y coordinación de servicios web, móviles y cloud. Esa experiencia conecta mis decisiones técnicas con las necesidades del producto y del equipo.',
       seo: {
         title: 'Marc Teixidó — Product Engineering e IA aplicada',
-        description: 'Perfil orientado a Product Engineering con foco en IA aplicada y evidencia publicada: cerca de 3 años full-stack y alrededor de 1 año coordinando proyectos IT.',
+        description: 'Ingeniería de software, coordinación de proyectos IT e IA aplicada. Experiencia, proyectos y formación de Marc Teixidó, en Balaguer, Lleida.',
         imageAlt: 'Marc Teixidó — Product Engineering, cerca de 3 años full-stack, alrededor de 1 año coordinando proyectos IT e IA aplicada',
       },
     })
@@ -58,8 +58,8 @@ describe('professional profile source', () => {
     expect(ainkii.status).toBe('En desarrollo')
     expect(ainkii).toMatchObject({
       href: '/proyectos/ainkii/',
-      teaser: 'Exploración de producto educativo en desarrollo.',
-      description: 'Ainkii es un proyecto en desarrollo que explora cómo ordenar materiales de aprendizaje con apoyo de IA.',
+      teaser: 'Una herramienta en desarrollo para docentes que crean sus propios materiales de estudio.',
+      description: 'Estoy desarrollando Ainkii para ayudar a docentes a convertir sus temarios en materiales de estudio conectados, con apoyo de IA y revisión editorial en cada paso.',
     })
     expect(professionalProfile.projects.every(project => project.sourceId === PROFILE_SOURCE_ID)).toBe(true)
   })
