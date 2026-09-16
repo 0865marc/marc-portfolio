@@ -149,7 +149,7 @@ export const professionalProfile: ProfessionalProfile = {
     institution: 'Universitat de Lleida',
     startYear: 2018,
     endYear: 2022,
-    context: 'El grado me dio una base transversal en electrónica, automatización y programación. Durante esos años orienté cada vez más mi trabajo hacia el desarrollo de software, los datos y los sistemas conectados.',
+    context: 'El grado me dio una base transversal en electrónica, automatización y programación. Orienté mis optativas hacia el Internet de las Cosas (IoT), la programación y las comunicaciones.',
   },
   languages: [
     { language: 'Catalán', level: 'Nativo', context: 'Uso habitual en entornos personales y profesionales.' },

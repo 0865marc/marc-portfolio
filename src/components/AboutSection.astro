@@ -1,7 +1,7 @@
 ---
 import { professionalProfile } from '../data/portfolio'
 
-const { identity, facts, experience, languages, education } = professionalProfile
+const { identity, facts, experience, languages } = professionalProfile
 ---
 
 <section id="about" aria-labelledby="about-title" class="scroll-mt-6 px-5 py-16 sm:px-8 md:px-10 md:py-24">
@@ -13,8 +13,6 @@ const { identity, facts, experience, languages, education } = professionalProfil
       </div>
       <p data-section-intro-copy class="min-w-0 max-w-3xl text-xl font-light leading-relaxed opacity-80">{identity.aboutIntro}</p>
     </div>
-
-    <p data-education class="mt-6 max-w-3xl font-light leading-relaxed opacity-75">{education.qualification} · {education.institution}, {education.startYear}–{education.endYear}.</p>
 
     <dl class="profile-facts mx-auto mt-14 max-w-4xl">
       {facts.map((fact, index) => (

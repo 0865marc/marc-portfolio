@@ -4,7 +4,9 @@ El sitio es estático: el perfil y el catálogo de cursos viven en TypeScript; l
 
 ## Formación y aprendizaje por cursos
 
-La portada presenta experiencia, Ainkii y ButiPunt, formación continua y contacto. El grado universitario aparece una sola vez en el perfil; `FormationSection.astro` presenta la especialización IBM/Coursera como formación en curso. El bloque de formación prevista en AWS se ha retirado.
+La portada presenta experiencia, Ainkii y ButiPunt, formación académica y continua y contacto. `FormationSection.astro` presenta primero el grado en Ingeniería Electrónica Industrial y Automática, en una tarjeta destacada con la Universitat de Lleida, el periodo 2018–2022 y el contexto de `professionalProfile.education`. El grado aparece una sola vez en la portada y ya no se incluye en Experiencia. Debajo se presenta la especialización IBM/Coursera como formación en curso. El bloque de formación prevista en AWS se ha retirado.
+
+El emblema circular de la Universitat de Lleida — Escola Politècnica Superior procede de la imagen proporcionada por el propietario el 16 de septiembre de 2026. El original se conserva en `src/assets/universitat-lleida-eps.png`; Astro genera una versión PNG a su tamaño nativo de 364 × 364 píxeles para servirlo localmente. Se mantienen las proporciones y los colores, dentro de un marco blanco cuadrado con esquinas redondeadas, del mismo tamaño y con el mismo margen interior que la imagen de IBM/Coursera. El marco pertenece al contenedor; la imagen tiene un contorno circular propio para evitar el remate plano del borde inferior del archivo original.
 
 La imagen de la especialización se sirve desde `public/media/certifications/generative-ai-engineering-with-llms.png`, proporcionada por el propietario el 16 de septiembre de 2026. Se conserva el archivo original completo, sin recortes; identifica el programa y no cambia su estado de formación en curso.
 
