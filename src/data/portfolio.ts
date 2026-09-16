@@ -1,4 +1,5 @@
 export const PROFILE_SOURCE_ID = 'profile-2026-08-10' as const
+export const PROJECT_SOURCE_ID = 'public-projects-2026-09-16' as const
 
 export type ProfileFact = {
   label: string
@@ -19,11 +20,15 @@ export type Experience = {
 }
 
 export type Project = {
-  id: 'ainkii'
+  id: 'ainkii' | 'butipunt'
   canonicalName: string
   aliases: string[]
   category: string
   status: string
+  availability: string
+  website: string
+  websiteLabel: string
+  logo: { src: string; width: number; height: number }
   href: string
   teaser: string
   description: string
@@ -33,7 +38,7 @@ export type Project = {
   model: string[]
   capabilities: string[]
   principle: string
-  sourceId: typeof PROFILE_SOURCE_ID
+  sourceId: typeof PROJECT_SOURCE_ID
 }
 
 export type ProfessionalProfile = {
@@ -158,21 +163,51 @@ export const professionalProfile: ProfessionalProfile = {
       aliases: ['Ainki'],
       category: 'Producto educativo personal',
       status: 'En desarrollo',
+      availability: 'Landing pública. La aplicación interna todavía no está abierta al público.',
+      website: 'https://ainkii.mteixido.dev/',
+      websiteLabel: 'Abrir Ainkii',
+      logo: { src: '/media/projects/ainkii-logo.svg', width: 320, height: 100 },
       href: '/proyectos/ainkii/',
-      teaser: 'Una herramienta en desarrollo para docentes que crean sus propios materiales de estudio.',
-      description: 'Estoy desarrollando Ainkii para ayudar a docentes a convertir sus temarios en materiales de estudio conectados, con apoyo de IA y revisión editorial en cada paso.',
-      focus: 'Recorrido de un temario a materiales de estudio',
-      tags: ['Producto educativo', 'IA aplicada', 'Materiales de aprendizaje'],
-      audience: 'Profesores y creadores de materiales educativos.',
+      teaser: 'Contenido, tarjetas de práctica y seguimiento del aprendizaje en un mismo espacio para alumnos y academias. La IA ayuda a preparar materiales bajo revisión humana.',
+      description: 'Estoy desarrollando Ainkii para conectar lo que una academia enseña con lo que sus alumnos comprenden y practican: temarios estructurados, tarjetas vinculadas al contenido y seguimiento del aprendizaje.',
+      focus: 'Entender, practicar y reconocer el avance.',
+      tags: ['Aprendizaje conectado', 'IA editorial', 'Alumnos y academias'],
+      audience: 'Alumnos que estudian con su academia y docentes que preparan y acompañan ese recorrido.',
       model: ['Temarios', 'Temas', 'Conocimientos', 'Tarjetas de aprendizaje'],
       capabilities: [
-        'Desglosar un temario en temas, conceptos y tarjetas de aprendizaje.',
-        'Detectar huecos y relaciones entre los contenidos.',
-        'Redactar y revisar materiales con ayuda de IA.',
-        'Revisar cada propuesta antes de incorporarla al material.',
+        'Organizar temarios en temas y conocimientos conectados mediante relaciones y requisitos.',
+        'Practicar con tarjetas vinculadas a los conocimientos leídos y orientar el repaso según los resultados.',
+        'Consultar lecturas, práctica y precisión para acompañar el progreso de cada alumno.',
+        'Preparar borradores a partir de fuentes PDF y vídeo, con propuestas de IA que se revisan antes de aplicarse.',
       ],
       principle: 'El profesor decide los cambios.',
-      sourceId: PROFILE_SOURCE_ID,
+      sourceId: PROJECT_SOURCE_ID,
+    },
+    {
+      id: 'butipunt',
+      canonicalName: 'ButiPunt',
+      aliases: [],
+      category: 'Gestión de torneos presenciales',
+      status: 'Disponible',
+      availability: 'Aplicación pública, sin registro. El torneo se guarda en el navegador del dispositivo.',
+      website: 'https://butipunt.mteixido.dev/',
+      websiteLabel: 'Abrir ButiPunt',
+      logo: { src: '/media/projects/butipunt-logo.svg', width: 320, height: 100 },
+      href: '/proyectos/butipunt/',
+      teaser: 'Una aplicación para organizar torneos de butifarra: inscribir parejas, preparar rondas, anotar resultados y consultar la clasificación desde el navegador, sin crear una cuenta.',
+      description: 'He creado ButiPunt para llevar la organización de un torneo de butifarra de principio a fin. Reúne parejas, mesas, rondas y clasificación, mientras las partidas se juegan presencialmente.',
+      focus: 'El juego, en la mesa. El torneo, organizado.',
+      tags: ['Torneos de butifarra', 'Sin registro', 'Guardado local'],
+      audience: 'Personas que organizan torneos presenciales de butifarra por parejas.',
+      model: ['Parejas', 'Rondas', 'Resultados', 'Clasificación'],
+      capabilities: [
+        'Crear un torneo con nombre, número de rondas y los dos jugadores de cada pareja.',
+        'Sortear la primera ronda y consultar las parejas asignadas a cada mesa.',
+        'Anotar y confirmar resultados, corregir los de la ronda actual y consultar rondas anteriores.',
+        'Actualizar la clasificación y preparar las siguientes rondas según victorias y puntos.',
+      ],
+      principle: 'Las partidas se juegan en la mesa; la aplicación lleva la organización.',
+      sourceId: PROJECT_SOURCE_ID,
     },
   ],
   contacts: {

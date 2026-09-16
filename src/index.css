@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Keep document navigation native, with a static fallback for no-script browsing. */
+@media (scripting: enabled) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+::view-transition-group(*) {
+  animation-duration: 260ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 180ms;
+  animation-timing-function: ease-out;
+}
+
 :root {
   color: #d7e2ea;
   background: #0c0c0c;
@@ -593,7 +611,23 @@ a {
   }
 }
 
+@media (scripting: none) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+
   html {
     scroll-behavior: auto;
   }

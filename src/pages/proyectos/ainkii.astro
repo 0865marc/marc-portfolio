@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import AinkiiModel from '../../components/AinkiiModel.astro'
+import ProjectBrand from '../../components/ProjectBrand.astro'
 import { professionalProfile } from '../../data/portfolio'
 
 const ainkii = professionalProfile.projects.find(project => project.id === 'ainkii')!
@@ -10,6 +11,8 @@ const ainkiiJsonLd = {
   name: ainkii.canonicalName,
   description: ainkii.description,
   url: new URL('/proyectos/ainkii/', Astro.site).href,
+  sameAs: ainkii.website,
+  image: new URL(ainkii.logo.src, Astro.site).href,
   inLanguage: 'es',
   genre: 'Producto educativo',
   creator: {
@@ -26,7 +29,7 @@ const ainkiiJsonLd = {
 
 <BaseLayout
   title="Ainkii — Producto educativo en desarrollo | Marc Teixidó"
-  description="Proyecto educativo en desarrollo que explora cómo ayudar a docentes a revisar temarios y organizar materiales de estudio con apoyo de IA."
+  description="Ainkii conecta temarios, tarjetas de práctica y seguimiento para alumnos y academias. Proyecto en desarrollo con landing pública; aplicación interna aún no abierta al público."
   canonicalPath="/proyectos/ainkii/"
   imageAlt="Ainkii — proyecto educativo en desarrollo para organizar materiales de aprendizaje"
   jsonLd={ainkiiJsonLd}
@@ -34,7 +37,7 @@ const ainkiiJsonLd = {
   <main>
     <header class="px-5 pb-20 pt-8 sm:px-8 md:px-10 md:pb-28 md:pt-10">
       <div class="mx-auto max-w-6xl">
-        <a class="control" href="/">Volver al portfolio <span aria-hidden="true">↖</span></a>
+        <a class="control" href="/#projects">Volver a los proyectos <span aria-hidden="true">↖</span></a>
         <div class="mt-16 grid items-end gap-10 lg:grid-cols-[minmax(0,1fr)_22rem]">
           <div>
             <div class="flex flex-wrap gap-3 text-xs uppercase tracking-[.2em] opacity-60">
@@ -42,9 +45,12 @@ const ainkiiJsonLd = {
             </div>
             <h1 data-route-heading tabindex="-1" class="hero-heading mt-5 text-[clamp(4rem,14vw,10rem)] font-black uppercase leading-[.84]">Ainkii</h1>
             <p class="mt-8 max-w-4xl text-2xl font-light leading-relaxed sm:text-3xl">{ainkii.description}</p>
+            <p class="mt-6 max-w-2xl font-light leading-relaxed opacity-75">{ainkii.availability}</p>
+            <a class="button-light mt-6" href={ainkii.website}>{ainkii.websiteLabel} <span aria-hidden="true">↗</span></a>
           </div>
-          <aside class="border-l border-[#D7E2EA]/25 pl-6">
-            <p class="text-xs uppercase tracking-[.2em] opacity-60">Para quién</p>
+          <aside class="min-w-0">
+            <ProjectBrand project={ainkii} />
+            <p class="mt-6 text-xs uppercase tracking-[.2em] opacity-60">Para quién</p>
             <p class="mt-4 text-xl font-light leading-relaxed">{ainkii.audience}</p>
           </aside>
         </div>
@@ -57,7 +63,7 @@ const ainkiiJsonLd = {
           <div>
             <p class="section-kicker">Cómo se organiza</p>
             <h2 id="ainkii-purpose-title" class="mt-5 text-[clamp(2.75rem,7vw,6rem)] font-black uppercase leading-[.92]">Un temario conectado</h2>
-            <p class="mt-7 text-xl font-light leading-relaxed text-black/70">La estructura parte del temario: cada tema reúne los conceptos que hay que comprender y las tarjetas con las que se pueden estudiar. Así, cada material conserva su relación con lo que se quiere enseñar.</p>
+            <p class="mt-7 text-xl font-light leading-relaxed text-black/70">La estructura parte del temario: cada tema reúne conocimientos relacionados y tarjetas para practicarlos. Los requisitos orientan el orden de lectura y conectan cada ejercicio con lo que se necesita comprender antes.</p>
           </div>
           <AinkiiModel />
         </div>
@@ -65,10 +71,10 @@ const ainkiiJsonLd = {
         <section aria-labelledby="ainkii-capabilities-title" class="mt-24">
           <div class="grid gap-6 lg:grid-cols-[1fr_25rem] lg:items-end">
             <div>
-              <p class="section-kicker">Objetivo del producto</p>
-              <h3 id="ainkii-capabilities-title" class="mt-4 text-4xl font-medium uppercase sm:text-6xl">Qué quiero resolver</h3>
+              <p class="section-kicker">Propuesta del producto</p>
+              <h3 id="ainkii-capabilities-title" class="mt-4 text-4xl font-medium uppercase sm:text-6xl">De entender a practicar</h3>
             </div>
-            <p class="font-light leading-relaxed text-black/65">Preparar materiales implica ordenar, detectar lo que falta y revisar lo que ya existe. Estas son las tareas que quiero reunir en Ainkii.</p>
+            <p class="font-light leading-relaxed text-black/65">La landing presenta este recorrido y permite explorar una demostración con datos de ejemplo. El acceso a la aplicación interna todavía no está disponible públicamente.</p>
           </div>
           <ol class="ainkii-capabilities mt-12">
             {ainkii.capabilities.map((capability, index) => (
@@ -80,6 +86,18 @@ const ainkiiJsonLd = {
           </ol>
         </section>
 
+        <div class="mt-16 grid gap-10 border-t border-black/15 pt-10 md:grid-cols-2">
+          <section aria-labelledby="ainkii-student-title">
+            <p class="section-kicker">Para el alumno</p>
+            <h3 id="ainkii-student-title" class="mt-4 text-3xl font-medium">Leer, practicar, volver a repasar</h3>
+            <p class="mt-5 text-lg font-light leading-relaxed text-black/70">El recorrido propuesto empieza por leer un conocimiento y sus requisitos. Después se practican las tarjetas relacionadas. Las lecturas, la práctica y la precisión ayudan a reconocer el avance y los temas que necesitan más atención.</p>
+          </section>
+          <section aria-labelledby="ainkii-academy-title">
+            <p class="section-kicker">Para la academia</p>
+            <h3 id="ainkii-academy-title" class="mt-4 text-3xl font-medium">Preparar y acompañar</h3>
+            <p class="mt-5 text-lg font-light leading-relaxed text-black/70">La propuesta reúne edición de contenidos, relaciones entre conocimientos, gestión de accesos y seguimiento por alumno y tema. La IA editorial prepara borradores y sugiere mejoras; un docente revisa cada propuesta antes de incorporarla al curso.</p>
+          </section>
+        </div>
       </div>
     </section>
 
@@ -87,8 +105,8 @@ const ainkiiJsonLd = {
       <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_25rem] lg:items-end">
         <div>
           <p class="section-kicker">Estado</p>
-          <h2 id="ainkii-status-title" class="hero-heading mt-5 text-[clamp(3rem,9vw,7rem)] font-black uppercase leading-none">En desarrollo</h2>
-          <p class="mt-7 max-w-3xl text-xl font-light leading-relaxed opacity-80">El proyecto está en desarrollo. Estoy trabajando en la estructura de los contenidos y en cómo incorporar ayuda de IA durante su revisión, manteniendo las decisiones en manos del docente.</p>
+          <h2 id="ainkii-status-title" class="hero-heading mt-5 text-[clamp(3rem,9vw,7rem)] font-black uppercase leading-none">Landing pública</h2>
+          <p class="mt-7 max-w-3xl text-xl font-light leading-relaxed opacity-80">Ainkii está desplegado parcialmente: se puede visitar la presentación del producto y su demostración de ejemplo. La aplicación interna sigue en desarrollo y aún no tiene acceso público.</p>
         </div>
         <div class="ainkii-route-actions flex min-w-0 flex-col gap-3">
           <a class="button-light" href={`mailto:${professionalProfile.contacts.email}`}>Conversar sobre Ainkii <span aria-hidden="true">↗</span></a>

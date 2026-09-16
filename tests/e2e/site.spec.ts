@@ -54,7 +54,15 @@ test('landing makes projects, formation and contact discoverable', async ({ page
   await expect(navigation.locator('a')).toHaveText(['Perfil', 'Proyectos', 'Formación', 'Contacto'])
   for (const id of ['about', 'projects', 'formacion', 'contact']) await expect(page.locator(`#${id}`)).toBeVisible()
   await expect(page.getByRole('link', { name: 'Explorar el aprendizaje', exact: true })).toHaveAttribute('href', '/aprendizaje/')
-  await expect(page.getByRole('link', { name: 'Ver el proyecto', exact: true })).toHaveAttribute('href', '/proyectos/ainkii/')
+  for (const project of professionalProfile.projects) {
+    await expect(page.getByRole('link', { name: `Conocer ${project.canonicalName}`, exact: true })).toHaveAttribute('href', project.href)
+    await expect(page.getByRole('link', { name: project.websiteLabel, exact: true })).toHaveAttribute('href', project.website)
+    await expect(page.getByText(project.availability, { exact: true })).toBeVisible()
+    const logo = page.getByRole('img', { name: `Logo de ${project.canonicalName}`, exact: true })
+    await logo.scrollIntoViewIfNeeded()
+    await expect(logo).toBeVisible()
+    await expect(logo).toHaveJSProperty('naturalWidth', project.logo.width)
+  }
   await expect(page.getByRole('link', { name: 'Escríbeme por correo', exact: true })).toHaveAttribute('href', `mailto:${professionalProfile.contacts.email}`)
   await expect(page.locator('#contact')).not.toContainText(professionalProfile.contacts.email)
   await expect(page.locator('#blog, a[href="#blog"], a[href^="/blog/"]')).toHaveCount(0)
@@ -310,15 +318,15 @@ test('Ainkii remains a separate project in development', async ({ page }, info) 
   test.skip(!['chromium', 'chromium-mobile-320'].includes(info.project.name))
   await page.goto('/proyectos/ainkii/')
   await expect(page).toHaveTitle('Ainkii — Producto educativo en desarrollo | Marc Teixidó')
-  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', 'Proyecto educativo en desarrollo que explora cómo ayudar a docentes a revisar temarios y organizar materiales de estudio con apoyo de IA.')
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /Proyecto en desarrollo con landing pública; aplicación interna aún no abierta al público\./)
   const backLink = page.locator('a.control').first()
-  await expect(backLink).toHaveAttribute('href', '/')
+  await expect(backLink).toHaveAttribute('href', '/#projects')
 
   await expect(page.getByRole('heading', { level: 1, name: 'Ainkii' })).not.toBeFocused()
   await page.keyboard.press('Tab')
   await expect(backLink).toBeFocused()
   await expect(page.getByText(professionalProfile.projects[0].description, { exact: true })).toBeVisible()
-  await expect(page.getByRole('heading', { level: 3, name: 'Qué quiero resolver', exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 3, name: 'De entender a practicar', exact: true })).toBeVisible()
   await expect(page.locator('.ainkii-capabilities li p')).toHaveText(professionalProfile.projects[0].capabilities)
   await expect(page.locator('.ainkii-human-gate')).toHaveCount(1)
   expect(await page.locator('.ainkii-route-actions a').evaluateAll(controls => controls.every(control => control.scrollWidth <= control.clientWidth))).toBe(true)
@@ -329,7 +337,7 @@ test('Ainkii model labels fit their cards at each layout width', async ({ page }
   test.skip(info.project.name !== 'chromium')
   for (const width of [320, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 })
-    for (const route of ['/', '/proyectos/ainkii/']) {
+    for (const route of ['/proyectos/ainkii/']) {
       await page.goto(route)
       await page.evaluate(() => document.fonts.ready)
       const labels = await page.locator('.ainkii-model li strong').evaluateAll(items => items.map(item => {
@@ -349,7 +357,7 @@ test('Ainkii model labels fit their cards at each layout width', async ({ page }
 
 test('portfolio routes fit desktop and narrow viewports without material axe violations', async ({ page }, info) => {
   test.skip(!['chromium', 'chromium-mobile-320', 'chromium-mobile-375', 'chromium-1440'].includes(info.project.name))
-  const routes = ['/', '/aprendizaje/', '/aprendizaje/#curso-3', '/proyectos/ainkii/']
+  const routes = ['/', '/aprendizaje/', '/aprendizaje/#curso-3', '/proyectos/ainkii/', '/proyectos/butipunt/']
   const remoteRequests = await collectUnexpectedRemote(page)
 
   for (const width of [320, 390, 1440]) {
@@ -405,9 +413,45 @@ test('reduced motion keeps portfolio content static and readable', async ({ page
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
 })
 
+test('project navigation completes native transitions and respects reduced motion', async ({ page, javaScriptEnabled }, info) => {
+  test.skip(!['chromium', 'chromium-mobile-320', 'chromium-js-off', 'chromium-reduced-motion'].includes(info.project.name))
+  if (javaScriptEnabled !== false) {
+    await page.addInitScript(() => {
+      addEventListener('pagereveal', event => {
+        const transition = (event as Event & { viewTransition: ViewTransition | null }).viewTransition
+        document.documentElement.dataset.transitionResult = transition ? 'pending' : 'none'
+        if (transition) {
+          transition.ready.then(() => transition.finished).then(
+            () => { document.documentElement.dataset.transitionResult = 'finished' },
+            () => { document.documentElement.dataset.transitionResult = 'skipped' },
+          )
+        }
+      })
+    })
+  }
+
+  await page.goto('/#projects')
+  for (const project of professionalProfile.projects) {
+    await page.getByRole('link', { name: `Conocer ${project.canonicalName}`, exact: true }).click()
+    await expect(page).toHaveURL(new RegExp(`${project.href}$`))
+    await expect(page.getByRole('heading', { level: 1, name: project.canonicalName, exact: true })).toBeVisible()
+    await expect(page.getByRole('img', { name: `Logo de ${project.canonicalName}`, exact: true })).toBeVisible()
+    if (javaScriptEnabled !== false) {
+      await expect(page.locator('html')).toHaveAttribute('data-transition-result', info.project.name === 'chromium-reduced-motion' ? 'none' : 'finished')
+    }
+    await page.getByRole('link', { name: 'Volver a los proyectos', exact: true }).first().click()
+    await expect(page).toHaveURL(/\/#projects$/)
+    await expect(page.getByRole('heading', { name: 'Ideas en práctica', exact: true })).toBeInViewport()
+    if (javaScriptEnabled !== false) {
+      await expect(page.locator('html')).toHaveAttribute('data-transition-result', info.project.name === 'chromium-reduced-motion' ? 'none' : 'finished')
+      await expect(page.getByRole('heading', { name: 'Ideas en práctica', exact: true })).toBeFocused()
+    }
+  }
+})
+
 test('mobile portfolio routes pass material axe checks', async ({ page }, info) => {
   test.skip(info.project.name !== 'chromium-mobile-320')
-  for (const route of ['/', '/aprendizaje/', '/aprendizaje/#curso-3', '/proyectos/ainkii/']) {
+  for (const route of ['/', '/aprendizaje/', '/aprendizaje/#curso-3', '/proyectos/ainkii/', '/proyectos/butipunt/']) {
     await page.goto(route)
     expect(await materialAxeViolations(page)).toEqual([])
   }

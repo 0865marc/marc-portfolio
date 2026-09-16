@@ -84,7 +84,7 @@ test('@performance landing keeps a bounded first-party document', async ({ page 
     }
   })
   expect(report.elements).toBeLessThan(700)
-  expect(report.images).toBe(0)
+  expect(report.images).toBe(2)
   expect(report.thirdParty).toEqual([])
   expect(report.transfer).toBeLessThan(750 * 1024)
 })

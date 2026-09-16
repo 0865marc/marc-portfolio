@@ -4,7 +4,7 @@ El sitio es estático: el perfil y el catálogo de cursos viven en TypeScript; l
 
 ## Formación y aprendizaje por cursos
 
-La portada presenta experiencia, Ainkii, formación continua y contacto. El grado universitario aparece una sola vez en el perfil; `FormationSection.astro` presenta la especialización IBM/Coursera como formación en curso. El bloque de formación prevista en AWS se ha retirado.
+La portada presenta experiencia, Ainkii y ButiPunt, formación continua y contacto. El grado universitario aparece una sola vez en el perfil; `FormationSection.astro` presenta la especialización IBM/Coursera como formación en curso. El bloque de formación prevista en AWS se ha retirado.
 
 `src/data/learningCourses.ts` define los siete cursos de Generative AI Engineering with LLMs, en el orden del programa oficial de IBM consultado el 7 de septiembre de 2026. Cada entrada conserva el título y enlace oficiales, una explicación propia en español y conceptos o diagramas. `available` controla si se publica su contenido: los cursos 1–4 están disponibles; los cursos 5–7 aparecen como botones deshabilitados con la etiqueta «Pendiente» y su contenido no se emite. La disponibilidad de una explicación no acredita la finalización del curso ni una certificación.
 
@@ -17,11 +17,16 @@ La portada presenta experiencia, Ainkii, formación continua y contacto. El grad
 
 La primera edición procede de las notas públicas de agosto: tokenización y datos (día 24); embeddings, clasificación, contexto y evaluación (25 y 29); atención y transformers (31). Los resúmenes de los siguientes cursos describen el programa, no logros del autor.
 
-## Perfil profesional y proyecto separado
+## Perfil profesional y proyectos personales
 
-`src/data/portfolio.ts` contiene únicamente los hechos compactos que siguen siendo públicos: identidad, experiencia verificable, formación, idiomas, contactos y Ainkii. `professionalProfile.identity` centraliza el copy del Hero, la introducción de Perfil y el SEO de Home. La experiencia actual se publica con el empleador autorizado `Taurus Research & Development` y la descripción detallada proporcionada; no debe recuperar datos adicionales de operación interna, proveedores, cifras, arquitectura o calendarios, ni reintroducir Hermes.
+`src/data/portfolio.ts` contiene únicamente los hechos compactos que siguen siendo públicos: identidad, experiencia verificable, formación, idiomas, contactos y proyectos personales. `professionalProfile.identity` centraliza el copy del Hero, la introducción de Perfil y el SEO de Home. La experiencia actual se publica con el empleador autorizado `Taurus Research & Development` y la descripción detallada proporcionada; no debe recuperar datos adicionales de operación interna, proveedores, cifras, arquitectura o calendarios, ni reintroducir Hermes.
 
-`professionalProfile.source.id` identifica la procedencia factual. `Ainkii` es el único proyecto seleccionado, permanece «En desarrollo» y es evidencia separada: no debe presentarse como el proyecto del reto de ocho semanas.
+`professionalProfile.source.id` identifica la procedencia factual del perfil. Los proyectos usan `PROJECT_SOURCE_ID` (`public-projects-2026-09-16`): sus descripciones se revisaron con las landings públicas y el estado de acceso confirmado por el propietario el 16 de septiembre de 2026.
+
+- [Ainkii](https://ainkii.mteixido.dev/): producto para alumnos y academias; conecta temarios, conocimientos, tarjetas y seguimiento. Permanece «En desarrollo»: solo la landing y su demostración de ejemplo son públicas; la aplicación interna no está abierta al público. No enlazar el login como una aplicación disponible ni presentar datos de demostración como uso real.
+- [ButiPunt](https://butipunt.mteixido.dev/): gestor disponible de torneos presenciales de butifarra, sin registro y con guardado en el navegador. No promete juego en línea ni sincronización entre dispositivos.
+
+Los logos se sirven localmente desde `public/media/projects/`, conservando los trazados, colores y proporciones originales. Se normaliza únicamente el encuadre SVG a 320 × 100, centrando los límites visibles con el mismo margen horizontal; así ambos tienen una escala comparable dentro del marco compacto de `ProjectBrand.astro`. Procedencia: [logo de Ainkii](https://ainkii.mteixido.dev/brand/ainkii-logo-horizontal.svg) y [logo de ButiPunt](https://butipunt.mteixido.dev/brand/logo.svg), descargados el 16 de septiembre de 2026. El [pack de marca de ButiPunt](https://butipunt.mteixido.dev/marca/) documenta el uso sobre blanco. `ProjectBrand.astro` comparte su presentación; `ProjectsSection.astro` renderiza ambas fichas desde los datos. No se añaden afirmaciones sobre tecnologías, usuarios o resultados que las fuentes no acreditan.
 La ubicación pública actual de la identidad es `Balaguer, Lleida`; las ubicaciones de experiencia se mantienen como hechos históricos independientes.
 
 ## Contenido de aprendizaje
@@ -44,9 +49,11 @@ Rutas públicas:
 
 - `/#about`, `/#projects`, `/#formacion`, `/#contact`: navegación visible de la portada. `#career-sprint` y `#progress` se conservan como anclas de compatibilidad dentro de formación.
 - `/aprendizaje/#curso-1` a `#curso-4`: contenido disponible de la página didáctica por cursos. Las rutas antiguas de conceptos redirigen a estas secciones.
-- `/proyectos/ainkii/`: proyecto separado.
+- `/proyectos/ainkii/` y `/proyectos/butipunt/`: fichas de proyectos, incluidas en el sitemap, con enlaces a sus respectivas webs públicas.
 
 Las rutas retiradas responden con la página 404 y no se reutilizan.
+
+La navegación entre documentos usa View Transitions nativas mediante `@view-transition` en `src/index.css`: fundido de página y un nombre compartido por logo en `ProjectBrand.astro`. Los enlaces de vuelta de ambos proyectos apuntan a `/#projects`. Se desactivan las transiciones con `prefers-reduced-motion: reduce` o JavaScript deshabilitado; los navegadores sin soporte conservan la navegación normal. No se incorpora un router cliente ni cambia el ciclo de ejecución de los scripts de aprendizaje. El foco inicial de las anclas se aplica tras `pageshow` para respetar el desplazamiento nativo; las entradas de historial restauradas desde caché mantienen su posición y foco.
 
 ## Editar y verificar
 

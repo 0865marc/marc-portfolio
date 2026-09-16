@@ -25,6 +25,7 @@ const publicHtmlPaths = [
   'aprendizaje/index.html',
   ...conceptIds.map(id => `aprendizaje/${id}/index.html`),
   'proyectos/ainkii/index.html',
+  'proyectos/butipunt/index.html',
   '404.html',
 ] as const
 const publicNavigation = publicHtmlPaths.map(path => read(path)).join('\n')
@@ -188,12 +189,30 @@ describe('static output', () => {
       expect(html).toContain(expected)
     }
     expect(html).toContain('<title>Ainkii — Producto educativo en desarrollo | Marc Teixidó</title>')
-    expect(html).toContain('Proyecto educativo en desarrollo que explora cómo ayudar a docentes a revisar temarios y organizar materiales de estudio con apoyo de IA.')
+    expect(html).toContain('Proyecto en desarrollo con landing pública; aplicación interna aún no abierta al público.')
     expect(html).toContain(professionalProfile.projects[0].description)
     expect(html).toContain('"@type":"CreativeWork"')
-    expect(html).toContain('Qué quiero resolver')
+    expect(html).toContain('De entender a practicar')
     expect(html).not.toContain('Proyecto insignia')
     expect(html).not.toContain('próximamente')
+  })
+
+  it('publishes both project pages, local logos and links to the public sites', () => {
+    const landing = read('index.html')
+    const sitemap = read('sitemap.xml')
+    for (const project of professionalProfile.projects) {
+      const html = read(`proyectos/${project.id}/index.html`)
+      expect(landing).toContain(`href="${project.href}"`)
+      expect(sitemap).toContain(`${project.href}</loc>`)
+      for (const page of [landing, html]) {
+        expect(page).toContain(`href="${project.website}"`)
+        expect(page).toContain(`src="${project.logo.src}"`)
+        expect(page).toContain(project.availability)
+      }
+      expect(statSync(join(dist, project.logo.src)).size).toBeGreaterThan(100)
+    }
+    expect(read('proyectos/butipunt/index.html')).toContain('No se sincroniza entre dispositivos')
+    expect(read('proyectos/ainkii/index.html')).not.toMatch(/href="https:\/\/ainkii\.mteixido\.dev\/login/)
   })
 
   it('removes blog pages, navigation and sitemap entries', () => {

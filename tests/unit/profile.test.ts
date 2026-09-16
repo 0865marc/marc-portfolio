@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { PROFILE_SOURCE_ID, professionalProfile } from '../../src/data/portfolio'
+import { PROFILE_SOURCE_ID, PROJECT_SOURCE_ID, professionalProfile } from '../../src/data/portfolio'
 
 describe('professional profile source', () => {
   it('keeps the approved public identity and positioning', () => {
@@ -49,19 +49,25 @@ describe('professional profile source', () => {
     expect(professionalProfile.experience.every(entry => entry.sourceId === PROFILE_SOURCE_ID)).toBe(true)
   })
 
-  it('publishes Ainkii as the only selected project', () => {
-    expect(professionalProfile.projects.map(project => project.id)).toEqual(['ainkii'])
-    const [ainkii] = professionalProfile.projects
+  it('distinguishes the public ButiPunt app from the Ainkii landing', () => {
+    expect(professionalProfile.projects.map(project => project.id)).toEqual(['ainkii', 'butipunt'])
+    const [ainkii, butipunt] = professionalProfile.projects
     expect(ainkii.canonicalName).toBe('Ainkii')
     expect(ainkii.aliases).toContain('Ainki')
     expect(ainkii.model).toEqual(['Temarios', 'Temas', 'Conocimientos', 'Tarjetas de aprendizaje'])
     expect(ainkii.status).toBe('En desarrollo')
     expect(ainkii).toMatchObject({
       href: '/proyectos/ainkii/',
-      teaser: 'Una herramienta en desarrollo para docentes que crean sus propios materiales de estudio.',
-      description: 'Estoy desarrollando Ainkii para ayudar a docentes a convertir sus temarios en materiales de estudio conectados, con apoyo de IA y revisión editorial en cada paso.',
+      website: 'https://ainkii.mteixido.dev/',
+      availability: 'Landing pública. La aplicación interna todavía no está abierta al público.',
     })
-    expect(professionalProfile.projects.every(project => project.sourceId === PROFILE_SOURCE_ID)).toBe(true)
+    expect(butipunt).toMatchObject({
+      canonicalName: 'ButiPunt',
+      status: 'Disponible',
+      href: '/proyectos/butipunt/',
+      website: 'https://butipunt.mteixido.dev/',
+    })
+    expect(professionalProfile.projects.every(project => project.sourceId === PROJECT_SOURCE_ID)).toBe(true)
   })
 
   it('does not reintroduce removed employment or agent details', () => {
