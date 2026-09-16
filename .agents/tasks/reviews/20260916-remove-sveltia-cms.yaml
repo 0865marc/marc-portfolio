@@ -1,0 +1,42 @@
+schema_version: 1
+task_id: "20260916-remove-sveltia-cms"
+review_status: pending
+summary: "Author learning explanations directly as Astro HTML and remove Sveltia CMS from the project."
+knowledge_delta:
+  added_nodes:
+    - path: "src/components/LearningNotes.astro"
+      fact: "The six Para profundizar explanations are literal HTML in an Astro component, including native details, paragraphs, lists and code examples. No content loader or CMS is required."
+      evidence: "src/components/LearningNotes.astro; src/pages/aprendizaje/index.astro; tests/e2e/site.spec.ts"
+  changed_nodes:
+    - path: "src/pages/aprendizaje/[id].astro"
+      fact: "Earlier concept URLs still redirect to available courses using their existing catalog IDs."
+      evidence: "src/pages/aprendizaje/[id].astro; src/data/learningCourses.ts; tests/static-output.test.ts"
+    - path: "package.json"
+      fact: "Sveltia, its three font packages, CMS preparation hooks and Worker verification are removed. The full repository gate continues to check the application and authored knowledge."
+      evidence: "package.json; package-lock.json; scripts/measure-route-assets.mjs"
+    - path: "ops/nginx/container.conf"
+      fact: "CMS-specific routing, popup policy and external authentication origins are removed. Retired admin paths use the standard 404 response and public security headers."
+      evidence: "ops/nginx/container.conf; scripts/verify-container-image.sh; tests/e2e/site.spec.ts"
+  deprecated_nodes:
+    - path: "public/admin"
+      fact: "The CMS panel, config, bootstrap and generated assets are removed; no admin directory is emitted."
+      evidence: "tests/static-output.test.ts; scripts/verify-static-output.mjs"
+    - path: "ops/cms-auth"
+      fact: "Worker source, deployment configuration, vendored authenticator and package files are removed from the repository. This local implementation performs no external service deletion or production deployment."
+      evidence: "src/data/README.md; package.json"
+    - path: "src/data/articleContent.ts"
+      fact: "The article adapter, learning JSON loader, inline-text renderer, concept/tag collections and their obsolete tests are removed after transferring the displayed content to HTML."
+      evidence: "src/components/LearningNotes.astro; src/data/README.md"
+  adr_needed: false
+  adr_reason: "Owner-directed simplification within the existing static Astro architecture."
+  design_changed: false
+  design_notes: "The displayed explanations, examples and native disclosure controls are preserved."
+  stale_knowledge:
+    - path: ".agents/context/architecture.md"
+      fact: "Git-backed CMS authoring, CMS verification and article adapters no longer describe the project."
+    - path: ".agents/domains/blog.md"
+      fact: "CMS collections and JSON-backed article sources are obsolete."
+    - path: ".agents/tasks/reviews/20260915-remove-learning-archive.yaml"
+      fact: "Its retention of Sveltia and learning content watchers is superseded by direct HTML authoring and complete CMS removal."
+reviewed_by: ""
+reviewed_at: null

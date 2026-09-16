@@ -15,6 +15,10 @@ La verificación completa del repositorio es:
 npm run verify
 ```
 
+## Contenido
+
+Las explicaciones de «Para profundizar» se editan directamente en [`LearningNotes.astro`](src/components/LearningNotes.astro). El catálogo y las introducciones de los cursos están en [`learningCourses.ts`](src/data/learningCourses.ts). No se utiliza un CMS.
+
 ## Entrega
 
 Las pull requests hacia `main` ejecutan `CI / Verify`. Después de un merge, GitHub Actions vuelve a verificar el commit y publica en GHCR una imagen candidata identificada por el SHA del commit y por su digest inmutable.

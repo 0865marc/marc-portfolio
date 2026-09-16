@@ -1,9 +1,9 @@
 ---
-import { learningConcepts, conceptHref } from '../../data/learning'
+import { learningCourses, conceptCourseHref } from '../../data/learningCourses'
 export function getStaticPaths() {
-  return learningConcepts.map(concept => ({ params: { id: concept.id } }))
+  return learningCourses.filter(course => course.available).flatMap(course => course.concepts.map(id => ({ params: { id } })))
 }
 // Preserve earlier concept URLs while making the course page the only reading surface.
-const destination = conceptHref(Astro.params.id!)
+const destination = conceptCourseHref(Astro.params.id!)
 return Astro.redirect(destination, 301)
 ---

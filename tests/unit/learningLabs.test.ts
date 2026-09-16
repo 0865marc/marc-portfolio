@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import { bagExamples, countWords, attentionTokens, visiblePositions } from '../../src/lib/learningLabs'
-import { learningConcepts } from '../../src/data/learning'
 import { learningCourses, conceptCourseHref } from '../../src/data/learningCourses'
 
 describe('learning demonstrations', () => {
@@ -17,11 +16,12 @@ describe('learning demonstrations', () => {
       expect(visiblePositions(position, false).every(Boolean)).toBe(true)
     }
   })
-  it('assigns every published concept to exactly one course', () => {
-    const assigned = learningCourses.flatMap(course => [...course.concepts])
-    expect(assigned.slice().sort()).toEqual(learningConcepts.map(concept => concept.id).sort())
+  it('keeps earlier concept URLs mapped to an available course', () => {
+    const assigned = learningCourses.filter(course => course.available).flatMap(course => [...course.concepts])
     expect(new Set(assigned).size).toBe(assigned.length)
-    for (const id of assigned) expect(conceptCourseHref(id)).toMatch(/^\/aprendizaje\/#curso-[1-3]$/)
+    expect(conceptCourseHref('tokenizacion-y-vocabulario')).toBe('/aprendizaje/#curso-1')
+    expect(conceptCourseHref('embeddings')).toBe('/aprendizaje/#curso-2')
+    expect(conceptCourseHref('transformers-y-atencion')).toBe('/aprendizaje/#curso-3')
     expect(() => conceptCourseHref('missing')).toThrow('Concept has no course')
   })
 })

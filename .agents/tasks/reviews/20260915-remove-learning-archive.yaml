@@ -1,0 +1,38 @@
+schema_version: 1
+task_id: "20260915-remove-learning-archive"
+review_status: pending
+summary: "Remove the daily learning archive and Career Sprint calendar while retaining the CMS for current learning concepts."
+knowledge_delta:
+  added_nodes: []
+  changed_nodes:
+    - path: "src/pages/sitemap.xml.ts"
+      fact: "The sitemap contains only the portfolio, learning page and Ainkii. Calendar and daily archive routes are removed and return the existing 404 page."
+      evidence: "src/pages/sitemap.xml.ts; tests/static-output.test.ts; tests/e2e/site.spec.ts; scripts/verify-static-output.mjs; scripts/verify-container-image.sh"
+    - path: "public/admin/config.yml"
+      fact: "Sveltia remains for content displayed in the current learning page. Its only collections are learning concepts and tags; daily and weekly collections are removed."
+      evidence: "public/admin/config.yml; src/data/README.md; tests/static-output.test.ts"
+    - path: "astro.config.mjs"
+      fact: "Development content refresh watches concepts and tags and invalidates the learning adapter; it no longer depends on the deleted challenge adapter."
+      evidence: "astro.config.mjs; src/scripts/enhancements.ts"
+  deprecated_nodes:
+    - path: "src/data/challenge.ts"
+      fact: "The challenge adapter, source daily/weekly JSON, route helpers and archive pages are deleted. Their original content remains in Git history."
+      evidence: "src/data/README.md; tests/static-output.test.ts"
+    - path: "src/components/Article.astro"
+      fact: "Article and daily block components, reading progress, floating article index and calendar disclosure styles/scripts are removed. Inline text rendering remains shared by learning explanations."
+      evidence: "src/components/ArticleInlineText.astro; src/pages/aprendizaje/index.astro; src/index.css; src/scripts/enhancements.ts"
+  adr_needed: false
+  adr_reason: "Owner-directed removal of obsolete learning archive; the static architecture and release boundary remain."
+  design_changed: false
+  design_notes: "Only obsolete routes and their unused styles are removed; current portfolio and course views retain their design."
+  stale_knowledge:
+    - path: ".agents/context/architecture.md"
+      fact: "The daily archive, roadmap, challenge adapter and article views are no longer present."
+    - path: ".agents/domains/portfolio.md"
+      fact: "The eight-week challenge and daily progress contracts are obsolete."
+    - path: ".agents/tasks/reviews/20260907-formation-and-concepts.yaml"
+      fact: "Its retention of the original daily archive and calendar is superseded."
+    - path: ".agents/tasks/reviews/20260915-remove-blog.yaml"
+      fact: "The article validator now serves learning concepts only; the daily archive and its CMS collections are removed."
+reviewed_by: ""
+reviewed_at: null
