@@ -1,8 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import LearningLab from '../../components/LearningLab.astro'
-import ArticleInlineText from '../../components/ArticleInlineText.astro'
-import { learningConcepts } from '../../data/learning'
+import LearningNotes from '../../components/LearningNotes.astro'
 import { learningCourses, specializationUrl } from '../../data/learningCourses'
 import '../../learning.css'
 ---
@@ -46,23 +45,7 @@ import '../../learning.css'
                 <p class="diagram-takeaway">{course.takeaway}</p>
               </figure>}
             </div>
-            {course.concepts.length > 0 && <div class="course-notes">
-              <p>Para profundizar</p>
-              {course.concepts.map(id => {
-                const concept = learningConcepts.find(item => item.id === id)
-                return concept && <details>
-                  <summary>{concept.title}</summary>
-                  <div class="concept-explanation">
-                    {concept.sections.map(section => <div>
-                      <h3>{section.heading}</h3>
-                      {section.paragraphs.map(paragraph => <p><ArticleInlineText text={paragraph} /></p>)}
-                      {section.points && <ul>{section.points.map(point => <li><ArticleInlineText text={point} /></li>)}</ul>}
-                      {section.codeBlocks?.map(block => <pre tabindex="0" aria-label={block.title ?? 'Ejemplo'}><code>{block.code}</code></pre>)}
-                    </div>)}
-                  </div>
-                </details>
-              })}
-            </div>}
+            <LearningNotes course={course.id} />
           </section>)}
         </div>
         <footer class="learning-footer"><p>Marc Teixidó · Apuntes y ejemplos propios a partir del programa de IBM.</p><a class="control" href="/#formacion">Volver a mi formación <span aria-hidden="true">↖</span></a></footer>

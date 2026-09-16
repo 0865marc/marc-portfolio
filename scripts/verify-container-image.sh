@@ -28,12 +28,27 @@ grep -Fq 'Marc Teixidó' "$BODY_FILE"
 grep -Fq 'Ainkii' "$BODY_FILE"
 grep -Fvq '/admin/' "$BODY_FILE"
 
-for path in / /roadmap/ /career-sprint-daily/ /career-sprint-daily/2026-08-24/ /career-sprint-daily/2026-08-25/ /proyectos/ainkii/ /aprendizaje/ /admin/ /robots.txt /sitemap.xml /og-card.png; do
+for path in / /proyectos/ainkii/ /aprendizaje/ /robots.txt /sitemap.xml /og-card.png; do
     status="$(curl --silent --show-error --max-time 5 --output "$BODY_FILE" --write-out '%{http_code}' "http://127.0.0.1:$PORT$path")"
     [[ "$status" == '200' ]] || { echo "$path returned HTTP $status" >&2; exit 1; }
 done
 
 for path in \
+    /admin/ \
+    /admin/index.html \
+    /admin/config.yml \
+    /admin/bootstrap.js \
+    /admin/sveltia-cms.js \
+    /admin/sveltia-cms-package.json \
+    /admin/locales/es-CO.json \
+    /admin/locales/es.json \
+    /admin/fonts/source-sans-3-latin-wght-normal.woff2 \
+    /roadmap/ \
+    /career-sprint-daily/ \
+    /career-sprint-daily/2026-08-24/ \
+    /career-sprint-daily/2026-08-25/ \
+    /career-sprint-daily/2026-08-29/ \
+    /career-sprint-daily/2026-08-31/ \
     /blog/ \
     /blog/entorno-reproducible/ \
     /blog/lo-que-decidi-no-contar-en-este-portfolio/ \
@@ -52,8 +67,8 @@ for path in \
     status="$(curl --silent --show-error --max-time 5 --output "$BODY_FILE" --write-out '%{http_code}' "http://127.0.0.1:$PORT$path")"
     [[ "$status" == '404' ]] || { echo "$path returned HTTP $status" >&2; exit 1; }
     grep -Fq 'No encuentro esa página' "$BODY_FILE"
-    grep -Fq 'Esta página no existe o ha cambiado de dirección. Puedes volver al portfolio o explorar el cuaderno de IA.' "$BODY_FILE"
-    grep -Fq 'Explorar conceptos' "$BODY_FILE"
+    grep -Fq 'Esta página no existe o ha cambiado de dirección. Puedes volver al portfolio.' "$BODY_FILE"
+    grep -Fq 'Volver al portfolio' "$BODY_FILE"
 done
 
 while IFS= read -r asset; do
@@ -62,7 +77,7 @@ while IFS= read -r asset; do
 done < <(docker exec "$CONTAINER" find /usr/share/nginx/html/assets -type f)
 curl --silent --show-error --head --max-time 5 "http://127.0.0.1:$PORT/index.html" | grep -Eqi '^cache-control:.*no-cache'
 
-public_paths=(/ /roadmap/ /career-sprint-daily/ /career-sprint-daily/2026-08-24/ /career-sprint-daily/2026-08-25/ /proyectos/ainkii/ /aprendizaje/ /blog/ /missing)
+public_paths=(/ /admin/ /roadmap/ /career-sprint-daily/ /career-sprint-daily/2026-08-24/ /career-sprint-daily/2026-08-25/ /proyectos/ainkii/ /aprendizaje/ /blog/ /missing)
 for path in "${public_paths[@]}"; do
     curl --silent --show-error --head --max-time 5 "http://127.0.0.1:$PORT$path" > "$HEADERS_FILE"
     grep -Eqi "^content-security-policy:.*default-src 'self'.*frame-ancestors 'none'" "$HEADERS_FILE"
@@ -74,50 +89,18 @@ for path in "${public_paths[@]}"; do
     grep -Eqi '^x-frame-options: *DENY' "$HEADERS_FILE"
 done
 
-curl --silent --show-error --head --max-time 5 "http://127.0.0.1:$PORT/admin/" > "$HEADERS_FILE"
-grep -Eqi '^cache-control: *no-store' "$HEADERS_FILE"
-grep -Eqi '^x-robots-tag: *noindex, nofollow' "$HEADERS_FILE"
-grep -Eqi "^content-security-policy:.*connect-src.*https://api\.github\.com.*https://cms-auth\.portfolio\.mybrawl\.io" "$HEADERS_FILE"
-grep -Eqi '^cross-origin-opener-policy: *same-origin-allow-popups[[:space:]]*$' "$HEADERS_FILE"
-grep -Eqi '^cross-origin-resource-policy: *same-origin' "$HEADERS_FILE"
-grep -Eqi '^permissions-policy:.*camera=\(\).*geolocation=\(\).*microphone=\(\)' "$HEADERS_FILE"
-grep -Eqi '^referrer-policy: *strict-origin-when-cross-origin' "$HEADERS_FILE"
-grep -Eqi '^x-content-type-options: *nosniff' "$HEADERS_FILE"
-grep -Eqi '^x-frame-options: *DENY' "$HEADERS_FILE"
-curl --silent --show-error --max-time 5 "http://127.0.0.1:$PORT/admin/" > "$BODY_FILE"
-grep -Fq 'content="noindex,nofollow"' "$BODY_FILE"
-grep -Fq 'src="./bootstrap.js"' "$BODY_FILE"
-grep -Fq 'src="./sveltia-cms.js"' "$BODY_FILE"
-for path in \
-    /admin/bootstrap.js \
-    /admin/sveltia-cms.js \
-    /admin/sveltia-cms-package.json \
-    /admin/locales/es-CO.json \
-    /admin/locales/es.json \
-    /admin/fonts/source-sans-3-latin-wght-normal.woff2 \
-    /admin/fonts/noto-mono-latin-400-normal.woff2 \
-    /admin/fonts/material-symbols-outlined-latin-wght-normal.woff2; do
-    curl --silent --show-error --head --max-time 5 "http://127.0.0.1:$PORT$path" | grep -Eqi '^cache-control: *no-store'
-done
-
 curl --silent --show-error --header 'Accept-Encoding: gzip' --dump-header "$HEADERS_FILE" --output "$BODY_FILE" --max-time 5 "http://127.0.0.1:$PORT/"
 grep -Eqi '^content-encoding: *gzip' "$HEADERS_FILE"
 
 curl --silent --show-error --max-time 5 "http://127.0.0.1:$PORT/robots.txt" > "$BODY_FILE"
-grep -Fq 'Disallow: /admin/' "$BODY_FILE"
 grep -Fq 'Sitemap: https://portfolio.mybrawl.io/sitemap.xml' "$BODY_FILE"
 curl --silent --show-error --max-time 5 "http://127.0.0.1:$PORT/sitemap.xml" > "$BODY_FILE"
-if grep -Fq '/blog/' "$BODY_FILE"; then
-    echo 'removed blog route found in sitemap' >&2
+if grep -Eq '/(admin|blog|roadmap|career-sprint-daily|progreso)/' "$BODY_FILE"; then
+    echo 'removed route found in sitemap' >&2
     exit 1
 fi
 grep -Fq '<loc>https://portfolio.mybrawl.io/aprendizaje/</loc>' "$BODY_FILE"
 grep -Fq '<loc>https://portfolio.mybrawl.io/proyectos/ainkii/</loc>' "$BODY_FILE"
-grep -Fq '<loc>https://portfolio.mybrawl.io/roadmap/</loc>' "$BODY_FILE"
-grep -Fq '<loc>https://portfolio.mybrawl.io/career-sprint-daily/</loc>' "$BODY_FILE"
-grep -Fq '<loc>https://portfolio.mybrawl.io/career-sprint-daily/2026-08-24/</loc>' "$BODY_FILE"
-grep -Fq '<loc>https://portfolio.mybrawl.io/career-sprint-daily/2026-08-25/</loc>' "$BODY_FILE"
-grep -Fvq '<loc>https://portfolio.mybrawl.io/progreso/' "$BODY_FILE"
 
 healthcheck="$(docker inspect --format '{{json .Config.Healthcheck.Test}}' "$CONTAINER")"
 [[ "$healthcheck" != 'null' ]] || { echo 'container image has no healthcheck' >&2; exit 1; }

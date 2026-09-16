@@ -14,9 +14,5 @@ __pycache__/
 *.pyc
 .codex-work/
 .private/
-public/admin/sveltia-cms.js
-public/admin/sveltia-cms-package.json
-public/admin/locales/
-public/admin/fonts/
 # Local Pi runtime state
 .atl/

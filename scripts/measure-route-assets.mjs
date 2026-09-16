@@ -28,14 +28,12 @@ for (const path of files.filter(file => /\.(?:css|html|js|svg|txt|xml)$/.test(fi
   })
 }
 
-const publicAssets = compressible.filter(asset => !asset.file.startsWith('admin/'))
-const adminAssets = compressible.filter(asset => asset.file.startsWith('admin/'))
 const sumGzip = (assets, extension) => assets
   .filter(asset => asset.file.endsWith(extension))
   .reduce((total, asset) => total + asset.gzip, 0)
-const html = publicAssets.filter(asset => asset.file.endsWith('.html'))
+const html = compressible.filter(asset => asset.file.endsWith('.html'))
 const firstPartyBinaryBytes = (await Promise.all(
-  files.filter(file => /\.(?:png|woff2)$/.test(file) && !relative(dist, file).startsWith('admin/')).map(async file => (await stat(file)).size),
+  files.filter(file => /\.(?:png|woff2)$/.test(file)).map(async file => (await stat(file)).size),
 )).reduce((total, size) => total + size, 0)
 
 const htmlSources = await Promise.all(html.map(asset => readFile(join(dist, asset.file), 'utf8')))
@@ -49,9 +47,8 @@ const remoteCssReferences = (await Promise.all(
 
 const result = {
   dist,
-  firstPartyJsGzip: sumGzip(publicAssets, '.js'),
-  adminJsGzip: sumGzip(adminAssets, '.js'),
-  firstPartyCssGzip: sumGzip(publicAssets, '.css'),
+  firstPartyJsGzip: sumGzip(compressible, '.js'),
+  firstPartyCssGzip: sumGzip(compressible, '.css'),
   largestHtmlGzip: Math.max(0, ...html.map(asset => asset.gzip)),
   firstPartyBinaryBytes,
   remoteMediaReferences,

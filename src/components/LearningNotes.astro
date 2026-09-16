@@ -1,0 +1,222 @@
+---
+interface Props {
+  course: string
+}
+const { course } = Astro.props
+// Explanations are authored here as HTML and rendered at build time.
+---
+
+{course === 'curso-1' && <div class="course-notes">
+  <p>Para profundizar</p>
+  <details data-concept="tokenizacion-y-vocabulario">
+    <summary>Tokenización y vocabulario</summary>
+    <div class="concept-explanation">
+      <div>
+        <h3>De una frase a sus piezas</h3>
+        <p>Tokenizar es dividir un texto en piezas llamadas tokens. Algunas coinciden con palabras completas; otras son fragmentos o signos. Las reglas dependen del tokenizador, así que dos tokenizadores pueden dividir la misma frase de forma distinta.</p>
+        <p>Después se busca cada pieza en el vocabulario, una tabla que le asigna un número o ID. En el ejemplo interactivo, «La» tiene el ID 1. Ese número solo identifica la pieza: no indica su importancia ni su significado.</p>
+        <p>El ID permite buscar el embedding del token: una lista de números que el modelo utiliza para hacer sus cálculos. En el segundo curso veremos cómo se aprende esa representación.</p>
+        <pre tabindex="0" aria-label="Ejemplo paso a paso"><code>Frase → piezas (tokens) → identificadores (IDs)
+Cada ID → su lista de números (embedding) → modelo</code></pre>
+      </div>
+      <div>
+        <h3>Usar el tokenizador que espera el modelo</h3>
+        <p>Un modelo ya entrenado viene preparado para un vocabulario concreto. Si en ese vocabulario el ID 42 corresponde a «gato», enviarle el 42 significa pedir la representación de «gato». No importa qué palabra tenga ese número en otra tabla.</p>
+        <p>Por eso el modelo y su tokenizador deben ir juntos. Los números pueden tener un formato válido y aun así señalar las piezas equivocadas.</p>
+      </div>
+      <div>
+        <h3>Si preparas tu propio vocabulario</h3>
+        <p>En un ejercicio desde cero, puedes construir el vocabulario con los textos de entrenamiento. Después conservas esa misma tabla para comprobar el modelo con textos nuevos.</p>
+        <ul>
+          <li>En un vocabulario que lo utilice, &lt;unk&gt; representa una pieza desconocida. Otros tokenizadores pueden descomponerla en piezas más pequeñas.</li>
+          <li>&lt;pad&gt; sirve para completar frases cortas al formar un batch. Hay que conocer su ID; no siempre es 0.</li>
+          <li>Guarda la tabla y las reglas para dividir el texto: necesitarás ambas al volver a usar el modelo.</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+  <details data-concept="datos-y-clasificacion">
+    <summary>Datos y clasificación de texto</summary>
+    <div class="concept-explanation">
+      <div>
+        <h3>Del ejemplo al batch</h3>
+        <p>Podemos reunir 32 reseñas y procesarlas juntas. Ese grupo es un batch y su batch size es 32. El tamaño del batch cuenta ejemplos; no cuenta las palabras de cada reseña.</p>
+        <p>En PyTorch, Dataset permite acceder a cada ejemplo. DataLoader los organiza en batches y puede cambiar su orden entre recorridos de entrenamiento. La función collate_fn prepara los ejemplos para que puedan agruparse.</p>
+      </div>
+      <div>
+        <h3>Qué hacemos cuando las frases miden distinto</h3>
+        <p>Supongamos que tres frases tienen 4, 6 y 2 tokens. Para colocarlas en una tabla con filas del mismo tamaño, completamos las más cortas con padding hasta llegar a 6 posiciones.</p>
+        <p>Una máscara distingue los tokens reales del relleno. Así podemos indicar al modelo qué posiciones debe ignorar.</p>
+        <pre tabindex="0" aria-label="Ejemplo paso a paso"><code>Frase A: 4 tokens + 2 de padding
+Frase B: 6 tokens + 0 de padding
+Frase C: 2 tokens + 4 de padding
+
+Forma de la tabla: [3, 6]
+3 frases, con 6 posiciones cada una</code></pre>
+      </div>
+      <div>
+        <h3>Una predicción para toda la reseña</h3>
+        <p>El modelo puede producir una lista de números por token, teniendo en cuenta su contexto. Para clasificar la reseña completa necesitamos reunir esa información en una sola representación.</p>
+        <p>Una forma sencilla es hacer la media de esas listas de números, posición a posición. Se llama mean pooling. A partir del resultado, una capa final calcula una puntuación para cada categoría: por ejemplo, «positiva» y «negativa».</p>
+        <pre tabindex="0" aria-label="Ejemplo paso a paso"><code>Representaciones por token
+  → media de los tokens reales
+  → una representación de la reseña
+  → puntuación para cada categoría</code></pre>
+      </div>
+      <div>
+        <h3>El relleno también se excluye de la media</h3>
+        <p>La máscara de atención evita que el modelo use las posiciones de relleno como contexto. Pero, al hacer pooling, también hay que excluirlas de la media: sus valores de salida no tienen por qué ser cero.</p>
+        <p>Es como calcular la nota media de tres exámenes y añadir dos ceros porque sobraban casillas en la tabla. El relleno cambiaría el resultado aunque no correspondiera a ningún examen.</p>
+      </div>
+      <div>
+        <h3>Comprobar si aprende con reseñas nuevas</h3>
+        <p>Durante el entrenamiento comparamos las puntuaciones del modelo, llamadas logits, con la categoría correcta. Una función de pérdida mide el error y sirve para ajustar los parámetros.</p>
+        <p>Después probamos con reseñas que no se hayan usado para esos ajustes. Si solo mejora con las que ya conoce, puede estar memorizando ejemplos. Compararlo con un clasificador sencillo ayuda a ver qué aporta un modelo más elaborado.</p>
+      </div>
+    </div>
+  </details>
+</div>}
+
+{course === 'curso-2' && <div class="course-notes">
+  <p>Para profundizar</p>
+  <details data-concept="embeddings">
+    <summary>Embeddings</summary>
+    <div class="concept-explanation">
+      <div>
+        <h3>Una lista de números por token</h3>
+        <p>Imagina una tabla con una fila por token. Cada fila contiene varios números: ese es su embedding. Cuando llega un ID, la capa de embeddings busca la fila correspondiente.</p>
+        <p>Al entrenar, esos números pueden cambiar para ayudar a resolver la tarea. Las palabras que aparecen en contextos parecidos pueden acabar con representaciones cercanas. Un embedding recién creado todavía no ha aprendido esas relaciones.</p>
+        <p>Si tenemos 3 frases de 6 tokens y usamos 8 números por token, pasamos de una tabla de IDs [3, 6] a una estructura [3, 6, 8]. Esa estructura de números se llama tensor.</p>
+        <pre tabindex="0" aria-label="Ejemplo paso a paso"><code>IDs:        [3 frases, 6 posiciones]
+Embeddings: [3 frases, 6 posiciones, 8 números]</code></pre>
+      </div>
+      <div>
+        <h3>Aprender mirando las palabras de alrededor</h3>
+        <p>Word2Vec aprende representaciones a partir de las palabras vecinas. En una de sus variantes, CBOW, se oculta una palabra y se intenta predecirla a partir de las que la rodean. En la otra, Skip-gram, se parte de una palabra para predecir sus vecinas.</p>
+        <p>GloVe utiliza recuentos de palabras que aparecen cerca unas de otras en una colección de textos. Son dos maneras de aprovechar el contexto para aprender relaciones.</p>
+        <p>Estos métodos asignan una representación fija a cada palabra. «Banco» empieza con el mismo vector al hablar de un asiento o de dinero. Para distinguir esos usos, hace falta un paso posterior que tenga en cuenta la frase concreta.</p>
+      </div>
+      <div>
+        <h3>Representar cada token o resumir la frase</h3>
+        <p>En PyTorch, Embedding devuelve una lista de números por token. EmbeddingBag puede reunir varias mediante una suma o una media, algo útil para obtener una representación sencilla de un texto.</p>
+        <p>Esa media pierde el orden: cambiar de sitio las palabras no cambia la suma. Un modelo que incorpora contexto puede relacionar los tokens antes de reunirlos y conservar información que la media inicial no tenía.</p>
+        <ul>
+          <li>IDs cercanos solo indican filas cercanas en una tabla; no garantizan palabras parecidas.</li>
+          <li>Los embeddings se aprenden con datos. Su tamaño, por sí solo, no dice si son buenos.</li>
+          <li>Conserva las representaciones de cada token si tu tarea necesita conocer el orden o las relaciones dentro de la frase.</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+  <details data-concept="modelos-de-lenguaje">
+    <summary>Contexto y modelos de lenguaje</summary>
+    <div class="concept-explanation">
+      <div>
+        <h3>Predecir la siguiente pieza</h3>
+        <p>Después de «Hoy hace mucho», podrían encajar «frío», «calor» o «viento». El modelo calcula probabilidades a partir del contexto. Para generar texto se elige un token según esas probabilidades y se añade a la frase; el proceso vuelve a empezar.</p>
+        <p>Un modelo de n-gramas utiliza una cantidad limitada de tokens anteriores. Por ejemplo, un trigrama predice usando los dos anteriores. Es una forma sencilla de trabajar con contexto, aunque deja fuera lo que se dijo antes de esa ventana.</p>
+        <p>En una versión neuronal, se pueden colocar los embeddings de la ventana uno detrás de otro. Esto se llama concatenar y permite conservar el lugar que ocupa cada token.</p>
+        <pre tabindex="0" aria-label="Ejemplo paso a paso"><code>Texto disponible → probabilidades → elegir un token
+        ↑                                  |
+        └──── añadirlo al texto ────────────┘</code></pre>
+      </div>
+      <div>
+        <h3>Una memoria que se actualiza</h3>
+        <p>Una red recurrente, o RNN, recorre el texto paso a paso. En cada paso actualiza una lista de números que resume lo que ha visto. Esa memoria numérica se llama estado oculto.</p>
+        <p>La memoria tiene un tamaño fijo. Cuanto más largo es el texto, más información tiene que condensar en el mismo espacio; por eso puede costarle conservar detalles lejanos.</p>
+      </div>
+      <div>
+        <h3>Leer una frase y producir otra</h3>
+        <p>En una traducción, la frase de entrada y la de salida pueden tener distinta longitud y orden. Un modelo encoder–decoder reparte el trabajo: el encoder representa la entrada y el decoder genera la salida paso a paso.</p>
+        <p>Al entrenar, podemos darle al decoder el token anterior correcto para que practique el siguiente paso. Esto se llama teacher forcing. Al generar una traducción nueva, continúa a partir de lo que él mismo ha producido, de modo que un error puede influir en los siguientes.</p>
+        <p>Las entradas y las respuestas esperadas van desplazadas una posición: con «El gato» se practica predecir «duerme»; con «El gato duerme» se practica lo que viene después. Algunas tareas usan además tokens especiales de inicio y final.</p>
+      </div>
+    </div>
+  </details>
+  <details data-concept="evaluacion-de-modelos">
+    <summary>Evaluar un modelo de lenguaje</summary>
+    <div class="concept-explanation">
+      <div>
+        <h3>Practicar y comprobar son pasos distintos</h3>
+        <p>La pérdida es una medida del error que usamos durante el entrenamiento. Ayuda a ajustar los parámetros: por ejemplo, penaliza al modelo cuando da poca probabilidad al token correcto.</p>
+        <p>La validación comprueba cómo responde a textos que no se han usado para esos ajustes. Es parecido a estudiar con unos ejercicios y comprobar después lo aprendido con otros. Mejorar solo en los ejercicios conocidos no basta.</p>
+      </div>
+      <div>
+        <h3>Perplexity: cuánto sorprende el texto al modelo</h3>
+        <p>La perplexity mide, de forma agregada, cuánta probabilidad daba el modelo a los tokens que aparecen en un texto de prueba. Un valor más bajo significa que ese texto le resultaba más previsible.</p>
+        <p>Se calcula a partir de la pérdida media de entropía cruzada por token, usando logaritmos naturales. Para comparar valores, hay que mantener los mismos textos y un procedimiento compatible, incluida la tokenización.</p>
+        <p>Un texto previsible puede contener un error. Por eso una buena perplexity no demuestra que una respuesta sea verdadera o útil.</p>
+        <pre tabindex="0" aria-label="Ejemplo paso a paso"><code>perplexity = exp(pérdida media por token)</code></pre>
+      </div>
+      <div>
+        <h3>Comparar con una respuesta de referencia</h3>
+        <p>BLEU, frecuente en traducción, compara grupos de palabras con traducciones de referencia y tiene en cuenta la longitud de la respuesta. ROUGE, habitual en resúmenes, mide coincidencias con textos de referencia mediante distintas variantes.</p>
+        <p>«El gato está durmiendo» y «El gato duerme» pueden transmitir la misma idea con palabras distintas. Una métrica de coincidencias no recoge por sí sola todo ese significado; tampoco detecta todos los errores de una respuesta que comparte muchas palabras.</p>
+      </div>
+      <div>
+        <h3>Mirar también los ejemplos</h3>
+        <p>Las métricas ayudan a comparar resultados, pero conviene leer algunas respuestas y sus errores. Así se ve qué mejora en la práctica y qué problemas siguen apareciendo.</p>
+        <ul>
+          <li>Evalúa siempre sobre el mismo conjunto de textos al comparar dos versiones.</li>
+          <li>Elige una métrica relacionada con la tarea: continuar texto, clasificarlo o traducirlo.</li>
+          <li>Revisa respuestas acertadas y fallos concretos, además del número final.</li>
+          <li>Usa una solución sencilla como punto de partida para valorar si la complejidad adicional aporta algo.</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+</div>}
+
+{course === 'curso-3' && <div class="course-notes">
+  <p>Para profundizar</p>
+  <details data-concept="transformers-y-atencion">
+    <summary>Transformers y atención</summary>
+    <div class="concept-explanation">
+      <div>
+        <h3>Saber qué token es y dónde aparece</h3>
+        <p>El embedding da una representación inicial al token. Para tener en cuenta el orden, el modelo también necesita información sobre su posición: primero, segundo, tercero…</p>
+        <p>Esa información puede aprenderse o construirse con una regla, como las funciones de senos y cosenos usadas en el transformer original. El objetivo es que el modelo pueda distinguir las mismas palabras colocadas de otra manera.</p>
+      </div>
+      <div>
+        <h3>Queries, Keys y Values, paso a paso</h3>
+        <p>Para calcular la atención se crean tres listas de números a partir de cada representación. Se llaman Query, Key y Value. Puedes pensar en la Query como lo que se busca, en la Key como la información con la que se compara esa búsqueda y en el Value como lo que se va a aportar.</p>
+        <p>El modelo compara la Query de un token con las Keys de los tokens disponibles. Convierte esas puntuaciones en pesos que suman 1 mediante una operación llamada softmax. Después mezcla los Values usando esos pesos: unos contribuyen más que otros.</p>
+        <p>Estas listas y comparaciones se calculan con parámetros aprendidos. La analogía de la búsqueda ayuda a seguir los pasos, pero el cálculo es una operación entre números.</p>
+        <pre tabindex="0" aria-label="Ejemplo paso a paso"><code>Query de un token + Keys disponibles
+  → puntuaciones
+  → pesos que suman 1
+  → mezcla de Values según esos pesos</code></pre>
+      </div>
+      <div>
+        <h3>Consultar la misma frase o una distinta</h3>
+        <p>En self-attention, un token consulta información de la misma secuencia. En cross-attention, consulta otra: por ejemplo, mientras genera una traducción, el decoder puede consultar la representación de la frase original.</p>
+        <p>Multi-head attention hace varias de estas combinaciones en paralelo, cada una con sus propios parámetros. Así el modelo puede aprender distintas relaciones y reunir sus resultados.</p>
+      </div>
+      <div>
+        <h3>Ocultar lo que todavía no se debería ver</h3>
+        <p>Cuando entrenamos un modelo para predecir el siguiente token, la respuesta ya está en el texto de entrenamiento. La máscara causal oculta los tokens futuros para que cada predicción use solo la posición actual y las anteriores.</p>
+        <p>La máscara de padding tiene otra función: excluye los tokens de relleno que añadimos para igualar longitudes. Ambas máscaras deciden qué posiciones están disponibles; los pesos de atención deciden cuánto aporta cada una de las permitidas.</p>
+      </div>
+      <div>
+        <h3>Qué añade el resto del transformer</h3>
+        <p>La atención reúne información de otros tokens. Después, una pequeña red transforma la representación de cada posición. Un transformer encadena varios bloques como este para seguir elaborando las representaciones.</p>
+        <p>Las conexiones residuales suman la entrada de una parte del bloque a su resultado, de modo que la información anterior siga teniendo un camino directo. La normalización ayuda a controlar la escala de los valores durante el entrenamiento.</p>
+        <p>En el esquema, B cuenta los ejemplos del batch, S las posiciones de cada frase y D los números de cada vector. El bloque mantiene esas dimensiones, aunque cambien los valores que contienen.</p>
+        <pre tabindex="0" aria-label="Ejemplo paso a paso"><code>Entrada: [B, S, D]
+  → combinar información con atención
+  → transformar cada posición
+Salida:  [B, S, D]</code></pre>
+      </div>
+      <div>
+        <h3>Qué comprobar al llevarlo a código</h3>
+        <p>Las dimensiones ayudan a seguir qué representa cada grupo de números. Un cálculo puede ejecutarse sin errores y aun así mezclar ejemplos o posiciones que deberían estar separados.</p>
+        <ul>
+          <li>Los pesos de cada Query deben repartirse entre las Keys que puede consultar.</li>
+          <li>Las frases de un batch se procesan juntas, pero no deben intercambiar contexto entre sí.</li>
+          <li>W_K es la matriz de parámetros que produce las Keys; K contiene el resultado para el texto que hemos dado al modelo.</li>
+          <li>Obtener una salida con parámetros recién creados solo comprueba que el cálculo funciona. Aprender requiere entrenamiento.</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+</div>}

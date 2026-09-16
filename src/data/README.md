@@ -1,6 +1,6 @@
 # Fuentes de contenido público
 
-El sitio es estático: el perfil vive en TypeScript y los conceptos y archivos de aprendizaje viven en JSON gestionado con Git. No hay API, base de datos ni contenido generado en tiempo de ejecución.
+El sitio es estático: el perfil y el catálogo de cursos viven en TypeScript; las explicaciones de aprendizaje se escriben directamente en HTML dentro de componentes Astro. No hay API, base de datos ni contenido generado en tiempo de ejecución.
 
 ## Formación y aprendizaje por cursos
 
@@ -12,7 +12,7 @@ La portada presenta experiencia, Ainkii, formación continua y contacto. El grad
 - `LearningLab.astro`, `src/lib/learningLabs.ts` y `src/scripts/learningLabs.ts` implementan ejemplos deterministas de tokenización, bolsa de palabras y máscara de atención. Funcionan localmente, sin APIs ni modelos reales. La tokenización ilustrativa se etiqueta como tal.
 - El índice empieza debajo de la introducción, junto al contenido del curso, y queda fijo al desplazarse: lista lateral en escritorio y selector desplegable en móvil. JavaScript marca el enlace actual y cierra el selector móvil al elegir. Sin JavaScript, el `details` nativo sigue operativo, las explicaciones, los diagramas y los ejemplos iniciales permanecen disponibles, y los controles dinámicos están ocultos.
 - Los cursos 1–3 introducen cada concepto con lenguaje cotidiano y ejemplos antes de desarrollar el detalle técnico en sus desplegables. Se conservan términos como token, batch, embedding o Query, explicando qué representan al presentarlos.
-- `content/concepts/*.json` conserva los detalles técnicos editables desde el CMS. Solo conceptos `published` aparecen en los desplegables de su curso, y `learningCourses.ts` asigna cada concepto publicado a una sección.
+- `src/components/LearningNotes.astro` contiene las seis explicaciones de «Para profundizar» como HTML: títulos, párrafos, listas y ejemplos de código dentro de `details` nativos. No hay CMS, colecciones JSON ni adaptador de artículos. `learningCourses.ts` conserva sus IDs para los enlaces antiguos y la organización por curso.
 - Las URLs anteriores `/aprendizaje/<id>/` redirigen a su curso. No se incluyen en el sitemap; la única página canónica de aprendizaje es `/aprendizaje/`.
 
 La primera edición procede de las notas públicas de agosto: tokenización y datos (día 24); embeddings, clasificación, contexto y evaluación (25 y 29); atención y transformers (31). Los resúmenes de los siguientes cursos describen el programa, no logros del autor.
@@ -26,47 +26,31 @@ La ubicación pública actual de la identidad es `Balaguer, Lleida`; las ubicaci
 
 ## Contenido de aprendizaje
 
-`src/data/articleContent.ts` valida el formato compartido de los conceptos de IA y los tipos de las notas originales. `content/concepts/*.json` y `content/tags/*.json` son las fuentes editables del aprendizaje. Solo entradas `published` se muestran; los IDs y referencias de etiquetas se conservan estables.
+Las explicaciones se editan en `src/components/LearningNotes.astro`; el catálogo, la disponibilidad y las introducciones de los cursos se editan en `src/data/learningCourses.ts`. Astro genera el HTML durante la compilación y conserva el contenido completo sin JavaScript. Los IDs de conceptos se mantienen para las redirecciones existentes.
 
 El blog se retiró por completo de la web y del CMS el 15 de septiembre de 2026. Las URLs `/blog/` y `/blog/<id>/` responden con la página 404 y quedan fuera del sitemap. Los JSON históricos de `content/posts/` se conservan como fuentes archivadas: no se cargan, no se publican y no generan páginas.
 
 El contacto conserva los enlaces de correo y LinkedIn; la dirección de correo no se muestra como texto separado.
 
-## Archivo del plan y notas originales
+## Retirada del archivo diario
 
-Las rutas de calendario y notas diarias se conservan para los enlaces existentes. Ofrecen acceso a la página didáctica por cursos, pero no son el recorrido principal de la portada. El índice de notas muestra primero las más recientes sin cambiar el orden del adaptador ni los IDs históricos.
+El calendario del Career Sprint y sus apuntes diarios se han eliminado del proyecto: páginas, JSON de días y semanas, adaptador, componentes de artículo y animaciones específicas. Sus rutas `/roadmap/`, `/career-sprint-daily/` y `/career-sprint-daily/<fecha>/` responden con la página 404 y no figuran en el sitemap. Los textos didácticos de `LearningNotes.astro` son independientes y siguen publicados en `/aprendizaje/`. Las notas originales se pueden recuperar del historial de Git.
 
-`content/weeks/w1.json` a `content/weeks/w8.json` son la ruta factual de 2026. `src/data/challenge.ts` valida y adapta semanas y entradas diarias; ningún componente consume esos JSON directamente.
+## Edición directa y rutas
 
-Una semana contiene `id`, `status`, `position`, fechas, título/foco, objetivo, agenda por día y bloque, reparto de horas, `hoursPlanned` opcional, temas, hitos, reservas, criterios y `progressState`.
-
-- Las ocho semanas son consecutivas del `2026-08-24` al `2026-10-18`.
-- Todas comienzan `planned`; la fecha no cambia ese estado automáticamente.
-- `hoursPlanned` solo existe donde el plan da un total explícito: W1, W2, W4, W5, W6 y W7 usan `63`; W3 y W8 lo omiten.
-- Hitos, exámenes, costes, cursos, labs y criterios son objetivos o referencias del plan hasta que exista evidencia diaria publicada.
-
-`content/daily/` admite un JSON por jornada real. Una entrada debe tener `id` igual al nombre de archivo e `activityDate` (`YYYY-MM-DD`), `weekId` existente, posición única, estado editorial, tags existentes, `hoursActual` opcional no negativo y la misma prosa estructurada que un artículo. No hay jornadas de ejemplo, vacías ni futuras: una colección diaria vacía es válida y muestra un estado accesible.
-
-Solo jornadas `published` generan `/career-sprint-daily/<YYYY-MM-DD>/`, JSON-LD y sitemap. Su fecha debe estar dentro de la semana referenciada.
-
-## CMS y rutas
-
-`/admin/` usa Sveltia CMS autoalojado en español. Las colecciones `Conceptos de IA`, `Etiquetas`, `Semanas` y `Progreso diario` guardan JSON en ramas y pull requests editoriales; `delete:false` y `publish:false` evitan operaciones destructivas o merge directo. OAuth, el Worker y sus secretos se documentan en [`ops/cms-auth/README.md`](../../ops/cms-auth/README.md).
+Sveltia CMS se retiró del proyecto el 16 de septiembre de 2026: panel `/admin/`, colecciones JSON, dependencias, preparación de recursos, configuración OAuth y código del Worker del repositorio. Las URL del panel y sus recursos responden 404. Esta retirada de código no ejecuta operaciones sobre servicios externos ni despliega producción.
 
 Rutas públicas:
 
 - `/#about`, `/#projects`, `/#formacion`, `/#contact`: navegación visible de la portada. `#career-sprint` y `#progress` se conservan como anclas de compatibilidad dentro de formación.
 - `/aprendizaje/#curso-1` a `#curso-4`: contenido disponible de la página didáctica por cursos. Las rutas antiguas de conceptos redirigen a estas secciones.
-- `/roadmap/`: archivo del plan de ocho semanas.
-- `/career-sprint-daily/`: archivo de notas originales, con la última primero.
-- `/career-sprint-daily/<YYYY-MM-DD>/`: detalle estático de una jornada publicada.
 - `/proyectos/ainkii/`: proyecto separado.
 
 Las rutas retiradas responden con la página 404 y no se reutilizan.
 
 ## Editar y verificar
 
-No cambies ni reutilices IDs o nombres de archivo. Publica una jornada solo después de realizarla y comprobar que la copy es factual; no conviertas la agenda ni una reserva de examen en evidencia.
+No cambies ni reutilices IDs o nombres de archivo. Las explicaciones publicadas deben corresponder a conceptos trabajados; no conviertas temarios previstos en formación completada. En desarrollo, Astro actualiza los componentes al editar su HTML; no hay observadores de contenido propios del CMS.
 
 ```sh
 npm run check
