@@ -11,7 +11,7 @@ import '../../learning.css'
       <a class="control" href="/#formacion">Volver al portfolio <span aria-hidden="true">↖</span></a>
       <p class="section-kicker">Mi aprendizaje · IBM / Coursera</p>
       <h1 data-route-heading tabindex="-1">Aprender a construir con LLMs</h1>
-      <p>Estoy cursando <a href={specializationUrl}>Generative AI Engineering with LLMs ↗</a>. Aquí comparto lo que voy aprendiendo, con explicaciones y ejemplos para explorar los conceptos de cada curso.</p>
+      <p>Estoy cursando <a href={specializationUrl} target="_blank" rel="noopener noreferrer" title="Se abre en una nueva pestaña">Generative AI Engineering with LLMs ↗</a>. Aquí comparto lo que voy aprendiendo, con explicaciones y ejemplos para explorar los conceptos de cada curso.</p>
     </header>
     <div class="learning-layout">
       <nav class="course-nav" aria-label="Cursos de la especialización">
@@ -31,7 +31,7 @@ import '../../learning.css'
             <header class="course-header">
               <p class="course-number">Curso {String(i + 1).padStart(2, '0')} <span>{course.concepts.length ? 'Con ejemplos' : 'Conceptos clave'}</span></p>
               <h2 id={`${course.id}-title`} data-route-heading tabindex="-1">{course.title}</h2>
-              <a class="course-source" href={course.url}>{course.officialTitle} <span aria-hidden="true">↗</span></a>
+              <a class="course-source" href={course.url} target="_blank" rel="noopener noreferrer" title="Se abre en una nueva pestaña">{course.officialTitle} <span aria-hidden="true">↗</span></a>
             </header>
             <div class="course-explainer">
               <div class="course-copy">

@@ -38,7 +38,7 @@ const currentYear = new Date().getFullYear()
               </ul>
               <div class="mt-6 flex flex-wrap gap-3">
                 <a class="button-light" href={project.href}>Conocer {project.canonicalName} <span aria-hidden="true">↗</span></a>
-                <a class="control" href={project.website}>{project.websiteLabel} <span aria-hidden="true">↗</span></a>
+                <a class="control" href={project.website} target="_blank" rel="noopener noreferrer" title="Se abre en una nueva pestaña">{project.websiteLabel} <span aria-hidden="true">↗</span></a>
               </div>
             </div>
           </div>
@@ -61,7 +61,7 @@ const currentYear = new Date().getFullYear()
         </div>
         <address class="flex min-w-0 w-full flex-col items-stretch gap-3 not-italic">
           <a class="contact-action button-light w-full max-w-full justify-between gap-4" href={`mailto:${contacts.email}`}>Escríbeme por correo <span aria-hidden="true">↗</span></a>
-          <a class="contact-action control w-full max-w-full justify-between gap-4" href={contacts.linkedin} rel="me">Ver perfil en LinkedIn <span aria-hidden="true">↗</span></a>
+          <a class="contact-action control w-full max-w-full justify-between gap-4" href={contacts.linkedin} target="_blank" rel="me noopener noreferrer" title="Se abre en una nueva pestaña">Ver perfil en LinkedIn <span aria-hidden="true">↗</span></a>
         </address>
       </div>
     </div>

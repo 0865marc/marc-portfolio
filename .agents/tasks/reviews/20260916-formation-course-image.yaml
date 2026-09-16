@@ -1,0 +1,22 @@
+schema_version: 1
+task_id: "20260916-formation-course-image"
+review_status: pending
+summary: "Add the owner-supplied IBM specialization image to the continuous formation card."
+knowledge_delta:
+  added_nodes:
+    - path: "public/media/certifications/generative-ai-engineering-with-llms.png"
+      fact: "The owner-supplied IBM/Coursera specialization image is served locally without modifying the original artwork. FormationSection displays it alongside the existing in-progress course description."
+      evidence: "src/components/FormationSection.astro; src/data/README.md"
+  changed_nodes: []
+  deprecated_nodes: []
+  adr_needed: false
+  adr_reason: "A local image uses the existing static Astro architecture."
+  design_changed: false
+  design_notes: "The responsive card reuses existing colors, spacing and radii."
+  stale_knowledge:
+    - path: ".agents/domains/portfolio.md"
+      fact: "The formation source map still points to the removed CareerSprintSection. FormationSection owns #formacion and the in-progress IBM/Coursera specialization; #career-sprint and #progress are compatibility anchors."
+    - path: ".agents/context/architecture.md"
+      fact: "The landing composition still names CareerSprintSection; index.astro instead supplies FormationSection through the formation slot in ProjectsSection."
+reviewed_by: ""
+reviewed_at: null

@@ -6,6 +6,8 @@ El sitio es estático: el perfil y el catálogo de cursos viven en TypeScript; l
 
 La portada presenta experiencia, Ainkii y ButiPunt, formación continua y contacto. El grado universitario aparece una sola vez en el perfil; `FormationSection.astro` presenta la especialización IBM/Coursera como formación en curso. El bloque de formación prevista en AWS se ha retirado.
 
+La imagen de la especialización se sirve desde `public/media/certifications/generative-ai-engineering-with-llms.png`, proporcionada por el propietario el 16 de septiembre de 2026. Se conserva el archivo original completo, sin recortes; identifica el programa y no cambia su estado de formación en curso.
+
 `src/data/learningCourses.ts` define los siete cursos de Generative AI Engineering with LLMs, en el orden del programa oficial de IBM consultado el 7 de septiembre de 2026. Cada entrada conserva el título y enlace oficiales, una explicación propia en español y conceptos o diagramas. `available` controla si se publica su contenido: los cursos 1–4 están disponibles; los cursos 5–7 aparecen como botones deshabilitados con la etiqueta «Pendiente» y su contenido no se emite. La disponibilidad de una explicación no acredita la finalización del curso ni una certificación.
 
 - `/aprendizaje/` muestra solo el curso seleccionado, mediante los enlaces `#curso-1` a `#curso-4`; al entrar sin un curso disponible muestra el primero, incluidos los enlaces directos a los cursos pendientes. La selección funciona con CSS incluso sin JavaScript y conserva enlaces directos e historial, sin plantilla de blog, fechas ni tiempos de lectura.
@@ -54,6 +56,8 @@ Rutas públicas:
 Las rutas retiradas responden con la página 404 y no se reutilizan.
 
 La navegación entre documentos usa View Transitions nativas mediante `@view-transition` en `src/index.css`: fundido de página y un nombre compartido por logo en `ProjectBrand.astro`. Los enlaces de vuelta de ambos proyectos apuntan a `/#projects`. Se desactivan las transiciones con `prefers-reduced-motion: reduce` o JavaScript deshabilitado; los navegadores sin soporte conservan la navegación normal. No se incorpora un router cliente ni cambia el ciclo de ejecución de los scripts de aprendizaje. El foco inicial de las anclas se aplica tras `pageshow` para respetar el desplazamiento nativo; las entradas de historial restauradas desde caché mantienen su posición y foco.
+
+Los enlaces a dominios o subdominios externos (Ainkii, ButiPunt, LinkedIn y Coursera) se abren en una nueva pestaña mediante `target="_blank"` y `rel="noopener noreferrer"`. LinkedIn conserva además `rel="me"`. Los enlaces internos, las anclas y las acciones de correo mantienen su comportamiento habitual.
 
 ## Editar y verificar
 

@@ -1,0 +1,18 @@
+schema_version: 1
+task_id: "20260916-external-link-tabs"
+review_status: pending
+summary: "Open all links to external domains and subdomains in a new tab."
+knowledge_delta:
+  added_nodes:
+    - path: "src/data/README.md"
+      fact: "External website links to Ainkii, ButiPunt, LinkedIn and Coursera use native target=_blank with noopener noreferrer on the landing, project pages and learning page. LinkedIn retains rel=me; internal navigation, anchors and mailto actions keep their existing behavior."
+      evidence: "src/components/ProjectsSection.astro; src/components/FormationSection.astro; src/pages/proyectos/ainkii.astro; src/pages/proyectos/butipunt.astro; src/pages/aprendizaje/index.astro"
+  changed_nodes: []
+  deprecated_nodes: []
+  adr_needed: false
+  adr_reason: "Native anchor attributes require no routing or runtime changes."
+  design_changed: false
+  design_notes: "Existing labels, icons and styles are preserved; newly updated external links announce the new tab in their title."
+  stale_knowledge: []
+reviewed_by: ""
+reviewed_at: null

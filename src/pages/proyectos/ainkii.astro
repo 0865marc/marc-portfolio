@@ -46,7 +46,7 @@ const ainkiiJsonLd = {
             <h1 data-route-heading tabindex="-1" class="hero-heading mt-5 text-[clamp(4rem,14vw,10rem)] font-black uppercase leading-[.84]">Ainkii</h1>
             <p class="mt-8 max-w-4xl text-2xl font-light leading-relaxed sm:text-3xl">{ainkii.description}</p>
             <p class="mt-6 max-w-2xl font-light leading-relaxed opacity-75">{ainkii.availability}</p>
-            <a class="button-light mt-6" href={ainkii.website}>{ainkii.websiteLabel} <span aria-hidden="true">↗</span></a>
+            <a class="button-light mt-6" href={ainkii.website} target="_blank" rel="noopener noreferrer" title="Se abre en una nueva pestaña">{ainkii.websiteLabel} <span aria-hidden="true">↗</span></a>
           </div>
           <aside class="min-w-0">
             <ProjectBrand project={ainkii} />

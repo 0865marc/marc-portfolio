@@ -41,7 +41,7 @@ const jsonLd = {
             <h1 data-route-heading tabindex="-1" class="hero-heading mt-5 text-[clamp(3rem,11vw,8rem)] font-black uppercase leading-[.95]">ButiPunt</h1>
             <p class="mt-8 max-w-4xl text-2xl font-light leading-relaxed sm:text-3xl">{butipunt.description}</p>
             <p class="mt-6 max-w-2xl font-light leading-relaxed opacity-75">{butipunt.availability}</p>
-            <a class="button-light mt-6" href={butipunt.website}>{butipunt.websiteLabel} <span aria-hidden="true">↗</span></a>
+            <a class="button-light mt-6" href={butipunt.website} target="_blank" rel="noopener noreferrer" title="Se abre en una nueva pestaña">{butipunt.websiteLabel} <span aria-hidden="true">↗</span></a>
           </div>
           <aside class="min-w-0">
             <ProjectBrand project={butipunt} />
@@ -93,7 +93,7 @@ const jsonLd = {
           <p class="mt-7 max-w-3xl text-xl font-light leading-relaxed opacity-80">No hace falta registrarse. El torneo queda guardado en el navegador del dispositivo para poder retomarlo. No se sincroniza entre dispositivos: borrar los datos del navegador o utilizar una sesión privada puede hacer que se pierda.</p>
         </div>
         <div class="flex min-w-0 flex-col gap-3">
-          <a class="button-light" href={butipunt.website}>{butipunt.websiteLabel} <span aria-hidden="true">↗</span></a>
+          <a class="button-light" href={butipunt.website} target="_blank" rel="noopener noreferrer" title="Se abre en una nueva pestaña">{butipunt.websiteLabel} <span aria-hidden="true">↗</span></a>
           <a class="control" href="/proyectos/ainkii/">Conocer también Ainkii <span aria-hidden="true">↗</span></a>
           <a class="control" href="/#projects">Volver a los proyectos</a>
         </div>
