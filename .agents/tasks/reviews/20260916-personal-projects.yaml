@@ -1,0 +1,32 @@
+schema_version: 1
+task_id: "20260916-personal-projects"
+review_status: pending
+summary: "Document ButiPunt and the partially deployed Ainkii using their public landings and official logos."
+knowledge_delta:
+  added_nodes:
+    - path: "src/pages/proyectos/butipunt.astro"
+      fact: "ButiPunt has a static project page and sitemap entry. It describes an available browser-based manager for in-person butifarra tournaments, without accounts or cross-device synchronization."
+      evidence: "src/pages/proyectos/butipunt.astro; src/pages/sitemap.xml.ts; tests/static-output.test.ts"
+    - path: "src/components/ProjectBrand.astro"
+      fact: "Both project cards and detail pages display official SVG logos locally in a compact white frame. Transparent margins are normalized to a shared 320 by 100 viewport; original paths, colors and proportions are preserved. Asset sources and normalization are documented in src/data/README.md."
+      evidence: "src/components/ProjectBrand.astro; public/media/projects; src/data/README.md"
+  changed_nodes:
+    - path: "src/data/portfolio.ts"
+      symbol: "professionalProfile.projects"
+      fact: "The public project collection contains Ainkii and ButiPunt with separate project-source provenance, external site links and explicit availability. Ainkii remains in development: its landing and example demonstration are public, but its internal app is not publicly accessible."
+      evidence: "src/data/portfolio.ts; src/pages/proyectos/ainkii.astro; tests/unit/profile.test.ts"
+    - path: "src/components/ProjectsSection.astro"
+      fact: "The visible personal-project section renders both project cards from the typed collection. Card typography matches FormationSection, tags are plain text, and external actions use Abrir plus the project name."
+      evidence: "src/components/ProjectsSection.astro; tests/e2e/site.spec.ts"
+  deprecated_nodes: []
+  adr_needed: false
+  adr_reason: "Content and static routes remain within the existing Astro architecture."
+  design_changed: false
+  design_notes: "Uses existing canvas, typography, surfaces, spacing and radii; project brand colors remain confined to the official logos."
+  stale_knowledge:
+    - path: ".agents/domains/portfolio.md"
+      fact: "The hidden projects section and Ainkii-only source map are obsolete. The projects section is visible and includes ButiPunt; Ainkii has a public landing with no public internal-app access."
+    - path: ".agents/context/architecture.md"
+      fact: "The project route inventory must include /proyectos/butipunt/ and the visible data-driven project section."
+reviewed_by: ""
+reviewed_at: null

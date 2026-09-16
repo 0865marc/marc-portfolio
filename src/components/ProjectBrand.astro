@@ -1,0 +1,24 @@
+---
+import type { Project } from '../data/portfolio'
+
+interface Props {
+  project: Project
+}
+
+const { project } = Astro.props
+---
+
+<div
+  style={`view-transition-name: project-${project.id}-brand`}
+  class="flex h-28 w-full max-w-[15rem] items-center justify-center rounded-[28px] bg-white p-5"
+>
+  <img
+    src={project.logo.src}
+    alt={`Logo de ${project.canonicalName}`}
+    width={project.logo.width}
+    height={project.logo.height}
+    loading="lazy"
+    decoding="async"
+    class="h-auto w-full max-w-[12.5rem]"
+  />
+</div>

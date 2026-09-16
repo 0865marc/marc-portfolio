@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro'
+import { projects } from '../data/portfolio'
 
 export const prerender = true
 
@@ -14,7 +15,7 @@ export const GET: APIRoute = ({ site }) => {
   const entries = [
     { path: '/', lastmod: null },
     { path: '/aprendizaje/', lastmod: null },
-    { path: '/proyectos/ainkii/', lastmod: '2026-08-10' },
+    ...projects.map(project => ({ path: project.href, lastmod: '2026-09-16' })),
   ]
   const urls = entries.map(entry => {
     const loc = escapeXml(new URL(entry.path, origin).href)

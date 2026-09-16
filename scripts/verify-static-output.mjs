@@ -5,6 +5,7 @@ const dist = process.argv[2] || 'dist'
 const required = [
   'index.html',
   'proyectos/ainkii/index.html',
+  'proyectos/butipunt/index.html',
   'aprendizaje/index.html',
   '404.html',
   'robots.txt',
@@ -33,7 +34,7 @@ if (landing.includes('fonts.googleapis.com') || landing.includes('fonts.gstatic.
 if (landing.includes('/admin/')) throw new Error('removed CMS linked from landing')
 
 const sitemap = readFileSync(join(dist, 'sitemap.xml'), 'utf8')
-for (const path of ['/aprendizaje/', '/proyectos/ainkii/']) {
+for (const path of ['/aprendizaje/', '/proyectos/ainkii/', '/proyectos/butipunt/']) {
   if (!sitemap.includes(`<loc>https://portfolio.mybrawl.io${path}</loc>`)) throw new Error(`sitemap is missing ${path}`)
 }
 for (const route of retiredRoutes) {

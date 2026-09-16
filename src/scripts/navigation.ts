@@ -10,4 +10,8 @@ const focusHash = () => {
 }
 
 addEventListener('hashchange', focusHash)
-if (location.hash) requestAnimationFrame(focusHash)
+// Wait for native fragment navigation before focusing the associated heading.
+// Cached history entries retain the browser's restored scroll and focus.
+addEventListener('pageshow', event => {
+  if (!event.persisted && location.hash) requestAnimationFrame(focusHash)
+})

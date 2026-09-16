@@ -1,0 +1,29 @@
+schema_version: 1
+task_id: "20260916-native-view-transitions"
+review_status: pending
+summary: "Add native cross-document page fades and shared project-logo transitions while preserving standard navigation."
+knowledge_delta:
+  added_nodes:
+    - path: "src/index.css"
+      fact: "All routes opt in to native cross-document View Transitions: the page crossfade lasts 180ms and shared groups animate for 260ms. Reduced-motion mode opts out and disables transition animations. No-script browsing and unsupported browsers keep standard document navigation without transitions."
+      evidence: "src/index.css; tests/e2e/site.spec.ts: project navigation completes native transitions and respects reduced motion"
+    - path: "src/components/ProjectBrand.astro"
+      fact: "Each project logo has a stable, unique view-transition-name shared between its home card and project page. Existing paths, colors, dimensions and typography remain unchanged."
+      evidence: "src/components/ProjectBrand.astro; src/components/ProjectsSection.astro; src/pages/proyectos/ainkii.astro; src/pages/proyectos/butipunt.astro"
+  changed_nodes:
+    - path: "src/pages/proyectos/ainkii.astro"
+      fact: "The header back link returns to /#projects, matching ButiPunt and preserving the project-section position and existing hash focus behavior."
+      evidence: "src/pages/proyectos/ainkii.astro; src/scripts/navigation.ts; tests/e2e/site.spec.ts"
+    - path: "src/scripts/navigation.ts"
+      fact: "Initial fragment focus runs after pageshow so native navigation cannot reset it. Cached history entries preserve browser-restored position and focus; same-document hash changes retain their existing behavior."
+      evidence: "src/scripts/navigation.ts; tests/e2e/site.spec.ts"
+  deprecated_nodes: []
+  adr_needed: false
+  adr_reason: "Native document navigation is preserved, consistent with ADR 0001. No client router or script lifecycle changes are introduced."
+  design_changed: true
+  design_notes: "Add the native page crossfade and shared-logo motion to the existing restrained-motion guidance after independent review. Color, typography, spacing and radius tokens do not change."
+  stale_knowledge:
+    - path: ".agents/DESIGN.md"
+      fact: "The motion guidance does not yet describe native page transitions or shared project logos."
+reviewed_by: ""
+reviewed_at: null
