@@ -10,6 +10,7 @@ export default defineConfig({
   testDir: 'tests/e2e',
   timeout: 60_000,
   workers: 4,
+  reporter: process.env.CI ? 'github' : 'list',
   webServer: {
     command: `npm run preview -- --port ${port}`,
     url: baseURL,
