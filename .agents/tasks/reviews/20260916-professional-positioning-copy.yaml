@@ -6,7 +6,7 @@ knowledge_delta:
   added_nodes: []
   changed_nodes:
     - path: "src/components/HeroSection.astro"
-      fact: "The hero retains the professional headline, name and summary without repeating the current role and employer beneath the name. Taurus remains visible in professional experience and in employment structured data."
+      fact: "The hero presents the name, then the professional headline as a subtitle using the former employment subtitle typography, followed by the summary. The headline appears once. Taurus remains visible in professional experience and in employment structured data."
       evidence: "Owner discussion and commit request on 17 September 2026; src/components/HeroSection.astro; tests/e2e/site.spec.ts; tests/static-output.test.ts"
     - path: "src/data/portfolio.ts"
       fact: "The owner-approved profile revision of 16 September 2026 balances full-stack development, product orientation and IT project management. The current role includes ownership of the IoT product roadmap and execution with external developers, plus coordination across customer service, marketing and sales. Capability summaries replace year counters; job titles, employment dates, university facts and language levels remain unchanged."

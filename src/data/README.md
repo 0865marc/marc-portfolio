@@ -31,7 +31,7 @@ La revisión del perfil `profile-2026-09-16` incorpora el alcance confirmado por
 
 La identidad, los metadatos y la tarjeta para compartir usan el mismo posicionamiento. `public/og-card.svg` es la fuente editable de `public/og-card.png`, que se sirve como imagen social de 1200 × 630 píxeles; ambos deben actualizarse juntos.
 
-El Hero muestra el titular profesional, el nombre y el resumen; no repite el cargo actual con el nombre de la empresa. Taurus se conserva en la trayectoria profesional y en los datos estructurados de empleo.
+El Hero muestra el nombre, el titular profesional como subtítulo debajo y el resumen. El subtítulo «Ingeniero de software y responsable de proyectos IT» reutiliza el tamaño y peso del antiguo subtítulo de empleo, sin repetirlo encima del nombre ni añadir la empresa. Taurus se conserva en la trayectoria profesional y en los datos estructurados de empleo.
 
 - [Ainkii](https://ainkii.mteixido.dev/): producto para alumnos y academias; conecta temarios, conocimientos, tarjetas y seguimiento. Permanece «En desarrollo»: solo la landing y su demostración de ejemplo son públicas; la aplicación interna no está abierta al público. No enlazar el login como una aplicación disponible ni presentar datos de demostración como uso real.
 - [ButiPunt](https://butipunt.mteixido.dev/): gestor disponible de torneos presenciales de butifarra, sin registro y con guardado en el navegador. No promete juego en línea ni sincronización entre dispositivos.
