@@ -1,4 +1,4 @@
-export const PROFILE_SOURCE_ID = 'profile-2026-08-10' as const
+export const PROFILE_SOURCE_ID = 'profile-2026-09-16' as const
 export const PROJECT_SOURCE_ID = 'public-projects-2026-09-16' as const
 
 export type ProfileFact = {
@@ -90,7 +90,7 @@ export type ProfessionalProfile = {
 export const professionalProfile: ProfessionalProfile = {
   source: {
     id: PROFILE_SOURCE_ID,
-    reviewedAt: '2026-08-10',
+    reviewedAt: '2026-09-16',
     visibility: 'public',
     authority: 'Fuente factual proporcionada por Marc Teixidó Rosauro.',
   },
@@ -99,25 +99,25 @@ export const professionalProfile: ProfessionalProfile = {
     displayName: 'Marc Teixidó',
     location: 'Balaguer, Lleida',
     headline: 'Ingeniero de software y responsable de proyectos IT',
-    positioning: 'Perfil orientado a Product Engineering con foco en IA aplicada',
-    summary: 'Desarrollo software y coordino proyectos desde las necesidades de producto hasta la entrega. Incorporo automatización e IA a procesos de documentación, contenido y monitorización.',
-    aboutIntro: 'He trabajado en desarrollo full-stack, migración de plataformas y coordinación de servicios web, móviles y cloud. Esa experiencia conecta mis decisiones técnicas con las necesidades del producto y del equipo.',
+    positioning: 'Ingeniería de software y gestión de proyectos IT con orientación a producto',
+    summary: 'Desarrollo software y lidero proyectos IT, conectando necesidades de negocio, decisiones técnicas y entrega. Mi experiencia combina desarrollo full-stack con la gestión del roadmap, la coordinación entre departamentos y la ejecución con desarrolladores externos.',
+    aboutIntro: 'Mi trayectoria combina desarrollo de aplicaciones de negocio, migración de plataformas y responsabilidad sobre un producto IoT. Además, desarrollo productos propios, manteniendo una práctica técnica activa y una perspectiva que conecta software, producto y negocio.',
     seo: {
-      title: 'Marc Teixidó — Product Engineering e IA aplicada',
-      description: 'Ingeniería de software, coordinación de proyectos IT e IA aplicada. Experiencia, proyectos y formación de Marc Teixidó, en Balaguer, Lleida.',
-      imageAlt: 'Marc Teixidó — Product Engineering, cerca de 3 años full-stack, alrededor de 1 año coordinando proyectos IT e IA aplicada',
+      title: 'Marc Teixidó — Ingeniería de software y proyectos IT',
+      description: 'Desarrollo full-stack, orientación a producto y gestión de proyectos IT. Experiencia, proyectos y formación de Marc Teixidó.',
+      imageAlt: 'Marc Teixidó — Ingeniero de software y responsable de proyectos IT, con experiencia en desarrollo full-stack y gestión del roadmap.',
     },
   },
   facts: [
     {
-      label: 'Desarrollo full-stack',
-      value: '≈ 3 años',
-      context: 'Software de negocio, datos, despliegues e infraestructura entre 2022 y 2025.',
+      label: 'Desarrollo de software',
+      value: 'Full-stack',
+      context: 'Aplicaciones de negocio con Django, procesos asíncronos, datos y despliegues.',
     },
     {
-      label: 'Liderazgo de proyectos IT',
-      value: '≈ 1 año',
-      context: 'Responsable de proyectos IT en Taurus Research & Development desde 2025.',
+      label: 'Gestión de proyectos IT',
+      value: 'Roadmap y ejecución',
+      context: 'Coordinación entre departamentos y desarrolladores externos, desde las necesidades de producto hasta las entregas.',
     },
   ],
   experience: [
@@ -129,7 +129,7 @@ export const professionalProfile: ProfessionalProfile = {
       endDate: null,
       period: '2025 — Actualidad',
       location: 'Cataluña',
-      summary: 'Coordino el roadmap y el desarrollo de un ecosistema internacional de servicios web, móviles y cloud para un producto de cocina conectado. Trabajo con dirección, distribuidores y desarrolladores externos, traduciendo necesidades de producto en especificaciones, prioridades y entregas. También introduzco automatizaciones con IA en procesos de documentación, contenido y monitorización.',
+      summary: 'Soy responsable del roadmap de un producto IoT con servicios web, móviles y cloud. Coordino su ejecución con desarrolladores externos y hago seguimiento de las entregas. Trabajo con atención al cliente, marketing y comercial para traducir las necesidades del producto en prioridades de desarrollo. Colaboro también con dirección y distribuidores en un entorno internacional. Además, incorporo automatizaciones con IA en procesos de documentación, contenido y monitorización.',
       sourceId: PROFILE_SOURCE_ID,
     },
     {
@@ -140,7 +140,7 @@ export const professionalProfile: ProfessionalProfile = {
       endDate: '2025-06',
       period: '2022 — 2025',
       location: 'Cataluña',
-      summary: 'Fui responsable de migrar la plataforma interna de la empresa a una arquitectura más moderna y escalable. Desarrollé funcionalidades de CRM y ERP, procesos asíncronos con Celery y RabbitMQ, dashboards y modelos predictivos sobre datos de sensores. También gestioné despliegues, migraciones y entornos de test y producción.',
+      summary: 'Fui responsable de la migración de la plataforma interna de la empresa. Desarrollé funcionalidades de CRM y ERP con Django, procesos asíncronos con Celery y RabbitMQ, dashboards y modelos predictivos sobre datos de sensores. Gestioné también despliegues, migraciones y entornos de pruebas y producción.',
       sourceId: PROFILE_SOURCE_ID,
     },
   ],
@@ -154,7 +154,7 @@ export const professionalProfile: ProfessionalProfile = {
   languages: [
     { language: 'Catalán', level: 'Nativo', context: 'Uso habitual en entornos personales y profesionales.' },
     { language: 'Español', level: 'Nativo', context: 'Uso habitual en entornos personales y profesionales.' },
-    { language: 'Inglés', level: 'Uso profesional', context: 'Reuniones, documentación y comunicación técnica con equipos y distribuidores internacionales. Sin certificación oficial.' },
+    { language: 'Inglés', level: 'Uso profesional', context: 'Reuniones, documentación y comunicación técnica con equipos y distribuidores internacionales.' },
   ],
   projects: [
     {
@@ -163,12 +163,12 @@ export const professionalProfile: ProfessionalProfile = {
       aliases: ['Ainki'],
       category: 'Producto educativo personal',
       status: 'En desarrollo',
-      availability: 'Landing pública. La aplicación interna todavía no está abierta al público.',
+      availability: 'Presentación y demo públicas. Aplicación interna en desarrollo, todavía sin acceso público.',
       website: 'https://ainkii.mteixido.dev/',
-      websiteLabel: 'Abrir Ainkii',
+      websiteLabel: 'Ver presentación y demo',
       logo: { src: '/media/projects/ainkii-logo.svg', width: 320, height: 100 },
       href: '/proyectos/ainkii/',
-      teaser: 'Contenido, tarjetas de práctica y seguimiento del aprendizaje en un mismo espacio para alumnos y academias. La IA ayuda a preparar materiales bajo revisión humana.',
+      teaser: 'Desarrollo una plataforma educativa que conecta contenidos, tarjetas de práctica y seguimiento del aprendizaje para alumnos y academias. La propuesta incorpora IA para preparar materiales bajo revisión docente.',
       description: 'Estoy desarrollando Ainkii para conectar lo que una academia enseña con lo que sus alumnos comprenden y practican: temarios estructurados, tarjetas vinculadas al contenido y seguimiento del aprendizaje.',
       focus: 'Entender, practicar y reconocer el avance.',
       tags: ['Aprendizaje conectado', 'IA editorial', 'Alumnos y academias'],
@@ -194,7 +194,7 @@ export const professionalProfile: ProfessionalProfile = {
       websiteLabel: 'Abrir ButiPunt',
       logo: { src: '/media/projects/butipunt-logo.svg', width: 320, height: 100 },
       href: '/proyectos/butipunt/',
-      teaser: 'Una aplicación para organizar torneos de butifarra: inscribir parejas, preparar rondas, anotar resultados y consultar la clasificación desde el navegador, sin crear una cuenta.',
+      teaser: 'He creado una aplicación web para organizar torneos presenciales de butifarra: inscripción de parejas, emparejamientos, resultados y clasificación, sin registro y con guardado local.',
       description: 'He creado ButiPunt para llevar la organización de un torneo de butifarra de principio a fin. Reúne parejas, mesas, rondas y clasificación, mientras las partidas se juegan presencialmente.',
       focus: 'El juego, en la mesa. El torneo, organizado.',
       tags: ['Torneos de butifarra', 'Sin registro', 'Guardado local'],

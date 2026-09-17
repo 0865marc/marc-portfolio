@@ -21,7 +21,7 @@ import '../../learning.css'
           <ol>{learningCourses.map((course, i) => <li>
             {course.available
               ? <a href={`#${course.id}`} data-course-link><span>{String(i + 1).padStart(2, '0')}</span>{course.title}</a>
-              : <button type="button" class="course-unavailable" disabled><span>{String(i + 1).padStart(2, '0')}</span><span>{course.title}<small>Pendiente</small></span></button>}
+              : <button type="button" class="course-unavailable" disabled><span>{String(i + 1).padStart(2, '0')}</span><span>{course.title}<small>Contenido no publicado</small></span></button>}
           </li>)}</ol>
         </details>
       </nav>

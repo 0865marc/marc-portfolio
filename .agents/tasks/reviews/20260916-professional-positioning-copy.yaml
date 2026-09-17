@@ -1,0 +1,34 @@
+schema_version: 1
+task_id: "20260916-professional-positioning-copy"
+review_status: pending
+summary: "Align the approved Spanish copy with software development and IT project management opportunities."
+knowledge_delta:
+  added_nodes: []
+  changed_nodes:
+    - path: "src/components/HeroSection.astro"
+      fact: "The hero retains the professional headline, name and summary without repeating the current role and employer beneath the name. Taurus remains visible in professional experience and in employment structured data."
+      evidence: "Owner discussion and commit request on 17 September 2026; src/components/HeroSection.astro; tests/e2e/site.spec.ts; tests/static-output.test.ts"
+    - path: "src/data/portfolio.ts"
+      fact: "The owner-approved profile revision of 16 September 2026 balances full-stack development, product orientation and IT project management. The current role includes ownership of the IoT product roadmap and execution with external developers, plus coordination across customer service, marketing and sales. Capability summaries replace year counters; job titles, employment dates, university facts and language levels remain unchanged."
+      evidence: "Owner instructions in this session; src/data/portfolio.ts; tests/unit/profile.test.ts"
+    - path: "src/components/ProjectsSection.astro"
+      fact: "Project summaries identify Marc's authorship. Ainkii's external action explicitly opens its public presentation and demo while its internal application remains unavailable. Contact invites software development or IT project management opportunities."
+      evidence: "src/components/ProjectsSection.astro; src/data/portfolio.ts"
+    - path: "src/components/FormationSection.astro"
+      fact: "The ongoing IBM specialization describes the goal of building LLM applications, including assistants over owned documentation, adaptation, integration and response evaluation. The action reads Ver apuntes y ejemplos. Unpublished course content is labelled Contenido no publicado without claiming completion or certification."
+      evidence: "src/components/FormationSection.astro; src/pages/aprendizaje/index.astro; tests/static-output.test.ts; tests/e2e/site.spec.ts"
+    - path: "public/og-card.svg"
+      fact: "The editable social card and its 1200 by 630 PNG emphasize software engineering and IT project management, with full-stack development, product, roadmap and delivery. Metadata uses the same positioning without redundant full-stack and backend labels."
+      evidence: "public/og-card.svg; public/og-card.png; src/data/portfolio.ts; tests/static-output.test.ts"
+  deprecated_nodes: []
+  adr_needed: false
+  adr_reason: "Approved copy changes preserve routes, content ownership and application architecture."
+  design_changed: false
+  design_notes: "The social card text is reflowed within its existing dark layout and palette. Formation cards use a shrinkable single grid column on narrow screens to prevent horizontal clipping. Existing page structure and design tokens remain in place."
+  stale_knowledge:
+    - path: ".agents/domains/portfolio.md"
+      fact: "The domain still describes the removed Career Sprint and hidden projects. The current landing presents professional experience, personal projects, university and ongoing formation, and contact."
+    - path: ".agents/context/architecture.md"
+      fact: "The route and landing descriptions still reference removed blog, CMS and daily progress features. Current source and src/data/README.md are authoritative."
+reviewed_by: ""
+reviewed_at: null
