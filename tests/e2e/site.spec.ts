@@ -51,9 +51,12 @@ test('landing makes projects, formation and contact discoverable', async ({ page
   await expect(page.getByRole('heading', { level: 1, name: 'Marc Teixidó', exact: true })).toBeVisible()
   await expect(page.getByText(professionalProfile.identity.headline, { exact: true })).toBeVisible()
   await expect(page.getByText(professionalProfile.identity.summary, { exact: true })).toBeVisible()
+  const currentEmployment = professionalProfile.experience.find(entry => entry.endDate === null)!
+  await expect(page.locator('section[aria-labelledby="hero-title"]')).not.toContainText(currentEmployment.company)
+  await expect(page.locator('#about')).toContainText(currentEmployment.company)
   await expect(navigation.locator('a')).toHaveText(['Perfil', 'Proyectos', 'Formación', 'Contacto'])
   for (const id of ['about', 'projects', 'formacion', 'contact']) await expect(page.locator(`#${id}`)).toBeVisible()
-  await expect(page.getByRole('link', { name: 'Explorar el aprendizaje', exact: true })).toHaveAttribute('href', '/aprendizaje/')
+  await expect(page.getByRole('link', { name: 'Ver apuntes y ejemplos', exact: true })).toHaveAttribute('href', '/aprendizaje/')
   for (const project of professionalProfile.projects) {
     await expect(page.getByRole('link', { name: `Conocer ${project.canonicalName}`, exact: true })).toHaveAttribute('href', project.href)
     await expect(page.getByRole('link', { name: project.websiteLabel, exact: true })).toHaveAttribute('href', project.website)
@@ -69,7 +72,17 @@ test('landing makes projects, formation and contact discoverable', async ({ page
   await expect(page.locator('#formacion')).toContainText('En curso · IBM / Coursera')
   await expect(page.locator('#formacion')).toContainText('Estoy cursando esta especialización')
   await expect(page.locator('#formacion')).not.toContainText('AWS')
-  await expect(page.locator('#formacion article')).toHaveCount(1)
+  await expect(page.locator('#formacion article')).toHaveCount(2)
+  const formationCards = await page.locator('#formacion article').evaluateAll(cards => cards.map(card => {
+    const bounds = card.getBoundingClientRect()
+    const container = card.parentElement!.getBoundingClientRect()
+    return { left: bounds.left, right: bounds.right, containerLeft: container.left, containerRight: container.right }
+  }))
+  for (const card of formationCards) {
+    expect(card.left).toBeGreaterThanOrEqual(card.containerLeft - 1)
+    expect(card.right).toBeLessThanOrEqual(card.containerRight + 1)
+  }
+  await expect(page.locator('#formacion article').first()).toContainText(professionalProfile.education.qualification)
   await expect(page.locator('a[href="/career-sprint-daily/"], a[href="/roadmap/"]')).toHaveCount(0)
   expect(remoteRequests).toEqual([])
 })
@@ -96,10 +109,10 @@ test('mobile navigation labels fit inside their own targets', async ({ page }, i
 test('learning follows the courses with inline explanations and stable earlier URLs', async ({ page }, info) => {
   test.skip(!['chromium', 'chromium-mobile-320', 'chromium-js-off'].includes(info.project.name))
   await page.goto('/')
-  await expect(page.locator('#about [data-education]')).toContainText(professionalProfile.education.qualification)
-  await expect(page.locator('#formacion')).not.toContainText(professionalProfile.education.qualification)
+  await expect(page.locator('#formacion [data-education]')).toContainText(professionalProfile.education.qualification)
+  await expect(page.locator('#about')).not.toContainText(professionalProfile.education.qualification)
   await expect(page.getByText(professionalProfile.education.qualification, { exact: false })).toHaveCount(1)
-  await page.getByRole('link', { name: 'Explorar el aprendizaje', exact: true }).click()
+  await page.getByRole('link', { name: 'Ver apuntes y ejemplos', exact: true }).click()
   await expect(page.getByRole('heading', { level: 1, name: 'Aprender a construir con LLMs' })).toBeVisible()
   await expect(page.locator('.course-section')).toHaveCount(4)
   await expect(page.locator('.course-section:visible')).toHaveCount(1)
@@ -153,7 +166,7 @@ test('pending courses remain visible but cannot be opened, including by direct h
     const pending = nav.getByRole('button', { name: new RegExp(course.title) })
     await expect(pending).toBeVisible()
     await expect(pending).toBeDisabled()
-    await expect(pending).toContainText('Pendiente')
+    await expect(pending).toContainText('Contenido no publicado')
     await pending.click({ force: true })
     await expect(page).toHaveURL(/#curso-4$/)
     await expect(page.locator('.course-section:visible')).toHaveAttribute('id', 'curso-4')
@@ -383,7 +396,7 @@ test('primary navigation moves focus to visible landing anchors', async ({ page,
   await page.goto('/')
   await navigation.getByRole('link', { name: 'Formación', exact: true }).click()
   await expect(page).toHaveURL(/\/#formacion$/)
-  await expect(page.getByRole('heading', { name: 'IA generativa', exact: true })).toBeFocused()
+  await expect(page.getByRole('heading', { level: 2, name: 'Formación', exact: true })).toBeFocused()
 
   await page.goto('/')
   const contactLink = navigation.getByRole('link', { name: 'Contacto', exact: true })
@@ -441,10 +454,10 @@ test('project navigation completes native transitions and respects reduced motio
     }
     await page.getByRole('link', { name: 'Volver a los proyectos', exact: true }).first().click()
     await expect(page).toHaveURL(/\/#projects$/)
-    await expect(page.getByRole('heading', { name: 'Ideas en práctica', exact: true })).toBeInViewport()
+    await expect(page.getByRole('heading', { name: 'Proyectos de software', exact: true })).toBeInViewport()
     if (javaScriptEnabled !== false) {
       await expect(page.locator('html')).toHaveAttribute('data-transition-result', info.project.name === 'chromium-reduced-motion' ? 'none' : 'finished')
-      await expect(page.getByRole('heading', { name: 'Ideas en práctica', exact: true })).toBeFocused()
+      await expect(page.getByRole('heading', { name: 'Proyectos de software', exact: true })).toBeFocused()
     }
   }
 })

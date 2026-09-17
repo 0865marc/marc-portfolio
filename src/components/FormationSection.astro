@@ -1,21 +1,59 @@
+---
+import { Image } from 'astro:assets'
+import universityLogo from '../assets/universitat-lleida-eps.png'
+import { professionalProfile } from '../data/portfolio'
+
+const { education } = professionalProfile
+---
+
 <section id="formacion" aria-labelledby="formation-title" class="scroll-mt-6 px-5 py-20 sm:px-8 md:px-10 md:py-24">
   <div id="career-sprint" class="mx-auto max-w-6xl scroll-mt-6">
     <div id="progress" class="scroll-mt-6">
       <div class="grid gap-6 lg:grid-cols-[1fr_1fr] lg:items-end">
         <div>
-          <p class="section-kicker">Formación continua</p>
-          <h2 id="formation-title" data-route-heading tabindex="-1" class="mt-4 text-4xl font-black uppercase leading-tight sm:text-5xl">IA generativa</h2>
+          <p class="section-kicker">Universidad y aprendizaje continuo</p>
+          <h2 id="formation-title" data-route-heading tabindex="-1" class="mt-4 text-4xl font-black uppercase leading-tight sm:text-5xl">Formación</h2>
         </div>
-        <p class="max-w-2xl text-lg font-light leading-relaxed opacity-80">Profundizo en cómo funcionan los modelos de lenguaje y aprendo a llevarlos a una aplicación.</p>
+        <p class="max-w-2xl text-lg font-light leading-relaxed opacity-80">Formación en ingeniería, software y sistemas conectados, con aprendizaje continuo en IA generativa.</p>
       </div>
 
-      <div class="mt-10">
-        <article class="rounded-[28px] border border-[#D7E2EA]/30 p-6 sm:p-8">
-          <p class="section-kicker">En curso · IBM / Coursera</p>
-          <h3 class="mt-4 text-2xl font-medium leading-tight sm:text-3xl">Generative AI Engineering with LLMs</h3>
-          <p class="mt-4 max-w-3xl font-light leading-relaxed opacity-80">Estoy cursando esta especialización para aprender a preparar datos, entender cómo trabaja un modelo e interpretar sus resultados. Tokenización, embeddings y atención son algunos de los conceptos que voy explorando.</p>
-          <a class="button-light mt-7 max-w-full" href="/aprendizaje/">Explorar el aprendizaje <span aria-hidden="true">↗</span></a>
-          <p class="mt-5 max-w-3xl text-sm font-light leading-relaxed opacity-70">Comparto explicaciones y ejemplos visuales a medida que avanzo en los cursos de la <a class="underline underline-offset-4" href="https://www.coursera.org/specializations/generative-ai-engineering-with-llms" target="_blank" rel="noopener noreferrer">especialización de IBM <span class="sr-only">(abre en una nueva pestaña)</span>↗</a>.</p>
+      <div class="mt-10 grid gap-6">
+        <article data-education aria-labelledby="education-title" class="grid grid-cols-1 items-center gap-8 rounded-[28px] border border-[#D7E2EA]/30 bg-[#D7E2EA]/5 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_16rem]">
+          <div class="min-w-0">
+            <p class="section-kicker">Formación universitaria</p>
+            <h3 id="education-title" class="mt-4 max-w-4xl text-3xl font-medium leading-tight sm:text-4xl">{education.qualification}</h3>
+            <p class="mt-5 text-lg font-medium">{education.institution} · <span class="whitespace-nowrap">{education.startYear}–{education.endYear}</span></p>
+            <p class="mt-4 max-w-3xl font-light leading-relaxed opacity-80">{education.context}</p>
+          </div>
+          <div class="aspect-square w-64 max-w-full justify-self-center rounded-[28px] bg-white p-3">
+            <Image
+              src={universityLogo}
+              alt="Logo de la Universitat de Lleida — Escola Politècnica Superior"
+              width={364}
+              format="png"
+              loading="lazy"
+              decoding="async"
+              class="aspect-square h-auto w-full rounded-full object-contain"
+            />
+          </div>
+        </article>
+        <article class="grid grid-cols-1 items-center gap-8 rounded-[28px] border border-[#D7E2EA]/30 p-6 sm:p-8 md:grid-cols-[minmax(0,1fr)_16rem]">
+          <div class="min-w-0">
+            <p class="section-kicker">En curso · IBM / Coursera</p>
+            <h3 class="mt-4 text-2xl font-medium leading-tight sm:text-3xl">Generative AI Engineering with LLMs</h3>
+            <p class="mt-4 max-w-3xl font-light leading-relaxed opacity-80">Estoy cursando esta especialización para aprender a desarrollar aplicaciones basadas en modelos de lenguaje, como asistentes que respondan preguntas sobre documentación propia. La formación aborda cómo adaptar los modelos a una tarea, integrarlos en una aplicación y evaluar sus respuestas.</p>
+            <a class="button-light mt-7 max-w-full" href="/aprendizaje/">Ver apuntes y ejemplos <span aria-hidden="true">↗</span></a>
+            <p class="mt-5 max-w-3xl text-sm font-light leading-relaxed opacity-70">Comparto explicaciones y ejemplos visuales a medida que avanzo en los cursos de la <a class="underline underline-offset-4" href="https://www.coursera.org/specializations/generative-ai-engineering-with-llms" target="_blank" rel="noopener noreferrer">especialización de IBM <span class="sr-only">(abre en una nueva pestaña)</span>↗</a>.</p>
+          </div>
+          <img
+            src="/media/certifications/generative-ai-engineering-with-llms.png"
+            alt="Imagen de la especialización IBM Generative AI Engineering with LLMs en Coursera"
+            width="1080"
+            height="1080"
+            loading="lazy"
+            decoding="async"
+            class="aspect-square w-64 max-w-full justify-self-center rounded-[28px] bg-white object-contain p-3"
+          />
         </article>
       </div>
     </div>

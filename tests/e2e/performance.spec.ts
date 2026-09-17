@@ -84,7 +84,8 @@ test('@performance landing keeps a bounded first-party document', async ({ page 
     }
   })
   expect(report.elements).toBeLessThan(700)
-  expect(report.images).toBe(2)
+  // Two project logos, plus the university and ongoing specialization images.
+  expect(report.images).toBe(4)
   expect(report.thirdParty).toEqual([])
   expect(report.transfer).toBeLessThan(750 * 1024)
 })

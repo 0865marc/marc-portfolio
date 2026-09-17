@@ -1,0 +1,28 @@
+schema_version: 1
+task_id: "20260916-university-formation"
+review_status: pending
+summary: "Give the university degree a prominent first card in Formation, before the ongoing IBM specialization."
+knowledge_delta:
+  added_nodes:
+    - path: "src/assets/universitat-lleida-eps.png"
+      fact: "The university card displays the owner-supplied circular Universitat de Lleida / Escola Politècnica Superior emblem in a white square frame matching the IBM/Coursera image's size, rounded corners and padding. The original 364 by 364 pixel image is retained; Astro generates a local PNG at native resolution, preserving proportions and colors."
+      evidence: "src/components/FormationSection.astro; src/data/README.md"
+  changed_nodes:
+    - path: "src/components/FormationSection.astro"
+      fact: "The #formacion section is headed Formación and shows a highlighted university degree card before the ongoing IBM/Coursera specialization. The degree title, institution, dates and context come from professionalProfile.education."
+      evidence: "src/components/FormationSection.astro; src/data/portfolio.ts; tests/e2e/site.spec.ts"
+    - path: "src/components/AboutSection.astro"
+      fact: "The experience section no longer renders the degree; the qualification appears only once in visible landing content, inside FormationSection."
+      evidence: "src/components/AboutSection.astro; src/components/FormationSection.astro; tests/e2e/site.spec.ts"
+  deprecated_nodes: []
+  adr_needed: false
+  adr_reason: "Content moves between existing static landing sections without changing routes or data ownership."
+  design_changed: false
+  design_notes: "The university card uses a subtle foreground tint over the dark canvas and an existing border treatment; larger typography and first position preserve its emphasis. Spacing and radius tokens remain unchanged."
+  stale_knowledge:
+    - path: ".agents/domains/portfolio.md"
+      fact: "The landing source map still omits FormationSection, which now presents university education before continuous formation."
+    - path: ".agents/context/architecture.md"
+      fact: "The landing composition should identify FormationSection in the formation slot, including university education followed by the IBM specialization."
+reviewed_by: ""
+reviewed_at: null

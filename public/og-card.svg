@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
-  <title id="title">Marc Teixidó — Product Engineering e IA aplicada</title>
-  <desc id="description">Perfil orientado a Product Engineering con cerca de tres años full-stack, alrededor de un año coordinando proyectos IT y evidencia publicada de IA aplicada.</desc>
+  <title id="title">Marc Teixidó — Ingeniería de software y proyectos IT</title>
+  <desc id="description">Marc Teixidó — Ingeniero de software y responsable de proyectos IT, con experiencia en desarrollo full-stack y gestión del roadmap.</desc>
   <defs>
     <linearGradient id="type" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#646973" />
@@ -12,12 +12,12 @@
   <text x="88" y="103" fill="#D7E2EA" fill-opacity=".68" font-family="Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="4">PORTFOLIO · BALAGUER, LLEIDA</text>
   <text x="86" y="290" fill="url(#type)" font-family="Arial Black, Arial, sans-serif" font-size="142" font-weight="900" letter-spacing="-7">MARC</text>
   <text x="86" y="426" fill="url(#type)" font-family="Arial Black, Arial, sans-serif" font-size="142" font-weight="900" letter-spacing="-7">TEIXIDÓ</text>
-  <text x="786" y="153" fill="#D7E2EA" fill-opacity=".62" font-family="Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="3">PERFIL ORIENTADO A</text>
-  <text x="782" y="214" fill="url(#type)" font-family="Arial Black, Arial, sans-serif" font-size="48" font-weight="900">PRODUCT</text>
-  <text x="782" y="266" fill="url(#type)" font-family="Arial Black, Arial, sans-serif" font-size="48" font-weight="900">ENGINEERING</text>
-  <text x="786" y="307" fill="#D7E2EA" font-family="Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2.5">IA APLICADA</text>
-  <text x="786" y="334" fill="#D7E2EA" fill-opacity=".7" font-family="Arial, sans-serif" font-size="14" letter-spacing="2">EVIDENCIA PUBLICADA</text>
+  <text x="786" y="153" fill="#D7E2EA" fill-opacity=".62" font-family="Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="3">PERFIL PROFESIONAL</text>
+  <text x="782" y="208" fill="url(#type)" font-family="Arial Black, Arial, sans-serif" font-size="36" font-weight="900">INGENIERÍA</text>
+  <text x="782" y="250" fill="url(#type)" font-family="Arial Black, Arial, sans-serif" font-size="36" font-weight="900">DE SOFTWARE</text>
+  <text x="782" y="322" fill="url(#type)" font-family="Arial Black, Arial, sans-serif" font-size="36" font-weight="900">GESTIÓN DE</text>
+  <text x="782" y="364" fill="url(#type)" font-family="Arial Black, Arial, sans-serif" font-size="36" font-weight="900">PROYECTOS IT</text>
   <line x1="88" y1="475" x2="1112" y2="475" stroke="#D7E2EA" stroke-opacity=".2" />
-  <text x="88" y="522" fill="#D7E2EA" font-family="Arial, sans-serif" font-size="21" font-weight="700" letter-spacing="1.7">≈ 3 AÑOS FULL-STACK · ≈ 1 AÑO COORDINANDO PROYECTOS IT</text>
-  <text x="88" y="553" fill="#D7E2EA" fill-opacity=".7" font-family="Arial, sans-serif" font-size="19" letter-spacing="3">PRODUCT ENGINEERING · IA APLICADA</text>
+  <text x="88" y="522" fill="#D7E2EA" font-family="Arial, sans-serif" font-size="21" font-weight="700" letter-spacing="1.7">FULL-STACK · PRODUCTO · ROADMAP Y ENTREGAS</text>
+  <text x="88" y="553" fill="#D7E2EA" fill-opacity=".7" font-family="Arial, sans-serif" font-size="19" letter-spacing="3">SOFTWARE · PRODUCTO · PROYECTOS IT</text>
 </svg>

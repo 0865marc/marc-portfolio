@@ -2,7 +2,6 @@
 import { professionalProfile } from '../data/portfolio'
 
 const { identity } = professionalProfile
-const currentExperience = professionalProfile.experience.find(entry => entry.endDate === null)!
 ---
 
 <section aria-labelledby="hero-title" class="px-5 py-8 sm:px-8 md:px-10 md:py-10">
@@ -20,13 +19,12 @@ const currentExperience = professionalProfile.experience.find(entry => entry.end
 
     <div class="grid items-end gap-8 pb-10 pt-12 sm:py-16 lg:grid-cols-[minmax(0,1fr)_12rem]">
       <div class="min-w-0">
-        <p data-intro style="--intro-delay: 140ms" class="max-w-xl text-base font-light leading-relaxed opacity-80">{identity.headline}</p>
-        <h1 id="hero-title" data-route-heading tabindex="-1" data-intro style="--intro-delay: 210ms" class="hero-heading mt-5 break-words text-[clamp(3.5rem,9vw,5.5rem)] font-black uppercase leading-[.98]">
+        <h1 id="hero-title" data-route-heading tabindex="-1" data-intro style="--intro-delay: 140ms" class="hero-heading break-words text-[clamp(3.5rem,9vw,5.5rem)] font-black uppercase leading-[.98]">
           {identity.displayName}
         </h1>
-        <p data-intro style="--intro-delay: 280ms" class="mt-6 max-w-3xl text-xl font-medium leading-snug sm:text-2xl">{currentExperience.role} en {currentExperience.company}</p>
-        <p data-intro style="--intro-delay: 340ms" class="mt-4 max-w-2xl text-lg font-light leading-relaxed sm:text-xl">{identity.summary}</p>
-        <div data-intro style="--intro-delay: 400ms" class="mt-9 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap">
+        <p data-intro style="--intro-delay: 210ms" class="mt-6 max-w-3xl text-xl font-medium leading-snug sm:text-2xl">{identity.headline}</p>
+        <p data-intro style="--intro-delay: 280ms" class="mt-4 max-w-2xl text-lg font-light leading-relaxed sm:text-xl">{identity.summary}</p>
+        <div data-intro style="--intro-delay: 340ms" class="mt-9 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap">
           <a class="button-light" href="#projects">Ver proyectos <span aria-hidden="true">↓</span></a>
           <a class="control" href="#contact">Contactar <span aria-hidden="true">↓</span></a>
         </div>

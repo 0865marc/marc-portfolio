@@ -7,26 +7,26 @@ describe('professional profile source', () => {
       fullName: 'Marc Teixidó Rosauro',
       location: 'Balaguer, Lleida',
       headline: 'Ingeniero de software y responsable de proyectos IT',
-      positioning: 'Perfil orientado a Product Engineering con foco en IA aplicada',
-      summary: 'Desarrollo software y coordino proyectos desde las necesidades de producto hasta la entrega. Incorporo automatización e IA a procesos de documentación, contenido y monitorización.',
-      aboutIntro: 'He trabajado en desarrollo full-stack, migración de plataformas y coordinación de servicios web, móviles y cloud. Esa experiencia conecta mis decisiones técnicas con las necesidades del producto y del equipo.',
+      positioning: 'Ingeniería de software y gestión de proyectos IT con orientación a producto',
+      summary: 'Desarrollo software y lidero proyectos IT, conectando necesidades de negocio, decisiones técnicas y entrega. Mi experiencia combina desarrollo full-stack con la gestión del roadmap, la coordinación entre departamentos y la ejecución con desarrolladores externos.',
+      aboutIntro: 'Mi trayectoria combina desarrollo de aplicaciones de negocio, migración de plataformas y responsabilidad sobre un producto IoT. Además, desarrollo productos propios, manteniendo una práctica técnica activa y una perspectiva que conecta software, producto y negocio.',
       seo: {
-        title: 'Marc Teixidó — Product Engineering e IA aplicada',
-        description: 'Ingeniería de software, coordinación de proyectos IT e IA aplicada. Experiencia, proyectos y formación de Marc Teixidó, en Balaguer, Lleida.',
-        imageAlt: 'Marc Teixidó — Product Engineering, cerca de 3 años full-stack, alrededor de 1 año coordinando proyectos IT e IA aplicada',
+        title: 'Marc Teixidó — Ingeniería de software y proyectos IT',
+        description: 'Desarrollo full-stack, orientación a producto y gestión de proyectos IT. Experiencia, proyectos y formación de Marc Teixidó.',
+        imageAlt: 'Marc Teixidó — Ingeniero de software y responsable de proyectos IT, con experiencia en desarrollo full-stack y gestión del roadmap.',
       },
     })
     expect(professionalProfile.source.id).toBe(PROFILE_SOURCE_ID)
     expect(professionalProfile.facts).toEqual([
       {
-        label: 'Desarrollo full-stack',
-        value: '≈ 3 años',
-        context: 'Software de negocio, datos, despliegues e infraestructura entre 2022 y 2025.',
+        label: 'Desarrollo de software',
+        value: 'Full-stack',
+        context: 'Aplicaciones de negocio con Django, procesos asíncronos, datos y despliegues.',
       },
       {
-        label: 'Liderazgo de proyectos IT',
-        value: '≈ 1 año',
-        context: 'Responsable de proyectos IT en Taurus Research & Development desde 2025.',
+        label: 'Gestión de proyectos IT',
+        value: 'Roadmap y ejecución',
+        context: 'Coordinación entre departamentos y desarrolladores externos, desde las necesidades de producto hasta las entregas.',
       },
     ])
   })
@@ -38,12 +38,12 @@ describe('professional profile source', () => {
     ])
     expect(professionalProfile.experience[0]).toMatchObject({
       role: 'Responsable de proyectos IT',
-      summary: 'Coordino el roadmap y el desarrollo de un ecosistema internacional de servicios web, móviles y cloud para un producto de cocina conectado. Trabajo con dirección, distribuidores y desarrolladores externos, traduciendo necesidades de producto en especificaciones, prioridades y entregas. También introduzco automatizaciones con IA en procesos de documentación, contenido y monitorización.',
+      summary: 'Soy responsable del roadmap de un producto IoT con servicios web, móviles y cloud. Coordino su ejecución con desarrolladores externos y hago seguimiento de las entregas. Trabajo con atención al cliente, marketing y comercial para traducir las necesidades del producto en prioridades de desarrollo. Colaboro también con dirección y distribuidores en un entorno internacional. Además, incorporo automatizaciones con IA en procesos de documentación, contenido y monitorización.',
       location: 'Cataluña',
     })
     expect(professionalProfile.experience[1]).toMatchObject({
       role: 'Desarrollador full-stack con Django',
-      summary: 'Fui responsable de migrar la plataforma interna de la empresa a una arquitectura más moderna y escalable. Desarrollé funcionalidades de CRM y ERP, procesos asíncronos con Celery y RabbitMQ, dashboards y modelos predictivos sobre datos de sensores. También gestioné despliegues, migraciones y entornos de test y producción.',
+      summary: 'Fui responsable de la migración de la plataforma interna de la empresa. Desarrollé funcionalidades de CRM y ERP con Django, procesos asíncronos con Celery y RabbitMQ, dashboards y modelos predictivos sobre datos de sensores. Gestioné también despliegues, migraciones y entornos de pruebas y producción.',
       location: 'Cataluña',
     })
     expect(professionalProfile.experience.every(entry => entry.sourceId === PROFILE_SOURCE_ID)).toBe(true)
@@ -59,7 +59,7 @@ describe('professional profile source', () => {
     expect(ainkii).toMatchObject({
       href: '/proyectos/ainkii/',
       website: 'https://ainkii.mteixido.dev/',
-      availability: 'Landing pública. La aplicación interna todavía no está abierta al público.',
+      availability: 'Presentación y demo públicas. Aplicación interna en desarrollo, todavía sin acceso público.',
     })
     expect(butipunt).toMatchObject({
       canonicalName: 'ButiPunt',
@@ -87,12 +87,12 @@ describe('professional profile source', () => {
       institution: 'Universitat de Lleida',
       startYear: 2018,
       endYear: 2022,
-      context: 'El grado me dio una base transversal en electrónica, automatización y programación. Durante esos años orienté cada vez más mi trabajo hacia el desarrollo de software, los datos y los sistemas conectados.',
+      context: 'El grado me dio una base transversal en electrónica, automatización y programación. Orienté mis optativas hacia el Internet de las Cosas (IoT), la programación y las comunicaciones.',
     })
     expect(professionalProfile.languages).toEqual(expect.arrayContaining([
       expect.objectContaining({ language: 'Catalán', level: 'Nativo', context: 'Uso habitual en entornos personales y profesionales.' }),
       expect.objectContaining({ language: 'Español', level: 'Nativo', context: 'Uso habitual en entornos personales y profesionales.' }),
-      expect.objectContaining({ language: 'Inglés', level: 'Uso profesional', context: 'Reuniones, documentación y comunicación técnica con equipos y distribuidores internacionales. Sin certificación oficial.' }),
+      expect.objectContaining({ language: 'Inglés', level: 'Uso profesional', context: 'Reuniones, documentación y comunicación técnica con equipos y distribuidores internacionales.' }),
     ]))
   })
 })

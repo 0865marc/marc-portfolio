@@ -132,7 +132,7 @@ describe('static output', () => {
         expect(index).not.toContain(`id="${course.id}"`)
         expect(index).not.toContain(`href="#${course.id}"`)
         expect(index).not.toContain(escapeHtmlText(course.description))
-        expect(index).toContain(`${escapeHtmlText(course.title)}<small>Pendiente</small>`)
+        expect(index).toContain(`${escapeHtmlText(course.title)}<small>Contenido no publicado</small>`)
       }
     }
     for (const id of conceptIds) {
@@ -152,14 +152,15 @@ describe('static output', () => {
     expect(statSync(join(dist, 'og-card.svg')).size).toBeGreaterThan(500)
     expect(statSync(join(dist, 'og-card.png')).size).toBeGreaterThan(10_000)
     const currentEmployment = professionalProfile.experience.find(entry => entry.endDate === null)!
-    expect(html).toContain(`${currentEmployment.role} en ${escapeHtmlText(currentEmployment.company)}`)
+    expect(html).toContain(escapeHtmlText(currentEmployment.company))
+    expect(html).not.toContain(`${currentEmployment.role} en ${escapeHtmlText(currentEmployment.company)}`)
     expect(html).toContain(professionalProfile.identity.seo.description)
     expect(html).toContain(professionalProfile.identity.seo.imageAlt)
     expect(ogCard).toContain('PORTFOLIO · BALAGUER, LLEIDA')
-    expect(ogCard).toContain('Product Engineering e IA aplicada')
-    expect(ogCard).toContain('PRODUCT ENGINEERING · IA APLICADA')
-    expect(ogCard).toContain('≈ 3 AÑOS FULL-STACK · ≈ 1 AÑO COORDINANDO PROYECTOS IT')
-    expect(ogCard).toContain('EVIDENCIA PUBLICADA')
+    expect(ogCard).toContain('Ingeniería de software y proyectos IT')
+    expect(ogCard).toContain('SOFTWARE · PRODUCTO · PROYECTOS IT')
+    expect(ogCard).toContain('FULL-STACK · PRODUCTO · ROADMAP Y ENTREGAS')
+    expect(ogCard).toContain('PERFIL PROFESIONAL')
     expect(ogCard.toUpperCase()).not.toContain('AINKII')
     expect(ogCard).not.toContain('id="panel"')
     expect(ogCard).not.toContain('CATALUÑA')
